@@ -1,0 +1,23 @@
+{
+  "name": "erp-multi-tenants",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Enterprise Multi-Tenant ERP System for Holding Companies & Subsidiaries",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build:all": "npm run build --workspaces",
+    "db:generate:master": "npm run db:generate:master --workspace=packages/database",
+    "db:generate:tenant": "npm run db:generate:tenant --workspace=packages/database",
+    "db:generate": "npm run db:generate --workspace=packages/database",
+    "seed": "npm run seed --workspace=packages/database"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

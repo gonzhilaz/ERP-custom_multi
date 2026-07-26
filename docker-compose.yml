@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Master Holding PostgreSQL Database
+  postgres-master:
+    image: postgres:16-alpine
+    container_name: erp-postgres-master
+    restart: always
+    environment:
+      POSTGRES_USER: master_admin
+      POSTGRES_PASSWORD: master_password_2026
+      POSTGRES_DB: db_master_holding
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_master_data:/var/lib/postgresql/data
+
+  # Express Backend API Server & Socket.io WebSockets
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: erp-express-api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      MASTER_DATABASE_URL: "postgresql://master_admin:master_password_2026@postgres-master:5432/db_master_holding?schema=public"
+      JWT_SECRET: "erp-super-secret-jwt-key-2026-production"
+    depends_on:
+      - postgres-master
+
+  # Next.js 16 Web Dashboard (React 19)
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: erp-nextjs-web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:5000/api"
+    depends_on:
+      - api
+
+volumes:
+  postgres_master_data:

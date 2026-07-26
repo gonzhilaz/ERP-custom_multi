@@ -1,0 +1,287 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("TENANT_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/tenant-client"
+}
+
+// =========================================================
+// 1. ORGANIZATIONAL STRUCTURE & RBAC PERMISSIONS
+// =========================================================
+
+model Branch {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  address   String?
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  departments Department[]
+  warehouses  Warehouse[]
+  journals    JournalEntry[]
+
+  @@map("branches")
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  branchId  String
+  code      String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  branch    Branch     @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  employees Employee[]
+
+  @@map("departments")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g. "Finance Manager", "HR Supervisor", "Cashier"
+  description String?
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  permissions RolePermission[]
+  userRoles   UserRole[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String  @id @default(uuid())
+  module      String // e.g. "FINANCE", "INVENTORY", "HRD", "CHAT"
+  action      String // e.g. "READ", "CREATE", "UPDATE", "DELETE", "APPROVE"
+  code        String  @unique // e.g. "finance:journal:approve", "inventory:stock:opname"
+  description String?
+
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model LocalUser {
+  id        String   @id @default(uuid()) // Corresponds to MasterUser.id
+  email     String   @unique
+  fullName  String
+  isActive  Boolean  @default(true)
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userRoles       UserRole[]
+  sentMessages    ChatMessage[]  @relation("SentMessages")
+  chatMemberships ChatMember[]
+  createdJournals JournalEntry[] @relation("CreatedJournals")
+  employeeProfile Employee?
+
+  @@map("local_users")
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user LocalUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+// =========================================================
+// 2. STANDARDIZED CHART OF ACCOUNTS (COA) & GENERAL LEDGER
+// =========================================================
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+model Account {
+  id       String      @id @default(uuid())
+  code     String      @unique // e.g. "100-01-001" Cash, "200-01-001" AP
+  name     String
+  type     AccountType
+  parentId String?
+  isHeader Boolean     @default(false)
+  isActive Boolean     @default(true)
+  balance  Decimal     @default(0) @db.Decimal(18, 2)
+  currency String      @default("IDR")
+
+  parent       Account?      @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children     Account[]     @relation("AccountHierarchy")
+  journalLines JournalLine[]
+
+  @@map("accounts")
+}
+
+enum JournalStatus {
+  DRAFT
+  POSTED
+  VOID
+}
+
+model JournalEntry {
+  id            String        @id @default(uuid())
+  journalNumber String        @unique // e.g. "JV/2026/07/0001"
+  date          DateTime
+  reference     String? // PO Number, Invoice Number, Inter-company order
+  description   String
+  status        JournalStatus @default(DRAFT)
+  branchId      String
+  createdById   String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  branch    Branch        @relation(fields: [branchId], references: [id])
+  createdBy LocalUser     @relation("CreatedJournals", fields: [createdById], references: [id])
+  lines     JournalLine[]
+
+  @@map("journal_entries")
+}
+
+model JournalLine {
+  id             String  @id @default(uuid())
+  journalEntryId String
+  accountId      String
+  debit          Decimal @default(0) @db.Decimal(18, 2)
+  credit         Decimal @default(0) @db.Decimal(18, 2)
+  memo           String?
+
+  journalEntry JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  account      Account      @relation(fields: [accountId], references: [id])
+
+  @@map("journal_lines")
+}
+
+// =========================================================
+// 3. INVENTORY & WAREHOUSE BASE SCHEMA
+// =========================================================
+
+model Warehouse {
+  id       String  @id @default(uuid())
+  branchId String
+  code     String  @unique
+  name     String
+  address  String?
+
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@map("warehouses")
+}
+
+// =========================================================
+// 4. HRD & EMPLOYEE BASE SCHEMA
+// =========================================================
+
+enum SalaryType {
+  MONTHLY
+  DAILY
+  PIECEWORK_COMMISSION // Borongan / Komisi
+}
+
+model Employee {
+  id           String     @id @default(uuid())
+  localUserId  String?    @unique
+  departmentId String
+  nik          String     @unique
+  fullName     String
+  email        String?
+  phone        String?
+  salaryType   SalaryType @default(MONTHLY)
+  baseSalary   Decimal    @default(0) @db.Decimal(18, 2)
+  faceVector   String? // JSON string for WebGL Face Recognition descriptor
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  department Department @relation(fields: [departmentId], references: [id])
+  localUser  LocalUser? @relation(fields: [localUserId], references: [id])
+
+  @@map("employees")
+}
+
+// =========================================================
+// 5. INTERNAL REAL-TIME CHAT & COLLABORATION SCHEMA
+// =========================================================
+
+enum ChannelType {
+  DIRECT_MESSAGE
+  GROUP_CHANNEL
+  INCIDENT_SUPPORT
+}
+
+model ChatChannel {
+  id          String      @id @default(uuid())
+  name        String? // null for DMs, name for groups like "#finance-team"
+  type        ChannelType @default(GROUP_CHANNEL)
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  members  ChatMember[]
+  messages ChatMessage[]
+
+  @@map("chat_channels")
+}
+
+model ChatMember {
+  id        String   @id @default(uuid())
+  channelId String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  channel ChatChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user    LocalUser   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, userId])
+  @@map("chat_members")
+}
+
+enum MessageType {
+  TEXT
+  FILE
+  VOICE_NOTE
+  SYSTEM_ALERT
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  channelId String
+  senderId  String
+  type      MessageType @default(TEXT)
+  content   String? // Text message or caption
+  fileUrl   String? // URL for attachment or voice mail blob
+  fileType  String? // e.g. "image/png", "audio/webm", "application/pdf"
+  fileSize  Int? // Size in bytes
+  createdAt DateTime    @default(now())
+
+  channel ChatChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  sender  LocalUser   @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
