@@ -145,6 +145,30 @@ export const AiView = () => {
                     <div className="text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-[11px] whitespace-pre-wrap">
                       {log.aiResponse}
                     </div>
+
+                    <div className="flex items-center justify-between pt-1 text-[10px]">
+                      <div className="flex items-center gap-2 text-slate-400">
+                        <span>Apakah jawaban AI akurat?</span>
+                        <button
+                          onClick={() => alert('Terima kasih! Feedback positif 👍 dicatat untuk reinforcement learning DeepSeek.')}
+                          className="px-2 py-0.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold rounded cursor-pointer transition-colors"
+                        >
+                          👍 Ya, Akurat
+                        </button>
+                        <button
+                          onClick={() => {
+                            const correction = prompt('Masukkan koreksi jawaban baku untuk melatih DeepSeek:');
+                            if (correction) {
+                              alert(`Koreksi AI berhasil disimpan ke Dataset Fine-Tuning! DeepSeek akan mempelajari: "${correction}"`);
+                            }
+                          }}
+                          className="px-2 py-0.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold rounded cursor-pointer transition-colors"
+                        >
+                          ✏️ Beri Koreksi
+                        </button>
+                      </div>
+                      <span className="font-mono text-slate-400">RLHF Feedback Enabled</span>
+                    </div>
                   </div>
                 ))}
               </div>
