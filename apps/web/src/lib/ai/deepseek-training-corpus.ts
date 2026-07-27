@@ -1,6 +1,6 @@
 export interface DeepSeekTrainingItem {
   id: string;
-  category: 'FINANCE_TAX' | 'INVENTORY_SUPPLY' | 'HRD_PAYROLL' | 'MINING_FLEET' | 'HOTEL_RESTO' | 'PLANTATION_AGRI' | 'GOVERNANCE_SECURITY';
+  category: 'FINANCE_TAX' | 'INVENTORY_SUPPLY' | 'HRD_PAYROLL' | 'MINING_FLEET' | 'HOTEL_RESTO' | 'PLANTATION_AGRI' | 'DEV_STACK_INFRA' | 'GOVERNANCE_SECURITY';
   promptInstruction: string;
   expectedThoughtReasoning: string;
   expectedOutputResponse: string;
@@ -49,6 +49,22 @@ export const DEEPSEEK_ERP_TRAINING_CORPUS: DeepSeekTrainingItem[] = [
     datasetVersion: 'v2.5-Plantation'
   },
   {
+    id: 'dt-009',
+    category: 'DEV_STACK_INFRA',
+    promptInstruction: 'Tuliskan schema Prisma ORM & SQL Query PostgreSQL untuk penatausahaan Multi-Tenant Sales Invoice dengan audit soft-delete.',
+    expectedThoughtReasoning: 'Merancang skema Prisma model SalesInvoice dengan relasi Tenant, indeks pencarian, & filter soft-delete isDeleted boolean.',
+    expectedOutputResponse: 'Prisma Schema & PostgreSQL SQL: \nmodel SalesInvoice {\n  id String @id @default(uuid())\n  tenantId String\n  invoiceNo String @unique\n  totalAmount Decimal @db.Decimal(18,2)\n  isDeleted Boolean @default(false)\n  createdAt DateTime @default(now())\n  @@index([tenantId, isDeleted])\n}\nQuery PostgreSQL: SELECT * FROM "SalesInvoice" WHERE "tenantId" = \'tenant-resto-01\' AND "isDeleted" = false ORDER BY "createdAt" DESC;',
+    datasetVersion: 'v2.6-DevStack'
+  },
+  {
+    id: 'dt-010',
+    category: 'DEV_STACK_INFRA',
+    promptInstruction: 'Berikan konfigurasi Nginx Reverse Proxy & SSL Let\'s Encrypt untuk VPS Ubuntu Server 24.04 melayani Next.js App Router & Node.js API.',
+    expectedThoughtReasoning: 'Merancang konfigurasi Nginx server block dengan proxy_pass ke localhost:3000 (Next.js) & localhost:5000 (Express API).',
+    expectedOutputResponse: 'Konfigurasi Nginx VPS Ubuntu 24.04:\nserver {\n    server_name erp.domain.com;\n    location / {\n        proxy_pass http://127.0.0.1:3000;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n    }\n    location /api {\n        proxy_pass http://127.0.0.1:5000;\n    }\n}\nCommand SSL Certbot: sudo certbot --nginx -d erp.domain.com',
+    datasetVersion: 'v2.6-DevStack'
+  },
+  {
     id: 'dt-004',
     category: 'HRD_PAYROLL',
     promptInstruction: 'Simulasikan perhitungan THP Payroll Karyawan Tetap (PKWTT) Gaji Rp 12.000.000 dengan aturan BPJS dan PPh 21 TER 2026.',
@@ -62,14 +78,6 @@ export const DEEPSEEK_ERP_TRAINING_CORPUS: DeepSeekTrainingItem[] = [
     promptInstruction: 'Bagaimana penanganan transaksi akuntansi jika staf mencoba mencatat tanggal jurnal pada bulan yang sudah ditutup (Backdate Transaction)?',
     expectedThoughtReasoning: 'Memeriksa status Backdate Lock pada User Profile & System Parameters.',
     expectedOutputResponse: 'Aturan Keamanan Backdate: Jika indikator Gembok Backdate [LOCKED 🔒] aktif, transaksi otomatis ditolak oleh validasi backend. Pengguna harus meminta unblock sementara dari Direksi / Super Admin (Bayu Yanuar), yang mana pembukaan kunci akan mencatat Log Audit Keamanan resmi dengan ID jejak permanen.',
-    datasetVersion: 'v2.4-Enterprise'
-  },
-  {
-    id: 'dt-006',
-    category: 'HOTEL_RESTO',
-    promptInstruction: 'Berapa persentase Occupancy Rate Hotel Grand Royal hari ini dan apakah ada kamar yang membutuhkan pembersihan cepat?',
-    expectedThoughtReasoning: 'Mengecek ketersediaan dari total 120 kamar hotel dan status Housekeeping FO.',
-    expectedOutputResponse: 'Ringkasan PMS Hotelier: Occupancy Rate Hari Ini: 84.2% (101 Dari 120 Kamar Terisi). ADR: Rp 850.000 / Malam. Perhatian Housekeeping: 3 Kamar Deluxe (Kamar 304, 308, 412) berstatus Checkout Dirty & membutuhkan Quick Turnover untuk tamu reservasi jam 14:00.',
     datasetVersion: 'v2.4-Enterprise'
   }
 ];

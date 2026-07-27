@@ -97,6 +97,14 @@ export const DeepSeekGuardrailsTab = () => {
     },
     {
       id: 'sk-11',
+      domainName: '💻 Full-Stack Code & DevOps Infrastructure',
+      iconName: 'Code',
+      scopeCapabilities: 'PostgreSQL Text-to-SQL, Prisma ORM Schema, Next.js 16 App Router, Node/Express API, React Native, Flutter Mobile, MCP Server, Nginx & Ubuntu VPS.',
+      status: 'ACTIVE_GUARDED',
+      sampleQueries: 'Tuliskan konfigurasi Nginx Reverse Proxy & SSL untuk VPS Ubuntu Next.js'
+    },
+    {
+      id: 'sk-12',
       domainName: '🛡️ ERP Governance & Compliance Audit',
       iconName: 'ShieldCheck',
       scopeCapabilities: 'Aturan Gembok Backdate 🔒, Soft-Delete Governance, Matrix Otorisasi RBAC, & Audit Trail Permanent.',

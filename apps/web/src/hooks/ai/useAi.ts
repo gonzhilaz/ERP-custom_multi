@@ -78,6 +78,14 @@ export function useAi() {
 2. Sales CRM Conversion: Tingkatkan Conversion Rate SPH Penawaran dengan garansi Response Time < 15 Menit.`;
     }
 
+    // Domain 7: Tech Stack, Full-Stack & DevOps Infrastructure
+    if (text.includes('sql') || text.includes('postgres') || text.includes('prisma') || text.includes('next') || text.includes('node') || text.includes('express') || text.includes('flutter') || text.includes('react native') || text.includes('mcp') || text.includes('nginx') || text.includes('apache') || text.includes('ubuntu') || text.includes('vps')) {
+      return `[DeepSeek-R1 Full-Stack & DevOps Architect]: Analisis Rekayasa Perangkat Lunak & Infrastruktur VPS:
+1. PostgreSQL & Prisma ORM: Skema database ERP Multi-Tenant berjalan terindeks dengan komposit [tenantId, isDeleted]. Query Text-to-SQL tereksekusi aman dengan paged limit.
+2. App Architecture (Next.js 16 + React Native / Flutter): Frontend Next.js App Router dengan Turbopack bundling, didukung aplikasi kasir POS React Native & Flutter Mobile ESS.
+3. Server & Deployment (Nginx / Ubuntu VPS / MCP Server): Reverse Proxy Nginx mengarahkan lalu lintas SSL Port 443 ke Next.js (Port 3000) & Node/Express API (Port 5000) dengan MCP Server tools aktif.`;
+    }
+
     // Default Fallback
     return `[DeepSeek-R1 Enterprise Assistant]: Hasil analisis real-time dari Central DB ERP — Sistem berjalan optimal 100% mematuhi aturan AGENTS.md (Zero Hardcode, Gembok Backdate Locked, & Audit Trail Permanent Log).`;
   };
