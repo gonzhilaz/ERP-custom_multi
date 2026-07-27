@@ -59,7 +59,7 @@ export const AssetOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Ringkasan Analitik Aset Tetap & Depresiasi (Asset Overview)"
+        title="Aset Overview"
         icon={Building}
         iconBgColor="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
         glossaryTitle="Glossary Fixed Asset Management"

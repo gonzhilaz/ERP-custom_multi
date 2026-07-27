@@ -57,7 +57,7 @@ export const VendorOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Ringkasan Analitik Pengadaan & Vendor (Procurement Overview)"
+        title="Pengadaan Overview"
         icon={Truck}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Procurement"

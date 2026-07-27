@@ -194,7 +194,7 @@ export const FinanceArView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Manajemen Piutang Dagang (Accounts Receivable)"
+        title="Piutang Dagang"
         icon={TrendingUp}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Accounts Receivable"

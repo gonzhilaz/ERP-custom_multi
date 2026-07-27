@@ -9,7 +9,7 @@ export const MiningOverviewView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Pusat Operasional & Analitik Tambang (Mining Site Overview)"
+        title="Tambang Overview"
         icon={Pickaxe}
         iconBgColor="bg-amber-500/10 text-amber-600 dark:text-amber-400"
         glossaryTitle="Glossary Operasional Site Tambang"

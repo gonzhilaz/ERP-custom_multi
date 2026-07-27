@@ -125,7 +125,7 @@ export const HrdSppdTravelOrdersView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Surat Perintah Perjalanan Dinas & Disposisi Keluar Cabang (SPPD)"
+        title="SPPD Dinas"
         icon={Plane}
         iconBgColor="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
         glossaryTitle="Glossary SPPD Inter-Branch"

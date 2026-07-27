@@ -71,7 +71,7 @@ export const CrmCustomersView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Master Pelanggan & Contacts Hub (CRM Accounts)"
+        title="Pelanggan CRM"
         icon={Users}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Customer Accounts & Contacts"

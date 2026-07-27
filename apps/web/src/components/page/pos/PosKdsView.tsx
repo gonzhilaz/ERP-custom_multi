@@ -87,7 +87,7 @@ export const PosKdsView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Kitchen Display System (KDS Monitor Dapur Hotel)"
+        title="Kitchen Display"
         icon={ChefHat}
         iconBgColor="bg-amber-500/10 text-amber-600 dark:text-amber-400"
         glossaryTitle="Glossary KDS Dapur & Restoran"

@@ -187,13 +187,17 @@ export const ManagerialDmsView = () => {
               </div>
               <div>
                 <label className="font-semibold text-slate-700 dark:text-slate-300">Kategori Perizinan:</label>
-                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl focus:outline-none">
-                  <option value="Logistik & Fleet (KIR)">🚚 Logistik & Fleet (Uji KIR Dishub)</option>
-                  <option value="Logistik & Fleet (STNK)">🚚 Logistik & Fleet (STNK & Pajak Truk)</option>
-                  <option value="Izin Angkutan B3">🚚 Izin Transportasi & Angkutan B3</option>
-                  <option value="Izin Usaha Tambang (IUP)">⛏️ Izin Usaha Tambang (IUP)</option>
-                  <option value="Izin Halal & BPOM">🍳 Izin Halal & BPOM Resto/Catering</option>
-                </select>
+                <SearchableSelect
+                  value={form.category}
+                  onChange={(val) => setForm({ ...form, category: val })}
+                  options={[
+                    { id: 'Logistik & Fleet (KIR)', label: '🚚 Logistik & Fleet (Uji KIR Dishub)' },
+                    { id: 'Logistik & Fleet (STNK)', label: '🚚 Logistik & Fleet (STNK & Pajak Truk)' },
+                    { id: 'Izin Angkutan B3', label: '🚚 Izin Transportasi & Angkutan B3' },
+                    { id: 'Izin Usaha Tambang (IUP)', label: '⛏️ Izin Usaha Tambang (IUP)' },
+                    { id: 'Izin Halal & BPOM', label: '🍳 Izin Halal & BPOM Resto/Catering' }
+                  ]}
+                />
               </div>
               <div>
                 <label className="font-semibold text-slate-700 dark:text-slate-300">Nomor Dokumen / Lisensi:</label>

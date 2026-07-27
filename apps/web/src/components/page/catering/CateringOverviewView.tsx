@@ -9,7 +9,7 @@ export const CateringOverviewView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Pusat Analitik & Operasional Catering Massal (Catering Overview)"
+        title="Catering Overview"
         icon={UtensilsCrossed}
         iconBgColor="bg-orange-500/10 text-orange-600 dark:text-orange-400"
         glossaryTitle="Glossary Catering Massal"

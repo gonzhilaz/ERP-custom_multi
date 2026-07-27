@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, CheckCircle2, DollarSign, Receipt, Printer, AlertCircle, LogOut } from 'lucide-react';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 import { HotelReservationItem } from './HotelierReservationsView';
 
 interface Props {
@@ -131,12 +132,16 @@ export const HotelCheckOutModal: React.FC<Props> = ({ reservation, onClose, onCo
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Metode Pelunasan</label>
-              <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-xs">
-                <option value="DEBIT_CARD">Kartu Debit EDC</option>
-                <option value="CREDIT_CARD">Kartu Kredit Visa/Master</option>
-                <option value="CASH">Tunai (Cash Desk)</option>
-                <option value="QRIS">QRIS Statis/Dinamis</option>
-              </select>
+              <SearchableSelect
+                value={paymentMethod}
+                onChange={(val) => setPaymentMethod(val)}
+                options={[
+                  { id: 'DEBIT_CARD', label: 'Kartu Debit EDC' },
+                  { id: 'CREDIT_CARD', label: 'Kartu Kredit Visa/Master' },
+                  { id: 'CASH', label: 'Tunai (Cash Desk)' },
+                  { id: 'QRIS', label: 'QRIS Statis/Dinamis' }
+                ]}
+              />
             </div>
             <div>
               <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Pengembalian Deposit (Sisa)</label>

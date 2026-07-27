@@ -68,7 +68,7 @@ export const CrmQuotationsView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Surat Penawaran Harga (Sales Quotation Hub)"
+        title="Penawaran Sales"
         icon={FileText}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Sales Quotations (SPH)"

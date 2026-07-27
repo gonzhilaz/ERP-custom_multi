@@ -73,7 +73,7 @@ export const FinanceGlView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Jurnal Buku Besar (General Ledger)"
+        title="Buku Besar"
         icon={BookOpen}
         iconBgColor="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
         glossaryTitle="Glossary General Ledger"

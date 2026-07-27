@@ -10,7 +10,7 @@ export const EssOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Pusat Portal Mandiri Karyawan (ESS Overview)"
+        title="ESS Overview"
         icon={UserCheck}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Employee Self-Service"

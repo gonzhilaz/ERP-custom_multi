@@ -57,7 +57,7 @@ export const StorageOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Ringkasan Analitik Kapasitas & Lokasi Storage (Storage Overview)"
+        title="Storage Overview"
         icon={Warehouse}
         iconBgColor="bg-amber-500/10 text-amber-600 dark:text-amber-400"
         glossaryTitle="Glossary Storage Management"

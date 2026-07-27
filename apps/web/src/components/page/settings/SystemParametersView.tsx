@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Sliders, Plus, Trash2, HelpCircle, X, Layers } from 'lucide-react';
 import { useSystemParameters } from '@/hooks/useSystemParameters';
 import { DynamicSearchFilter } from '@/components/ui/forms/DynamicSearchFilter';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const SystemParametersView = () => {
   const { parameters, addParameter, deleteParameter } = useSystemParameters();
@@ -123,12 +124,16 @@ export const SystemParametersView = () => {
             <div className="space-y-3">
               <div>
                 <label className="font-semibold text-slate-700 dark:text-slate-300">Grup Modul:</label>
-                <select value={form.moduleGroup} onChange={(e) => setForm({ ...form, moduleGroup: e.target.value as any })} className="w-full px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl focus:outline-none">
-                  <option value="INVENTORY_ASSET">Inventory & Aset</option>
-                  <option value="VENDOR_PROCUREMENT">Vendor & Procurement</option>
-                  <option value="HRD_PAYROLL">HRD & Payroll</option>
-                  <option value="FINANCE_LEGAL">Finance & Legal</option>
-                </select>
+                <SearchableSelect
+                  value={form.moduleGroup}
+                  onChange={(val) => setForm({ ...form, moduleGroup: val as any })}
+                  options={[
+                    { id: 'INVENTORY_ASSET', label: 'Inventory & Aset' },
+                    { id: 'VENDOR_PROCUREMENT', label: 'Vendor & Procurement' },
+                    { id: 'HRD_PAYROLL', label: 'HRD & Payroll' },
+                    { id: 'FINANCE_LEGAL', label: 'Finance & Legal' }
+                  ]}
+                />
               </div>
               <div>
                 <label className="font-semibold text-slate-700 dark:text-slate-300">Tipe Parameter / Klasifikasi:</label>

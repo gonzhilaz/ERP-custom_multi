@@ -74,7 +74,7 @@ export const FinanceTrialBalanceView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Neraca Saldo / Neraca Sisa (Trial Balance)"
+        title="Neraca Saldo"
         icon={Scale}
         iconBgColor="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
         glossaryTitle="Glossary Trial Balance"

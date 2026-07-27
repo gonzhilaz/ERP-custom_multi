@@ -205,7 +205,7 @@ export const FinanceApView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Manajemen Utang Dagang (Accounts Payable)"
+        title="Utang Dagang"
         icon={CreditCard}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Accounts Payable"
@@ -241,7 +241,7 @@ export const FinanceApView = () => {
       <FinanceItemDetailModal
         isOpen={detailApItem !== null}
         onClose={() => setDetailApItem(null)}
-        title="Detail Tagihan Utang Vendor (Accounts Payable)"
+        title="Detail Utang Vendor"
         subtitle={detailApItem ? `${detailApItem.invoiceNumber} • ${detailApItem.supplierName}` : ''}
         badgeLabel={detailApItem?.status}
         badgeType={detailApItem?.status === 'PAID' ? 'ACTIVE' : 'ALERT'}

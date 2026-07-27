@@ -24,7 +24,7 @@ export const HrdQrKioskView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Dynamic QR Code Kiosk Presensi HRD (Rotasi 15 Detik)"
+        title="QR Presensi"
         icon={QrCode}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Dynamic QR Kiosk"

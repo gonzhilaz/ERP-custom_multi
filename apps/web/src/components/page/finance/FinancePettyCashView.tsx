@@ -93,7 +93,7 @@ export const FinancePettyCashView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Kas Kecil Ops (Petty Cash Imprest)"
+        title="Kas Kecil"
         icon={DollarSign}
         iconBgColor="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
         glossaryTitle="Glossary Imprest Fund Kas Kecil"

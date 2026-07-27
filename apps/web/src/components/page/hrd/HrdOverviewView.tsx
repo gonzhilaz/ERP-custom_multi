@@ -14,7 +14,7 @@ export const HrdOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Ringkasan Analitik SDM & Payroll (HRD Overview)"
+        title="SDM Overview"
         icon={Users}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary HRD & Payroll"

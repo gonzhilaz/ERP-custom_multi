@@ -9,7 +9,7 @@ export const MailOverviewView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Pusat Analitik Korespondensi & Tata Persuratan (Mail Overview)"
+        title="Persuratan Overview"
         icon={Mail}
         iconBgColor="bg-slate-500/10 text-slate-600 dark:text-slate-400"
         glossaryTitle="Glossary Korespondensi & Surat Resmi"

@@ -10,7 +10,7 @@ export const ManagerialOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Dashboard Eksekutif & Intelijen Konsolidasi (Managerial Overview)"
+        title="Eksekutif Overview"
         icon={BarChart3}
         iconBgColor="bg-purple-500/10 text-purple-600 dark:text-purple-400"
         glossaryTitle="Glossary Managerial Intelligence"

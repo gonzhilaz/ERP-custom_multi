@@ -9,7 +9,7 @@ export const ManufacturingOverviewView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Pusat Analitik & Operasional Pabrikasi (Manufacturing Overview)"
+        title="Pabrikasi Overview"
         icon={Factory}
         iconBgColor="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
         glossaryTitle="Glossary Manufaktur & Resep Produksi"

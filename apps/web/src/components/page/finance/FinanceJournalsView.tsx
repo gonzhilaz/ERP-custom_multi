@@ -165,7 +165,7 @@ export const FinanceJournalsView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Pusat Jurnal Keuangan (Journals Hub)"
+        title="Jurnal Keuangan"
         icon={FileSpreadsheet}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Accounting Journals"
