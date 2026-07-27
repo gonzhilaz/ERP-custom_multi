@@ -26,6 +26,7 @@ import provisionerRoutes from './routes/provisioner';
 import reportsRoutes from './routes/reports';
 import bankAccountsRoutes from './routes/bank-accounts';
 import assetDepreciationRoutes from './routes/asset-depreciation';
+import whatsappRoutes from './routes/whatsapp';
 import { setupSocketChatHandlers } from './socket/chat-handler';
 
 dotenv.config();
@@ -65,7 +66,7 @@ app.use('/api/tenants', tenantRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/inventory', inventoryRoutes);
-app.use('/api/vendors', vendorRoutes);
+app.use('/api/vendor', vendorRoutes);
 app.use('/api/hrd', hrdRoutes);
 app.use('/api/ess', essRoutes);
 app.use('/api/managerial', managerialRoutes);
@@ -82,6 +83,7 @@ app.use('/api/provisioner', provisionerRoutes);
 app.use('/api/finance/reports', reportsRoutes);
 app.use('/api/finance/bank-accounts', bankAccountsRoutes);
 app.use('/api/asset/depreciation', assetDepreciationRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 server.listen(PORT, () => {
   console.log(`=======================================================`);

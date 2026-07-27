@@ -273,6 +273,7 @@ export const holdingCategories: ModuleCategory[] = [
       { name: 'Approval Matrix', href: '/settings/approval-matrix' },
       { name: 'Hak Akses & Peran', href: '/settings/access-control' },
       { name: 'Document Designer', href: '/settings/document-designer' },
+      { name: 'WhatsApp Gateway', href: '/settings/whatsapp' },
       { name: 'Aturan & Parameter', href: '/settings/parameters' },
       { name: 'Laporan Sistem', href: '/settings/reports' },
       { name: 'Audit Log', href: '/settings/audit-log' }
