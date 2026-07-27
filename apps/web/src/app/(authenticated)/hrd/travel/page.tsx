@@ -1,6 +1,6 @@
 import React from 'react';
-import { HrdTravelExpensesView } from '@/components/page/hrd/HrdTravelExpensesView';
+import { HrdSppdTravelOrdersView } from '@/components/page/hrd/HrdSppdTravelOrdersView';
 
 export default function HrdTravelPage() {
-  return <HrdTravelExpensesView />;
+  return <HrdSppdTravelOrdersView />;
 }
