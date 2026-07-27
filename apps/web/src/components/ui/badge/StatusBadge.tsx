@@ -1,28 +1,34 @@
+'use client';
+
 import React from 'react';
 
 interface StatusBadgeProps {
-  type: 'ASSET' | 'LIABILITY' | 'EQUITY' | 'REVENUE' | 'EXPENSE' | 'ACTIVE' | 'ALERT' | 'APPROVED' | 'PENDING' | string;
+  type: string;
   label?: string;
+  className?: string;
 }
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ type, label }) => {
-  const displayLabel = label || type;
-
-  let colorClasses = 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300';
-
-  if (type === 'ASSET' || type === 'APPROVED' || type === 'ACTIVE') {
-    colorClasses = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300';
-  } else if (type === 'LIABILITY' || type === 'ALERT' || type === 'WAITING_APPROVAL_DIREKTUR') {
-    colorClasses = 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300';
-  } else if (type === 'REVENUE') {
-    colorClasses = 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300';
-  } else if (type === 'EXPENSE') {
-    colorClasses = 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300';
-  }
+export function StatusBadge({ type, label, className = '' }: StatusBadgeProps) {
+  const colorMap: Record<string, string> = {
+    ACTIVE: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+    SUCCESS: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+    APPROVED: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+    WARNING: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
+    ALERT: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
+    PENDING: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/30',
+    INFO: 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/30',
+    DRAFT: 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/30',
+    NEUTRAL: 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/30',
+    ERROR: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30',
+    REJECTED: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30',
+    CANCELLED: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30'
+  };
 
   return (
-    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${colorClasses}`}>
-      {displayLabel}
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full border ${colorMap[type] || colorMap.DRAFT} ${className}`}
+    >
+      {label || type}
     </span>
   );
-};
+}

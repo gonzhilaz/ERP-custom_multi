@@ -88,6 +88,31 @@ export type ChatMember = $Result.DefaultSelection<Prisma.$ChatMemberPayload>
  * 
  */
 export type ChatMessage = $Result.DefaultSelection<Prisma.$ChatMessagePayload>
+/**
+ * Model MeetingTicket
+ * 
+ */
+export type MeetingTicket = $Result.DefaultSelection<Prisma.$MeetingTicketPayload>
+/**
+ * Model MeetingSession
+ * 
+ */
+export type MeetingSession = $Result.DefaultSelection<Prisma.$MeetingSessionPayload>
+/**
+ * Model MeetingAgendaItem
+ * 
+ */
+export type MeetingAgendaItem = $Result.DefaultSelection<Prisma.$MeetingAgendaItemPayload>
+/**
+ * Model SecurityGateLog
+ * 
+ */
+export type SecurityGateLog = $Result.DefaultSelection<Prisma.$SecurityGateLogPayload>
+/**
+ * Model SecurityIncidentReport
+ * 
+ */
+export type SecurityIncidentReport = $Result.DefaultSelection<Prisma.$SecurityIncidentReportPayload>
 
 /**
  * Enums
@@ -140,6 +165,46 @@ export const MessageType: {
 
 export type MessageType = (typeof MessageType)[keyof typeof MessageType]
 
+
+export const TicketPriority: {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+export type TicketPriority = (typeof TicketPriority)[keyof typeof TicketPriority]
+
+
+export const TicketStatus: {
+  OPEN: 'OPEN',
+  ESCALATED_TO_HO: 'ESCALATED_TO_HO',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
+export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]
+
+
+export const GatePassType: {
+  INBOUND_SUPPLIER: 'INBOUND_SUPPLIER',
+  OUTBOUND_HAULING: 'OUTBOUND_HAULING',
+  VISITOR: 'VISITOR',
+  STAFF: 'STAFF'
+};
+
+export type GatePassType = (typeof GatePassType)[keyof typeof GatePassType]
+
+
+export const IncidentSeverity: {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+export type IncidentSeverity = (typeof IncidentSeverity)[keyof typeof IncidentSeverity]
+
 }
 
 export type AccountType = $Enums.AccountType
@@ -161,6 +226,22 @@ export const ChannelType: typeof $Enums.ChannelType
 export type MessageType = $Enums.MessageType
 
 export const MessageType: typeof $Enums.MessageType
+
+export type TicketPriority = $Enums.TicketPriority
+
+export const TicketPriority: typeof $Enums.TicketPriority
+
+export type TicketStatus = $Enums.TicketStatus
+
+export const TicketStatus: typeof $Enums.TicketStatus
+
+export type GatePassType = $Enums.GatePassType
+
+export const GatePassType: typeof $Enums.GatePassType
+
+export type IncidentSeverity = $Enums.IncidentSeverity
+
+export const IncidentSeverity: typeof $Enums.IncidentSeverity
 
 /**
  * ##  Prisma Client ʲˢ
@@ -434,6 +515,56 @@ export class PrismaClient<
     * ```
     */
   get chatMessage(): Prisma.ChatMessageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.meetingTicket`: Exposes CRUD operations for the **MeetingTicket** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MeetingTickets
+    * const meetingTickets = await prisma.meetingTicket.findMany()
+    * ```
+    */
+  get meetingTicket(): Prisma.MeetingTicketDelegate<ExtArgs>;
+
+  /**
+   * `prisma.meetingSession`: Exposes CRUD operations for the **MeetingSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MeetingSessions
+    * const meetingSessions = await prisma.meetingSession.findMany()
+    * ```
+    */
+  get meetingSession(): Prisma.MeetingSessionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.meetingAgendaItem`: Exposes CRUD operations for the **MeetingAgendaItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MeetingAgendaItems
+    * const meetingAgendaItems = await prisma.meetingAgendaItem.findMany()
+    * ```
+    */
+  get meetingAgendaItem(): Prisma.MeetingAgendaItemDelegate<ExtArgs>;
+
+  /**
+   * `prisma.securityGateLog`: Exposes CRUD operations for the **SecurityGateLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SecurityGateLogs
+    * const securityGateLogs = await prisma.securityGateLog.findMany()
+    * ```
+    */
+  get securityGateLog(): Prisma.SecurityGateLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.securityIncidentReport`: Exposes CRUD operations for the **SecurityIncidentReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SecurityIncidentReports
+    * const securityIncidentReports = await prisma.securityIncidentReport.findMany()
+    * ```
+    */
+  get securityIncidentReport(): Prisma.SecurityIncidentReportDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -889,7 +1020,12 @@ export namespace Prisma {
     Employee: 'Employee',
     ChatChannel: 'ChatChannel',
     ChatMember: 'ChatMember',
-    ChatMessage: 'ChatMessage'
+    ChatMessage: 'ChatMessage',
+    MeetingTicket: 'MeetingTicket',
+    MeetingSession: 'MeetingSession',
+    MeetingAgendaItem: 'MeetingAgendaItem',
+    SecurityGateLog: 'SecurityGateLog',
+    SecurityIncidentReport: 'SecurityIncidentReport'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -905,7 +1041,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "branch" | "department" | "role" | "permission" | "rolePermission" | "localUser" | "userRole" | "account" | "journalEntry" | "journalLine" | "warehouse" | "employee" | "chatChannel" | "chatMember" | "chatMessage"
+      modelProps: "branch" | "department" | "role" | "permission" | "rolePermission" | "localUser" | "userRole" | "account" | "journalEntry" | "journalLine" | "warehouse" | "employee" | "chatChannel" | "chatMember" | "chatMessage" | "meetingTicket" | "meetingSession" | "meetingAgendaItem" | "securityGateLog" | "securityIncidentReport"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1959,6 +2095,356 @@ export namespace Prisma {
           }
         }
       }
+      MeetingTicket: {
+        payload: Prisma.$MeetingTicketPayload<ExtArgs>
+        fields: Prisma.MeetingTicketFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MeetingTicketFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MeetingTicketFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>
+          }
+          findFirst: {
+            args: Prisma.MeetingTicketFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MeetingTicketFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>
+          }
+          findMany: {
+            args: Prisma.MeetingTicketFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>[]
+          }
+          create: {
+            args: Prisma.MeetingTicketCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>
+          }
+          createMany: {
+            args: Prisma.MeetingTicketCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MeetingTicketCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>[]
+          }
+          delete: {
+            args: Prisma.MeetingTicketDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>
+          }
+          update: {
+            args: Prisma.MeetingTicketUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>
+          }
+          deleteMany: {
+            args: Prisma.MeetingTicketDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MeetingTicketUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MeetingTicketUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingTicketPayload>
+          }
+          aggregate: {
+            args: Prisma.MeetingTicketAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMeetingTicket>
+          }
+          groupBy: {
+            args: Prisma.MeetingTicketGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MeetingTicketGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MeetingTicketCountArgs<ExtArgs>
+            result: $Utils.Optional<MeetingTicketCountAggregateOutputType> | number
+          }
+        }
+      }
+      MeetingSession: {
+        payload: Prisma.$MeetingSessionPayload<ExtArgs>
+        fields: Prisma.MeetingSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MeetingSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MeetingSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.MeetingSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MeetingSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>
+          }
+          findMany: {
+            args: Prisma.MeetingSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>[]
+          }
+          create: {
+            args: Prisma.MeetingSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>
+          }
+          createMany: {
+            args: Prisma.MeetingSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MeetingSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.MeetingSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>
+          }
+          update: {
+            args: Prisma.MeetingSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MeetingSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MeetingSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MeetingSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.MeetingSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMeetingSession>
+          }
+          groupBy: {
+            args: Prisma.MeetingSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MeetingSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MeetingSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<MeetingSessionCountAggregateOutputType> | number
+          }
+        }
+      }
+      MeetingAgendaItem: {
+        payload: Prisma.$MeetingAgendaItemPayload<ExtArgs>
+        fields: Prisma.MeetingAgendaItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MeetingAgendaItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MeetingAgendaItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>
+          }
+          findFirst: {
+            args: Prisma.MeetingAgendaItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MeetingAgendaItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>
+          }
+          findMany: {
+            args: Prisma.MeetingAgendaItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>[]
+          }
+          create: {
+            args: Prisma.MeetingAgendaItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>
+          }
+          createMany: {
+            args: Prisma.MeetingAgendaItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MeetingAgendaItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>[]
+          }
+          delete: {
+            args: Prisma.MeetingAgendaItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>
+          }
+          update: {
+            args: Prisma.MeetingAgendaItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.MeetingAgendaItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MeetingAgendaItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MeetingAgendaItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingAgendaItemPayload>
+          }
+          aggregate: {
+            args: Prisma.MeetingAgendaItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMeetingAgendaItem>
+          }
+          groupBy: {
+            args: Prisma.MeetingAgendaItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MeetingAgendaItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MeetingAgendaItemCountArgs<ExtArgs>
+            result: $Utils.Optional<MeetingAgendaItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      SecurityGateLog: {
+        payload: Prisma.$SecurityGateLogPayload<ExtArgs>
+        fields: Prisma.SecurityGateLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SecurityGateLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SecurityGateLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>
+          }
+          findFirst: {
+            args: Prisma.SecurityGateLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SecurityGateLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>
+          }
+          findMany: {
+            args: Prisma.SecurityGateLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>[]
+          }
+          create: {
+            args: Prisma.SecurityGateLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>
+          }
+          createMany: {
+            args: Prisma.SecurityGateLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SecurityGateLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>[]
+          }
+          delete: {
+            args: Prisma.SecurityGateLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>
+          }
+          update: {
+            args: Prisma.SecurityGateLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.SecurityGateLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SecurityGateLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SecurityGateLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityGateLogPayload>
+          }
+          aggregate: {
+            args: Prisma.SecurityGateLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSecurityGateLog>
+          }
+          groupBy: {
+            args: Prisma.SecurityGateLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SecurityGateLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SecurityGateLogCountArgs<ExtArgs>
+            result: $Utils.Optional<SecurityGateLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      SecurityIncidentReport: {
+        payload: Prisma.$SecurityIncidentReportPayload<ExtArgs>
+        fields: Prisma.SecurityIncidentReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SecurityIncidentReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SecurityIncidentReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>
+          }
+          findFirst: {
+            args: Prisma.SecurityIncidentReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SecurityIncidentReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>
+          }
+          findMany: {
+            args: Prisma.SecurityIncidentReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>[]
+          }
+          create: {
+            args: Prisma.SecurityIncidentReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>
+          }
+          createMany: {
+            args: Prisma.SecurityIncidentReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SecurityIncidentReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>[]
+          }
+          delete: {
+            args: Prisma.SecurityIncidentReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>
+          }
+          update: {
+            args: Prisma.SecurityIncidentReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.SecurityIncidentReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SecurityIncidentReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SecurityIncidentReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityIncidentReportPayload>
+          }
+          aggregate: {
+            args: Prisma.SecurityIncidentReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSecurityIncidentReport>
+          }
+          groupBy: {
+            args: Prisma.SecurityIncidentReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SecurityIncidentReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SecurityIncidentReportCountArgs<ExtArgs>
+            result: $Utils.Optional<SecurityIncidentReportCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2432,6 +2918,68 @@ export namespace Prisma {
    */
   export type ChatChannelCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChatMessageWhereInput
+  }
+
+
+  /**
+   * Count Type MeetingTicketCountOutputType
+   */
+
+  export type MeetingTicketCountOutputType = {
+    agendaItems: number
+  }
+
+  export type MeetingTicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agendaItems?: boolean | MeetingTicketCountOutputTypeCountAgendaItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MeetingTicketCountOutputType without action
+   */
+  export type MeetingTicketCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicketCountOutputType
+     */
+    select?: MeetingTicketCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MeetingTicketCountOutputType without action
+   */
+  export type MeetingTicketCountOutputTypeCountAgendaItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingAgendaItemWhereInput
+  }
+
+
+  /**
+   * Count Type MeetingSessionCountOutputType
+   */
+
+  export type MeetingSessionCountOutputType = {
+    agendaItems: number
+  }
+
+  export type MeetingSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agendaItems?: boolean | MeetingSessionCountOutputTypeCountAgendaItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MeetingSessionCountOutputType without action
+   */
+  export type MeetingSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSessionCountOutputType
+     */
+    select?: MeetingSessionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MeetingSessionCountOutputType without action
+   */
+  export type MeetingSessionCountOutputTypeCountAgendaItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingAgendaItemWhereInput
   }
 
 
@@ -17287,6 +17835,5041 @@ export namespace Prisma {
 
 
   /**
+   * Model MeetingTicket
+   */
+
+  export type AggregateMeetingTicket = {
+    _count: MeetingTicketCountAggregateOutputType | null
+    _min: MeetingTicketMinAggregateOutputType | null
+    _max: MeetingTicketMaxAggregateOutputType | null
+  }
+
+  export type MeetingTicketMinAggregateOutputType = {
+    id: string | null
+    ticketCode: string | null
+    title: string | null
+    description: string | null
+    category: string | null
+    priority: $Enums.TicketPriority | null
+    status: $Enums.TicketStatus | null
+    branchLocation: string | null
+    createdByName: string | null
+    assignedToName: string | null
+    solutionNote: string | null
+    resolvedAt: Date | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingTicketMaxAggregateOutputType = {
+    id: string | null
+    ticketCode: string | null
+    title: string | null
+    description: string | null
+    category: string | null
+    priority: $Enums.TicketPriority | null
+    status: $Enums.TicketStatus | null
+    branchLocation: string | null
+    createdByName: string | null
+    assignedToName: string | null
+    solutionNote: string | null
+    resolvedAt: Date | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingTicketCountAggregateOutputType = {
+    id: number
+    ticketCode: number
+    title: number
+    description: number
+    category: number
+    priority: number
+    status: number
+    branchLocation: number
+    createdByName: number
+    assignedToName: number
+    solutionNote: number
+    resolvedAt: number
+    isDeleted: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MeetingTicketMinAggregateInputType = {
+    id?: true
+    ticketCode?: true
+    title?: true
+    description?: true
+    category?: true
+    priority?: true
+    status?: true
+    branchLocation?: true
+    createdByName?: true
+    assignedToName?: true
+    solutionNote?: true
+    resolvedAt?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingTicketMaxAggregateInputType = {
+    id?: true
+    ticketCode?: true
+    title?: true
+    description?: true
+    category?: true
+    priority?: true
+    status?: true
+    branchLocation?: true
+    createdByName?: true
+    assignedToName?: true
+    solutionNote?: true
+    resolvedAt?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingTicketCountAggregateInputType = {
+    id?: true
+    ticketCode?: true
+    title?: true
+    description?: true
+    category?: true
+    priority?: true
+    status?: true
+    branchLocation?: true
+    createdByName?: true
+    assignedToName?: true
+    solutionNote?: true
+    resolvedAt?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MeetingTicketAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MeetingTicket to aggregate.
+     */
+    where?: MeetingTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingTickets to fetch.
+     */
+    orderBy?: MeetingTicketOrderByWithRelationInput | MeetingTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MeetingTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MeetingTickets
+    **/
+    _count?: true | MeetingTicketCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MeetingTicketMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MeetingTicketMaxAggregateInputType
+  }
+
+  export type GetMeetingTicketAggregateType<T extends MeetingTicketAggregateArgs> = {
+        [P in keyof T & keyof AggregateMeetingTicket]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMeetingTicket[P]>
+      : GetScalarType<T[P], AggregateMeetingTicket[P]>
+  }
+
+
+
+
+  export type MeetingTicketGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingTicketWhereInput
+    orderBy?: MeetingTicketOrderByWithAggregationInput | MeetingTicketOrderByWithAggregationInput[]
+    by: MeetingTicketScalarFieldEnum[] | MeetingTicketScalarFieldEnum
+    having?: MeetingTicketScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MeetingTicketCountAggregateInputType | true
+    _min?: MeetingTicketMinAggregateInputType
+    _max?: MeetingTicketMaxAggregateInputType
+  }
+
+  export type MeetingTicketGroupByOutputType = {
+    id: string
+    ticketCode: string
+    title: string
+    description: string
+    category: string
+    priority: $Enums.TicketPriority
+    status: $Enums.TicketStatus
+    branchLocation: string
+    createdByName: string
+    assignedToName: string | null
+    solutionNote: string | null
+    resolvedAt: Date | null
+    isDeleted: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: MeetingTicketCountAggregateOutputType | null
+    _min: MeetingTicketMinAggregateOutputType | null
+    _max: MeetingTicketMaxAggregateOutputType | null
+  }
+
+  type GetMeetingTicketGroupByPayload<T extends MeetingTicketGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MeetingTicketGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MeetingTicketGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MeetingTicketGroupByOutputType[P]>
+            : GetScalarType<T[P], MeetingTicketGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MeetingTicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketCode?: boolean
+    title?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    branchLocation?: boolean
+    createdByName?: boolean
+    assignedToName?: boolean
+    solutionNote?: boolean
+    resolvedAt?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agendaItems?: boolean | MeetingTicket$agendaItemsArgs<ExtArgs>
+    _count?: boolean | MeetingTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meetingTicket"]>
+
+  export type MeetingTicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketCode?: boolean
+    title?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    branchLocation?: boolean
+    createdByName?: boolean
+    assignedToName?: boolean
+    solutionNote?: boolean
+    resolvedAt?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["meetingTicket"]>
+
+  export type MeetingTicketSelectScalar = {
+    id?: boolean
+    ticketCode?: boolean
+    title?: boolean
+    description?: boolean
+    category?: boolean
+    priority?: boolean
+    status?: boolean
+    branchLocation?: boolean
+    createdByName?: boolean
+    assignedToName?: boolean
+    solutionNote?: boolean
+    resolvedAt?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MeetingTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agendaItems?: boolean | MeetingTicket$agendaItemsArgs<ExtArgs>
+    _count?: boolean | MeetingTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MeetingTicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $MeetingTicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MeetingTicket"
+    objects: {
+      agendaItems: Prisma.$MeetingAgendaItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ticketCode: string
+      title: string
+      description: string
+      category: string
+      priority: $Enums.TicketPriority
+      status: $Enums.TicketStatus
+      branchLocation: string
+      createdByName: string
+      assignedToName: string | null
+      solutionNote: string | null
+      resolvedAt: Date | null
+      isDeleted: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["meetingTicket"]>
+    composites: {}
+  }
+
+  type MeetingTicketGetPayload<S extends boolean | null | undefined | MeetingTicketDefaultArgs> = $Result.GetResult<Prisma.$MeetingTicketPayload, S>
+
+  type MeetingTicketCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MeetingTicketFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MeetingTicketCountAggregateInputType | true
+    }
+
+  export interface MeetingTicketDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MeetingTicket'], meta: { name: 'MeetingTicket' } }
+    /**
+     * Find zero or one MeetingTicket that matches the filter.
+     * @param {MeetingTicketFindUniqueArgs} args - Arguments to find a MeetingTicket
+     * @example
+     * // Get one MeetingTicket
+     * const meetingTicket = await prisma.meetingTicket.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MeetingTicketFindUniqueArgs>(args: SelectSubset<T, MeetingTicketFindUniqueArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MeetingTicket that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MeetingTicketFindUniqueOrThrowArgs} args - Arguments to find a MeetingTicket
+     * @example
+     * // Get one MeetingTicket
+     * const meetingTicket = await prisma.meetingTicket.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MeetingTicketFindUniqueOrThrowArgs>(args: SelectSubset<T, MeetingTicketFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MeetingTicket that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketFindFirstArgs} args - Arguments to find a MeetingTicket
+     * @example
+     * // Get one MeetingTicket
+     * const meetingTicket = await prisma.meetingTicket.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MeetingTicketFindFirstArgs>(args?: SelectSubset<T, MeetingTicketFindFirstArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MeetingTicket that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketFindFirstOrThrowArgs} args - Arguments to find a MeetingTicket
+     * @example
+     * // Get one MeetingTicket
+     * const meetingTicket = await prisma.meetingTicket.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MeetingTicketFindFirstOrThrowArgs>(args?: SelectSubset<T, MeetingTicketFindFirstOrThrowArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MeetingTickets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MeetingTickets
+     * const meetingTickets = await prisma.meetingTicket.findMany()
+     * 
+     * // Get first 10 MeetingTickets
+     * const meetingTickets = await prisma.meetingTicket.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const meetingTicketWithIdOnly = await prisma.meetingTicket.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MeetingTicketFindManyArgs>(args?: SelectSubset<T, MeetingTicketFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MeetingTicket.
+     * @param {MeetingTicketCreateArgs} args - Arguments to create a MeetingTicket.
+     * @example
+     * // Create one MeetingTicket
+     * const MeetingTicket = await prisma.meetingTicket.create({
+     *   data: {
+     *     // ... data to create a MeetingTicket
+     *   }
+     * })
+     * 
+     */
+    create<T extends MeetingTicketCreateArgs>(args: SelectSubset<T, MeetingTicketCreateArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MeetingTickets.
+     * @param {MeetingTicketCreateManyArgs} args - Arguments to create many MeetingTickets.
+     * @example
+     * // Create many MeetingTickets
+     * const meetingTicket = await prisma.meetingTicket.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MeetingTicketCreateManyArgs>(args?: SelectSubset<T, MeetingTicketCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MeetingTickets and returns the data saved in the database.
+     * @param {MeetingTicketCreateManyAndReturnArgs} args - Arguments to create many MeetingTickets.
+     * @example
+     * // Create many MeetingTickets
+     * const meetingTicket = await prisma.meetingTicket.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MeetingTickets and only return the `id`
+     * const meetingTicketWithIdOnly = await prisma.meetingTicket.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MeetingTicketCreateManyAndReturnArgs>(args?: SelectSubset<T, MeetingTicketCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MeetingTicket.
+     * @param {MeetingTicketDeleteArgs} args - Arguments to delete one MeetingTicket.
+     * @example
+     * // Delete one MeetingTicket
+     * const MeetingTicket = await prisma.meetingTicket.delete({
+     *   where: {
+     *     // ... filter to delete one MeetingTicket
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MeetingTicketDeleteArgs>(args: SelectSubset<T, MeetingTicketDeleteArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MeetingTicket.
+     * @param {MeetingTicketUpdateArgs} args - Arguments to update one MeetingTicket.
+     * @example
+     * // Update one MeetingTicket
+     * const meetingTicket = await prisma.meetingTicket.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MeetingTicketUpdateArgs>(args: SelectSubset<T, MeetingTicketUpdateArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MeetingTickets.
+     * @param {MeetingTicketDeleteManyArgs} args - Arguments to filter MeetingTickets to delete.
+     * @example
+     * // Delete a few MeetingTickets
+     * const { count } = await prisma.meetingTicket.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MeetingTicketDeleteManyArgs>(args?: SelectSubset<T, MeetingTicketDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MeetingTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MeetingTickets
+     * const meetingTicket = await prisma.meetingTicket.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MeetingTicketUpdateManyArgs>(args: SelectSubset<T, MeetingTicketUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MeetingTicket.
+     * @param {MeetingTicketUpsertArgs} args - Arguments to update or create a MeetingTicket.
+     * @example
+     * // Update or create a MeetingTicket
+     * const meetingTicket = await prisma.meetingTicket.upsert({
+     *   create: {
+     *     // ... data to create a MeetingTicket
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MeetingTicket we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MeetingTicketUpsertArgs>(args: SelectSubset<T, MeetingTicketUpsertArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MeetingTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketCountArgs} args - Arguments to filter MeetingTickets to count.
+     * @example
+     * // Count the number of MeetingTickets
+     * const count = await prisma.meetingTicket.count({
+     *   where: {
+     *     // ... the filter for the MeetingTickets we want to count
+     *   }
+     * })
+    **/
+    count<T extends MeetingTicketCountArgs>(
+      args?: Subset<T, MeetingTicketCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MeetingTicketCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MeetingTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MeetingTicketAggregateArgs>(args: Subset<T, MeetingTicketAggregateArgs>): Prisma.PrismaPromise<GetMeetingTicketAggregateType<T>>
+
+    /**
+     * Group by MeetingTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingTicketGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MeetingTicketGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MeetingTicketGroupByArgs['orderBy'] }
+        : { orderBy?: MeetingTicketGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MeetingTicketGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMeetingTicketGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MeetingTicket model
+   */
+  readonly fields: MeetingTicketFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MeetingTicket.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MeetingTicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    agendaItems<T extends MeetingTicket$agendaItemsArgs<ExtArgs> = {}>(args?: Subset<T, MeetingTicket$agendaItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MeetingTicket model
+   */ 
+  interface MeetingTicketFieldRefs {
+    readonly id: FieldRef<"MeetingTicket", 'String'>
+    readonly ticketCode: FieldRef<"MeetingTicket", 'String'>
+    readonly title: FieldRef<"MeetingTicket", 'String'>
+    readonly description: FieldRef<"MeetingTicket", 'String'>
+    readonly category: FieldRef<"MeetingTicket", 'String'>
+    readonly priority: FieldRef<"MeetingTicket", 'TicketPriority'>
+    readonly status: FieldRef<"MeetingTicket", 'TicketStatus'>
+    readonly branchLocation: FieldRef<"MeetingTicket", 'String'>
+    readonly createdByName: FieldRef<"MeetingTicket", 'String'>
+    readonly assignedToName: FieldRef<"MeetingTicket", 'String'>
+    readonly solutionNote: FieldRef<"MeetingTicket", 'String'>
+    readonly resolvedAt: FieldRef<"MeetingTicket", 'DateTime'>
+    readonly isDeleted: FieldRef<"MeetingTicket", 'Boolean'>
+    readonly createdAt: FieldRef<"MeetingTicket", 'DateTime'>
+    readonly updatedAt: FieldRef<"MeetingTicket", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MeetingTicket findUnique
+   */
+  export type MeetingTicketFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingTicket to fetch.
+     */
+    where: MeetingTicketWhereUniqueInput
+  }
+
+  /**
+   * MeetingTicket findUniqueOrThrow
+   */
+  export type MeetingTicketFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingTicket to fetch.
+     */
+    where: MeetingTicketWhereUniqueInput
+  }
+
+  /**
+   * MeetingTicket findFirst
+   */
+  export type MeetingTicketFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingTicket to fetch.
+     */
+    where?: MeetingTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingTickets to fetch.
+     */
+    orderBy?: MeetingTicketOrderByWithRelationInput | MeetingTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MeetingTickets.
+     */
+    cursor?: MeetingTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MeetingTickets.
+     */
+    distinct?: MeetingTicketScalarFieldEnum | MeetingTicketScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingTicket findFirstOrThrow
+   */
+  export type MeetingTicketFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingTicket to fetch.
+     */
+    where?: MeetingTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingTickets to fetch.
+     */
+    orderBy?: MeetingTicketOrderByWithRelationInput | MeetingTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MeetingTickets.
+     */
+    cursor?: MeetingTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MeetingTickets.
+     */
+    distinct?: MeetingTicketScalarFieldEnum | MeetingTicketScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingTicket findMany
+   */
+  export type MeetingTicketFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingTickets to fetch.
+     */
+    where?: MeetingTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingTickets to fetch.
+     */
+    orderBy?: MeetingTicketOrderByWithRelationInput | MeetingTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MeetingTickets.
+     */
+    cursor?: MeetingTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingTickets.
+     */
+    skip?: number
+    distinct?: MeetingTicketScalarFieldEnum | MeetingTicketScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingTicket create
+   */
+  export type MeetingTicketCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MeetingTicket.
+     */
+    data: XOR<MeetingTicketCreateInput, MeetingTicketUncheckedCreateInput>
+  }
+
+  /**
+   * MeetingTicket createMany
+   */
+  export type MeetingTicketCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MeetingTickets.
+     */
+    data: MeetingTicketCreateManyInput | MeetingTicketCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MeetingTicket createManyAndReturn
+   */
+  export type MeetingTicketCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MeetingTickets.
+     */
+    data: MeetingTicketCreateManyInput | MeetingTicketCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MeetingTicket update
+   */
+  export type MeetingTicketUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MeetingTicket.
+     */
+    data: XOR<MeetingTicketUpdateInput, MeetingTicketUncheckedUpdateInput>
+    /**
+     * Choose, which MeetingTicket to update.
+     */
+    where: MeetingTicketWhereUniqueInput
+  }
+
+  /**
+   * MeetingTicket updateMany
+   */
+  export type MeetingTicketUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MeetingTickets.
+     */
+    data: XOR<MeetingTicketUpdateManyMutationInput, MeetingTicketUncheckedUpdateManyInput>
+    /**
+     * Filter which MeetingTickets to update
+     */
+    where?: MeetingTicketWhereInput
+  }
+
+  /**
+   * MeetingTicket upsert
+   */
+  export type MeetingTicketUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MeetingTicket to update in case it exists.
+     */
+    where: MeetingTicketWhereUniqueInput
+    /**
+     * In case the MeetingTicket found by the `where` argument doesn't exist, create a new MeetingTicket with this data.
+     */
+    create: XOR<MeetingTicketCreateInput, MeetingTicketUncheckedCreateInput>
+    /**
+     * In case the MeetingTicket was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MeetingTicketUpdateInput, MeetingTicketUncheckedUpdateInput>
+  }
+
+  /**
+   * MeetingTicket delete
+   */
+  export type MeetingTicketDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+    /**
+     * Filter which MeetingTicket to delete.
+     */
+    where: MeetingTicketWhereUniqueInput
+  }
+
+  /**
+   * MeetingTicket deleteMany
+   */
+  export type MeetingTicketDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MeetingTickets to delete
+     */
+    where?: MeetingTicketWhereInput
+  }
+
+  /**
+   * MeetingTicket.agendaItems
+   */
+  export type MeetingTicket$agendaItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    where?: MeetingAgendaItemWhereInput
+    orderBy?: MeetingAgendaItemOrderByWithRelationInput | MeetingAgendaItemOrderByWithRelationInput[]
+    cursor?: MeetingAgendaItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MeetingAgendaItemScalarFieldEnum | MeetingAgendaItemScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingTicket without action
+   */
+  export type MeetingTicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingTicket
+     */
+    select?: MeetingTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingTicketInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MeetingSession
+   */
+
+  export type AggregateMeetingSession = {
+    _count: MeetingSessionCountAggregateOutputType | null
+    _min: MeetingSessionMinAggregateOutputType | null
+    _max: MeetingSessionMaxAggregateOutputType | null
+  }
+
+  export type MeetingSessionMinAggregateOutputType = {
+    id: string | null
+    sessionCode: string | null
+    title: string | null
+    meetingDate: Date | null
+    chairpersonName: string | null
+    secretaryName: string | null
+    status: string | null
+    notes: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingSessionMaxAggregateOutputType = {
+    id: string | null
+    sessionCode: string | null
+    title: string | null
+    meetingDate: Date | null
+    chairpersonName: string | null
+    secretaryName: string | null
+    status: string | null
+    notes: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingSessionCountAggregateOutputType = {
+    id: number
+    sessionCode: number
+    title: number
+    meetingDate: number
+    chairpersonName: number
+    secretaryName: number
+    status: number
+    notes: number
+    isDeleted: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MeetingSessionMinAggregateInputType = {
+    id?: true
+    sessionCode?: true
+    title?: true
+    meetingDate?: true
+    chairpersonName?: true
+    secretaryName?: true
+    status?: true
+    notes?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingSessionMaxAggregateInputType = {
+    id?: true
+    sessionCode?: true
+    title?: true
+    meetingDate?: true
+    chairpersonName?: true
+    secretaryName?: true
+    status?: true
+    notes?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingSessionCountAggregateInputType = {
+    id?: true
+    sessionCode?: true
+    title?: true
+    meetingDate?: true
+    chairpersonName?: true
+    secretaryName?: true
+    status?: true
+    notes?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MeetingSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MeetingSession to aggregate.
+     */
+    where?: MeetingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingSessions to fetch.
+     */
+    orderBy?: MeetingSessionOrderByWithRelationInput | MeetingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MeetingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MeetingSessions
+    **/
+    _count?: true | MeetingSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MeetingSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MeetingSessionMaxAggregateInputType
+  }
+
+  export type GetMeetingSessionAggregateType<T extends MeetingSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMeetingSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMeetingSession[P]>
+      : GetScalarType<T[P], AggregateMeetingSession[P]>
+  }
+
+
+
+
+  export type MeetingSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingSessionWhereInput
+    orderBy?: MeetingSessionOrderByWithAggregationInput | MeetingSessionOrderByWithAggregationInput[]
+    by: MeetingSessionScalarFieldEnum[] | MeetingSessionScalarFieldEnum
+    having?: MeetingSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MeetingSessionCountAggregateInputType | true
+    _min?: MeetingSessionMinAggregateInputType
+    _max?: MeetingSessionMaxAggregateInputType
+  }
+
+  export type MeetingSessionGroupByOutputType = {
+    id: string
+    sessionCode: string
+    title: string
+    meetingDate: Date
+    chairpersonName: string
+    secretaryName: string
+    status: string
+    notes: string | null
+    isDeleted: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: MeetingSessionCountAggregateOutputType | null
+    _min: MeetingSessionMinAggregateOutputType | null
+    _max: MeetingSessionMaxAggregateOutputType | null
+  }
+
+  type GetMeetingSessionGroupByPayload<T extends MeetingSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MeetingSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MeetingSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MeetingSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], MeetingSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MeetingSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionCode?: boolean
+    title?: boolean
+    meetingDate?: boolean
+    chairpersonName?: boolean
+    secretaryName?: boolean
+    status?: boolean
+    notes?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    agendaItems?: boolean | MeetingSession$agendaItemsArgs<ExtArgs>
+    _count?: boolean | MeetingSessionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meetingSession"]>
+
+  export type MeetingSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionCode?: boolean
+    title?: boolean
+    meetingDate?: boolean
+    chairpersonName?: boolean
+    secretaryName?: boolean
+    status?: boolean
+    notes?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["meetingSession"]>
+
+  export type MeetingSessionSelectScalar = {
+    id?: boolean
+    sessionCode?: boolean
+    title?: boolean
+    meetingDate?: boolean
+    chairpersonName?: boolean
+    secretaryName?: boolean
+    status?: boolean
+    notes?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MeetingSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    agendaItems?: boolean | MeetingSession$agendaItemsArgs<ExtArgs>
+    _count?: boolean | MeetingSessionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MeetingSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $MeetingSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MeetingSession"
+    objects: {
+      agendaItems: Prisma.$MeetingAgendaItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sessionCode: string
+      title: string
+      meetingDate: Date
+      chairpersonName: string
+      secretaryName: string
+      status: string
+      notes: string | null
+      isDeleted: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["meetingSession"]>
+    composites: {}
+  }
+
+  type MeetingSessionGetPayload<S extends boolean | null | undefined | MeetingSessionDefaultArgs> = $Result.GetResult<Prisma.$MeetingSessionPayload, S>
+
+  type MeetingSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MeetingSessionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MeetingSessionCountAggregateInputType | true
+    }
+
+  export interface MeetingSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MeetingSession'], meta: { name: 'MeetingSession' } }
+    /**
+     * Find zero or one MeetingSession that matches the filter.
+     * @param {MeetingSessionFindUniqueArgs} args - Arguments to find a MeetingSession
+     * @example
+     * // Get one MeetingSession
+     * const meetingSession = await prisma.meetingSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MeetingSessionFindUniqueArgs>(args: SelectSubset<T, MeetingSessionFindUniqueArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MeetingSession that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MeetingSessionFindUniqueOrThrowArgs} args - Arguments to find a MeetingSession
+     * @example
+     * // Get one MeetingSession
+     * const meetingSession = await prisma.meetingSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MeetingSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, MeetingSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MeetingSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionFindFirstArgs} args - Arguments to find a MeetingSession
+     * @example
+     * // Get one MeetingSession
+     * const meetingSession = await prisma.meetingSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MeetingSessionFindFirstArgs>(args?: SelectSubset<T, MeetingSessionFindFirstArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MeetingSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionFindFirstOrThrowArgs} args - Arguments to find a MeetingSession
+     * @example
+     * // Get one MeetingSession
+     * const meetingSession = await prisma.meetingSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MeetingSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, MeetingSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MeetingSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MeetingSessions
+     * const meetingSessions = await prisma.meetingSession.findMany()
+     * 
+     * // Get first 10 MeetingSessions
+     * const meetingSessions = await prisma.meetingSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const meetingSessionWithIdOnly = await prisma.meetingSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MeetingSessionFindManyArgs>(args?: SelectSubset<T, MeetingSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MeetingSession.
+     * @param {MeetingSessionCreateArgs} args - Arguments to create a MeetingSession.
+     * @example
+     * // Create one MeetingSession
+     * const MeetingSession = await prisma.meetingSession.create({
+     *   data: {
+     *     // ... data to create a MeetingSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends MeetingSessionCreateArgs>(args: SelectSubset<T, MeetingSessionCreateArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MeetingSessions.
+     * @param {MeetingSessionCreateManyArgs} args - Arguments to create many MeetingSessions.
+     * @example
+     * // Create many MeetingSessions
+     * const meetingSession = await prisma.meetingSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MeetingSessionCreateManyArgs>(args?: SelectSubset<T, MeetingSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MeetingSessions and returns the data saved in the database.
+     * @param {MeetingSessionCreateManyAndReturnArgs} args - Arguments to create many MeetingSessions.
+     * @example
+     * // Create many MeetingSessions
+     * const meetingSession = await prisma.meetingSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MeetingSessions and only return the `id`
+     * const meetingSessionWithIdOnly = await prisma.meetingSession.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MeetingSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, MeetingSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MeetingSession.
+     * @param {MeetingSessionDeleteArgs} args - Arguments to delete one MeetingSession.
+     * @example
+     * // Delete one MeetingSession
+     * const MeetingSession = await prisma.meetingSession.delete({
+     *   where: {
+     *     // ... filter to delete one MeetingSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MeetingSessionDeleteArgs>(args: SelectSubset<T, MeetingSessionDeleteArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MeetingSession.
+     * @param {MeetingSessionUpdateArgs} args - Arguments to update one MeetingSession.
+     * @example
+     * // Update one MeetingSession
+     * const meetingSession = await prisma.meetingSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MeetingSessionUpdateArgs>(args: SelectSubset<T, MeetingSessionUpdateArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MeetingSessions.
+     * @param {MeetingSessionDeleteManyArgs} args - Arguments to filter MeetingSessions to delete.
+     * @example
+     * // Delete a few MeetingSessions
+     * const { count } = await prisma.meetingSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MeetingSessionDeleteManyArgs>(args?: SelectSubset<T, MeetingSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MeetingSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MeetingSessions
+     * const meetingSession = await prisma.meetingSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MeetingSessionUpdateManyArgs>(args: SelectSubset<T, MeetingSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MeetingSession.
+     * @param {MeetingSessionUpsertArgs} args - Arguments to update or create a MeetingSession.
+     * @example
+     * // Update or create a MeetingSession
+     * const meetingSession = await prisma.meetingSession.upsert({
+     *   create: {
+     *     // ... data to create a MeetingSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MeetingSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MeetingSessionUpsertArgs>(args: SelectSubset<T, MeetingSessionUpsertArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MeetingSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionCountArgs} args - Arguments to filter MeetingSessions to count.
+     * @example
+     * // Count the number of MeetingSessions
+     * const count = await prisma.meetingSession.count({
+     *   where: {
+     *     // ... the filter for the MeetingSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends MeetingSessionCountArgs>(
+      args?: Subset<T, MeetingSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MeetingSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MeetingSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MeetingSessionAggregateArgs>(args: Subset<T, MeetingSessionAggregateArgs>): Prisma.PrismaPromise<GetMeetingSessionAggregateType<T>>
+
+    /**
+     * Group by MeetingSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MeetingSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MeetingSessionGroupByArgs['orderBy'] }
+        : { orderBy?: MeetingSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MeetingSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMeetingSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MeetingSession model
+   */
+  readonly fields: MeetingSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MeetingSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MeetingSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    agendaItems<T extends MeetingSession$agendaItemsArgs<ExtArgs> = {}>(args?: Subset<T, MeetingSession$agendaItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MeetingSession model
+   */ 
+  interface MeetingSessionFieldRefs {
+    readonly id: FieldRef<"MeetingSession", 'String'>
+    readonly sessionCode: FieldRef<"MeetingSession", 'String'>
+    readonly title: FieldRef<"MeetingSession", 'String'>
+    readonly meetingDate: FieldRef<"MeetingSession", 'DateTime'>
+    readonly chairpersonName: FieldRef<"MeetingSession", 'String'>
+    readonly secretaryName: FieldRef<"MeetingSession", 'String'>
+    readonly status: FieldRef<"MeetingSession", 'String'>
+    readonly notes: FieldRef<"MeetingSession", 'String'>
+    readonly isDeleted: FieldRef<"MeetingSession", 'Boolean'>
+    readonly createdAt: FieldRef<"MeetingSession", 'DateTime'>
+    readonly updatedAt: FieldRef<"MeetingSession", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MeetingSession findUnique
+   */
+  export type MeetingSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingSession to fetch.
+     */
+    where: MeetingSessionWhereUniqueInput
+  }
+
+  /**
+   * MeetingSession findUniqueOrThrow
+   */
+  export type MeetingSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingSession to fetch.
+     */
+    where: MeetingSessionWhereUniqueInput
+  }
+
+  /**
+   * MeetingSession findFirst
+   */
+  export type MeetingSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingSession to fetch.
+     */
+    where?: MeetingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingSessions to fetch.
+     */
+    orderBy?: MeetingSessionOrderByWithRelationInput | MeetingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MeetingSessions.
+     */
+    cursor?: MeetingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MeetingSessions.
+     */
+    distinct?: MeetingSessionScalarFieldEnum | MeetingSessionScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingSession findFirstOrThrow
+   */
+  export type MeetingSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingSession to fetch.
+     */
+    where?: MeetingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingSessions to fetch.
+     */
+    orderBy?: MeetingSessionOrderByWithRelationInput | MeetingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MeetingSessions.
+     */
+    cursor?: MeetingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MeetingSessions.
+     */
+    distinct?: MeetingSessionScalarFieldEnum | MeetingSessionScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingSession findMany
+   */
+  export type MeetingSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingSessions to fetch.
+     */
+    where?: MeetingSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingSessions to fetch.
+     */
+    orderBy?: MeetingSessionOrderByWithRelationInput | MeetingSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MeetingSessions.
+     */
+    cursor?: MeetingSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingSessions.
+     */
+    skip?: number
+    distinct?: MeetingSessionScalarFieldEnum | MeetingSessionScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingSession create
+   */
+  export type MeetingSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MeetingSession.
+     */
+    data: XOR<MeetingSessionCreateInput, MeetingSessionUncheckedCreateInput>
+  }
+
+  /**
+   * MeetingSession createMany
+   */
+  export type MeetingSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MeetingSessions.
+     */
+    data: MeetingSessionCreateManyInput | MeetingSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MeetingSession createManyAndReturn
+   */
+  export type MeetingSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MeetingSessions.
+     */
+    data: MeetingSessionCreateManyInput | MeetingSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MeetingSession update
+   */
+  export type MeetingSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MeetingSession.
+     */
+    data: XOR<MeetingSessionUpdateInput, MeetingSessionUncheckedUpdateInput>
+    /**
+     * Choose, which MeetingSession to update.
+     */
+    where: MeetingSessionWhereUniqueInput
+  }
+
+  /**
+   * MeetingSession updateMany
+   */
+  export type MeetingSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MeetingSessions.
+     */
+    data: XOR<MeetingSessionUpdateManyMutationInput, MeetingSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which MeetingSessions to update
+     */
+    where?: MeetingSessionWhereInput
+  }
+
+  /**
+   * MeetingSession upsert
+   */
+  export type MeetingSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MeetingSession to update in case it exists.
+     */
+    where: MeetingSessionWhereUniqueInput
+    /**
+     * In case the MeetingSession found by the `where` argument doesn't exist, create a new MeetingSession with this data.
+     */
+    create: XOR<MeetingSessionCreateInput, MeetingSessionUncheckedCreateInput>
+    /**
+     * In case the MeetingSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MeetingSessionUpdateInput, MeetingSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * MeetingSession delete
+   */
+  export type MeetingSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+    /**
+     * Filter which MeetingSession to delete.
+     */
+    where: MeetingSessionWhereUniqueInput
+  }
+
+  /**
+   * MeetingSession deleteMany
+   */
+  export type MeetingSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MeetingSessions to delete
+     */
+    where?: MeetingSessionWhereInput
+  }
+
+  /**
+   * MeetingSession.agendaItems
+   */
+  export type MeetingSession$agendaItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    where?: MeetingAgendaItemWhereInput
+    orderBy?: MeetingAgendaItemOrderByWithRelationInput | MeetingAgendaItemOrderByWithRelationInput[]
+    cursor?: MeetingAgendaItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MeetingAgendaItemScalarFieldEnum | MeetingAgendaItemScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingSession without action
+   */
+  export type MeetingSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingSession
+     */
+    select?: MeetingSessionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MeetingAgendaItem
+   */
+
+  export type AggregateMeetingAgendaItem = {
+    _count: MeetingAgendaItemCountAggregateOutputType | null
+    _min: MeetingAgendaItemMinAggregateOutputType | null
+    _max: MeetingAgendaItemMaxAggregateOutputType | null
+  }
+
+  export type MeetingAgendaItemMinAggregateOutputType = {
+    id: string | null
+    sessionId: string | null
+    ticketId: string | null
+    status: string | null
+    decisionNote: string | null
+    actionItem: string | null
+    picName: string | null
+    dueDate: Date | null
+    createdAt: Date | null
+  }
+
+  export type MeetingAgendaItemMaxAggregateOutputType = {
+    id: string | null
+    sessionId: string | null
+    ticketId: string | null
+    status: string | null
+    decisionNote: string | null
+    actionItem: string | null
+    picName: string | null
+    dueDate: Date | null
+    createdAt: Date | null
+  }
+
+  export type MeetingAgendaItemCountAggregateOutputType = {
+    id: number
+    sessionId: number
+    ticketId: number
+    status: number
+    decisionNote: number
+    actionItem: number
+    picName: number
+    dueDate: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MeetingAgendaItemMinAggregateInputType = {
+    id?: true
+    sessionId?: true
+    ticketId?: true
+    status?: true
+    decisionNote?: true
+    actionItem?: true
+    picName?: true
+    dueDate?: true
+    createdAt?: true
+  }
+
+  export type MeetingAgendaItemMaxAggregateInputType = {
+    id?: true
+    sessionId?: true
+    ticketId?: true
+    status?: true
+    decisionNote?: true
+    actionItem?: true
+    picName?: true
+    dueDate?: true
+    createdAt?: true
+  }
+
+  export type MeetingAgendaItemCountAggregateInputType = {
+    id?: true
+    sessionId?: true
+    ticketId?: true
+    status?: true
+    decisionNote?: true
+    actionItem?: true
+    picName?: true
+    dueDate?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MeetingAgendaItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MeetingAgendaItem to aggregate.
+     */
+    where?: MeetingAgendaItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingAgendaItems to fetch.
+     */
+    orderBy?: MeetingAgendaItemOrderByWithRelationInput | MeetingAgendaItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MeetingAgendaItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingAgendaItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingAgendaItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MeetingAgendaItems
+    **/
+    _count?: true | MeetingAgendaItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MeetingAgendaItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MeetingAgendaItemMaxAggregateInputType
+  }
+
+  export type GetMeetingAgendaItemAggregateType<T extends MeetingAgendaItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateMeetingAgendaItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMeetingAgendaItem[P]>
+      : GetScalarType<T[P], AggregateMeetingAgendaItem[P]>
+  }
+
+
+
+
+  export type MeetingAgendaItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingAgendaItemWhereInput
+    orderBy?: MeetingAgendaItemOrderByWithAggregationInput | MeetingAgendaItemOrderByWithAggregationInput[]
+    by: MeetingAgendaItemScalarFieldEnum[] | MeetingAgendaItemScalarFieldEnum
+    having?: MeetingAgendaItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MeetingAgendaItemCountAggregateInputType | true
+    _min?: MeetingAgendaItemMinAggregateInputType
+    _max?: MeetingAgendaItemMaxAggregateInputType
+  }
+
+  export type MeetingAgendaItemGroupByOutputType = {
+    id: string
+    sessionId: string
+    ticketId: string
+    status: string
+    decisionNote: string | null
+    actionItem: string | null
+    picName: string | null
+    dueDate: Date | null
+    createdAt: Date
+    _count: MeetingAgendaItemCountAggregateOutputType | null
+    _min: MeetingAgendaItemMinAggregateOutputType | null
+    _max: MeetingAgendaItemMaxAggregateOutputType | null
+  }
+
+  type GetMeetingAgendaItemGroupByPayload<T extends MeetingAgendaItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MeetingAgendaItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MeetingAgendaItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MeetingAgendaItemGroupByOutputType[P]>
+            : GetScalarType<T[P], MeetingAgendaItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MeetingAgendaItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    ticketId?: boolean
+    status?: boolean
+    decisionNote?: boolean
+    actionItem?: boolean
+    picName?: boolean
+    dueDate?: boolean
+    createdAt?: boolean
+    session?: boolean | MeetingSessionDefaultArgs<ExtArgs>
+    ticket?: boolean | MeetingTicketDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meetingAgendaItem"]>
+
+  export type MeetingAgendaItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    ticketId?: boolean
+    status?: boolean
+    decisionNote?: boolean
+    actionItem?: boolean
+    picName?: boolean
+    dueDate?: boolean
+    createdAt?: boolean
+    session?: boolean | MeetingSessionDefaultArgs<ExtArgs>
+    ticket?: boolean | MeetingTicketDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meetingAgendaItem"]>
+
+  export type MeetingAgendaItemSelectScalar = {
+    id?: boolean
+    sessionId?: boolean
+    ticketId?: boolean
+    status?: boolean
+    decisionNote?: boolean
+    actionItem?: boolean
+    picName?: boolean
+    dueDate?: boolean
+    createdAt?: boolean
+  }
+
+  export type MeetingAgendaItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | MeetingSessionDefaultArgs<ExtArgs>
+    ticket?: boolean | MeetingTicketDefaultArgs<ExtArgs>
+  }
+  export type MeetingAgendaItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | MeetingSessionDefaultArgs<ExtArgs>
+    ticket?: boolean | MeetingTicketDefaultArgs<ExtArgs>
+  }
+
+  export type $MeetingAgendaItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MeetingAgendaItem"
+    objects: {
+      session: Prisma.$MeetingSessionPayload<ExtArgs>
+      ticket: Prisma.$MeetingTicketPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sessionId: string
+      ticketId: string
+      status: string
+      decisionNote: string | null
+      actionItem: string | null
+      picName: string | null
+      dueDate: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["meetingAgendaItem"]>
+    composites: {}
+  }
+
+  type MeetingAgendaItemGetPayload<S extends boolean | null | undefined | MeetingAgendaItemDefaultArgs> = $Result.GetResult<Prisma.$MeetingAgendaItemPayload, S>
+
+  type MeetingAgendaItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MeetingAgendaItemFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MeetingAgendaItemCountAggregateInputType | true
+    }
+
+  export interface MeetingAgendaItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MeetingAgendaItem'], meta: { name: 'MeetingAgendaItem' } }
+    /**
+     * Find zero or one MeetingAgendaItem that matches the filter.
+     * @param {MeetingAgendaItemFindUniqueArgs} args - Arguments to find a MeetingAgendaItem
+     * @example
+     * // Get one MeetingAgendaItem
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MeetingAgendaItemFindUniqueArgs>(args: SelectSubset<T, MeetingAgendaItemFindUniqueArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MeetingAgendaItem that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MeetingAgendaItemFindUniqueOrThrowArgs} args - Arguments to find a MeetingAgendaItem
+     * @example
+     * // Get one MeetingAgendaItem
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MeetingAgendaItemFindUniqueOrThrowArgs>(args: SelectSubset<T, MeetingAgendaItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MeetingAgendaItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemFindFirstArgs} args - Arguments to find a MeetingAgendaItem
+     * @example
+     * // Get one MeetingAgendaItem
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MeetingAgendaItemFindFirstArgs>(args?: SelectSubset<T, MeetingAgendaItemFindFirstArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MeetingAgendaItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemFindFirstOrThrowArgs} args - Arguments to find a MeetingAgendaItem
+     * @example
+     * // Get one MeetingAgendaItem
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MeetingAgendaItemFindFirstOrThrowArgs>(args?: SelectSubset<T, MeetingAgendaItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MeetingAgendaItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MeetingAgendaItems
+     * const meetingAgendaItems = await prisma.meetingAgendaItem.findMany()
+     * 
+     * // Get first 10 MeetingAgendaItems
+     * const meetingAgendaItems = await prisma.meetingAgendaItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const meetingAgendaItemWithIdOnly = await prisma.meetingAgendaItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MeetingAgendaItemFindManyArgs>(args?: SelectSubset<T, MeetingAgendaItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MeetingAgendaItem.
+     * @param {MeetingAgendaItemCreateArgs} args - Arguments to create a MeetingAgendaItem.
+     * @example
+     * // Create one MeetingAgendaItem
+     * const MeetingAgendaItem = await prisma.meetingAgendaItem.create({
+     *   data: {
+     *     // ... data to create a MeetingAgendaItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends MeetingAgendaItemCreateArgs>(args: SelectSubset<T, MeetingAgendaItemCreateArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MeetingAgendaItems.
+     * @param {MeetingAgendaItemCreateManyArgs} args - Arguments to create many MeetingAgendaItems.
+     * @example
+     * // Create many MeetingAgendaItems
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MeetingAgendaItemCreateManyArgs>(args?: SelectSubset<T, MeetingAgendaItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MeetingAgendaItems and returns the data saved in the database.
+     * @param {MeetingAgendaItemCreateManyAndReturnArgs} args - Arguments to create many MeetingAgendaItems.
+     * @example
+     * // Create many MeetingAgendaItems
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MeetingAgendaItems and only return the `id`
+     * const meetingAgendaItemWithIdOnly = await prisma.meetingAgendaItem.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MeetingAgendaItemCreateManyAndReturnArgs>(args?: SelectSubset<T, MeetingAgendaItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MeetingAgendaItem.
+     * @param {MeetingAgendaItemDeleteArgs} args - Arguments to delete one MeetingAgendaItem.
+     * @example
+     * // Delete one MeetingAgendaItem
+     * const MeetingAgendaItem = await prisma.meetingAgendaItem.delete({
+     *   where: {
+     *     // ... filter to delete one MeetingAgendaItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MeetingAgendaItemDeleteArgs>(args: SelectSubset<T, MeetingAgendaItemDeleteArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MeetingAgendaItem.
+     * @param {MeetingAgendaItemUpdateArgs} args - Arguments to update one MeetingAgendaItem.
+     * @example
+     * // Update one MeetingAgendaItem
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MeetingAgendaItemUpdateArgs>(args: SelectSubset<T, MeetingAgendaItemUpdateArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MeetingAgendaItems.
+     * @param {MeetingAgendaItemDeleteManyArgs} args - Arguments to filter MeetingAgendaItems to delete.
+     * @example
+     * // Delete a few MeetingAgendaItems
+     * const { count } = await prisma.meetingAgendaItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MeetingAgendaItemDeleteManyArgs>(args?: SelectSubset<T, MeetingAgendaItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MeetingAgendaItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MeetingAgendaItems
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MeetingAgendaItemUpdateManyArgs>(args: SelectSubset<T, MeetingAgendaItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MeetingAgendaItem.
+     * @param {MeetingAgendaItemUpsertArgs} args - Arguments to update or create a MeetingAgendaItem.
+     * @example
+     * // Update or create a MeetingAgendaItem
+     * const meetingAgendaItem = await prisma.meetingAgendaItem.upsert({
+     *   create: {
+     *     // ... data to create a MeetingAgendaItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MeetingAgendaItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MeetingAgendaItemUpsertArgs>(args: SelectSubset<T, MeetingAgendaItemUpsertArgs<ExtArgs>>): Prisma__MeetingAgendaItemClient<$Result.GetResult<Prisma.$MeetingAgendaItemPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MeetingAgendaItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemCountArgs} args - Arguments to filter MeetingAgendaItems to count.
+     * @example
+     * // Count the number of MeetingAgendaItems
+     * const count = await prisma.meetingAgendaItem.count({
+     *   where: {
+     *     // ... the filter for the MeetingAgendaItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends MeetingAgendaItemCountArgs>(
+      args?: Subset<T, MeetingAgendaItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MeetingAgendaItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MeetingAgendaItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MeetingAgendaItemAggregateArgs>(args: Subset<T, MeetingAgendaItemAggregateArgs>): Prisma.PrismaPromise<GetMeetingAgendaItemAggregateType<T>>
+
+    /**
+     * Group by MeetingAgendaItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAgendaItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MeetingAgendaItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MeetingAgendaItemGroupByArgs['orderBy'] }
+        : { orderBy?: MeetingAgendaItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MeetingAgendaItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMeetingAgendaItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MeetingAgendaItem model
+   */
+  readonly fields: MeetingAgendaItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MeetingAgendaItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MeetingAgendaItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    session<T extends MeetingSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MeetingSessionDefaultArgs<ExtArgs>>): Prisma__MeetingSessionClient<$Result.GetResult<Prisma.$MeetingSessionPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    ticket<T extends MeetingTicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MeetingTicketDefaultArgs<ExtArgs>>): Prisma__MeetingTicketClient<$Result.GetResult<Prisma.$MeetingTicketPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MeetingAgendaItem model
+   */ 
+  interface MeetingAgendaItemFieldRefs {
+    readonly id: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly sessionId: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly ticketId: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly status: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly decisionNote: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly actionItem: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly picName: FieldRef<"MeetingAgendaItem", 'String'>
+    readonly dueDate: FieldRef<"MeetingAgendaItem", 'DateTime'>
+    readonly createdAt: FieldRef<"MeetingAgendaItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MeetingAgendaItem findUnique
+   */
+  export type MeetingAgendaItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingAgendaItem to fetch.
+     */
+    where: MeetingAgendaItemWhereUniqueInput
+  }
+
+  /**
+   * MeetingAgendaItem findUniqueOrThrow
+   */
+  export type MeetingAgendaItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingAgendaItem to fetch.
+     */
+    where: MeetingAgendaItemWhereUniqueInput
+  }
+
+  /**
+   * MeetingAgendaItem findFirst
+   */
+  export type MeetingAgendaItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingAgendaItem to fetch.
+     */
+    where?: MeetingAgendaItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingAgendaItems to fetch.
+     */
+    orderBy?: MeetingAgendaItemOrderByWithRelationInput | MeetingAgendaItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MeetingAgendaItems.
+     */
+    cursor?: MeetingAgendaItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingAgendaItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingAgendaItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MeetingAgendaItems.
+     */
+    distinct?: MeetingAgendaItemScalarFieldEnum | MeetingAgendaItemScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingAgendaItem findFirstOrThrow
+   */
+  export type MeetingAgendaItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingAgendaItem to fetch.
+     */
+    where?: MeetingAgendaItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingAgendaItems to fetch.
+     */
+    orderBy?: MeetingAgendaItemOrderByWithRelationInput | MeetingAgendaItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MeetingAgendaItems.
+     */
+    cursor?: MeetingAgendaItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingAgendaItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingAgendaItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MeetingAgendaItems.
+     */
+    distinct?: MeetingAgendaItemScalarFieldEnum | MeetingAgendaItemScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingAgendaItem findMany
+   */
+  export type MeetingAgendaItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * Filter, which MeetingAgendaItems to fetch.
+     */
+    where?: MeetingAgendaItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MeetingAgendaItems to fetch.
+     */
+    orderBy?: MeetingAgendaItemOrderByWithRelationInput | MeetingAgendaItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MeetingAgendaItems.
+     */
+    cursor?: MeetingAgendaItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MeetingAgendaItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MeetingAgendaItems.
+     */
+    skip?: number
+    distinct?: MeetingAgendaItemScalarFieldEnum | MeetingAgendaItemScalarFieldEnum[]
+  }
+
+  /**
+   * MeetingAgendaItem create
+   */
+  export type MeetingAgendaItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MeetingAgendaItem.
+     */
+    data: XOR<MeetingAgendaItemCreateInput, MeetingAgendaItemUncheckedCreateInput>
+  }
+
+  /**
+   * MeetingAgendaItem createMany
+   */
+  export type MeetingAgendaItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MeetingAgendaItems.
+     */
+    data: MeetingAgendaItemCreateManyInput | MeetingAgendaItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MeetingAgendaItem createManyAndReturn
+   */
+  export type MeetingAgendaItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MeetingAgendaItems.
+     */
+    data: MeetingAgendaItemCreateManyInput | MeetingAgendaItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MeetingAgendaItem update
+   */
+  export type MeetingAgendaItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MeetingAgendaItem.
+     */
+    data: XOR<MeetingAgendaItemUpdateInput, MeetingAgendaItemUncheckedUpdateInput>
+    /**
+     * Choose, which MeetingAgendaItem to update.
+     */
+    where: MeetingAgendaItemWhereUniqueInput
+  }
+
+  /**
+   * MeetingAgendaItem updateMany
+   */
+  export type MeetingAgendaItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MeetingAgendaItems.
+     */
+    data: XOR<MeetingAgendaItemUpdateManyMutationInput, MeetingAgendaItemUncheckedUpdateManyInput>
+    /**
+     * Filter which MeetingAgendaItems to update
+     */
+    where?: MeetingAgendaItemWhereInput
+  }
+
+  /**
+   * MeetingAgendaItem upsert
+   */
+  export type MeetingAgendaItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MeetingAgendaItem to update in case it exists.
+     */
+    where: MeetingAgendaItemWhereUniqueInput
+    /**
+     * In case the MeetingAgendaItem found by the `where` argument doesn't exist, create a new MeetingAgendaItem with this data.
+     */
+    create: XOR<MeetingAgendaItemCreateInput, MeetingAgendaItemUncheckedCreateInput>
+    /**
+     * In case the MeetingAgendaItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MeetingAgendaItemUpdateInput, MeetingAgendaItemUncheckedUpdateInput>
+  }
+
+  /**
+   * MeetingAgendaItem delete
+   */
+  export type MeetingAgendaItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+    /**
+     * Filter which MeetingAgendaItem to delete.
+     */
+    where: MeetingAgendaItemWhereUniqueInput
+  }
+
+  /**
+   * MeetingAgendaItem deleteMany
+   */
+  export type MeetingAgendaItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MeetingAgendaItems to delete
+     */
+    where?: MeetingAgendaItemWhereInput
+  }
+
+  /**
+   * MeetingAgendaItem without action
+   */
+  export type MeetingAgendaItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingAgendaItem
+     */
+    select?: MeetingAgendaItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingAgendaItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SecurityGateLog
+   */
+
+  export type AggregateSecurityGateLog = {
+    _count: SecurityGateLogCountAggregateOutputType | null
+    _min: SecurityGateLogMinAggregateOutputType | null
+    _max: SecurityGateLogMaxAggregateOutputType | null
+  }
+
+  export type SecurityGateLogMinAggregateOutputType = {
+    id: string | null
+    passCode: string | null
+    vehiclePlate: string | null
+    driverName: string | null
+    visitorName: string | null
+    purpose: string | null
+    passType: $Enums.GatePassType | null
+    branchLocation: string | null
+    gateOfficerName: string | null
+    checkInTime: Date | null
+    checkOutTime: Date | null
+    status: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+  }
+
+  export type SecurityGateLogMaxAggregateOutputType = {
+    id: string | null
+    passCode: string | null
+    vehiclePlate: string | null
+    driverName: string | null
+    visitorName: string | null
+    purpose: string | null
+    passType: $Enums.GatePassType | null
+    branchLocation: string | null
+    gateOfficerName: string | null
+    checkInTime: Date | null
+    checkOutTime: Date | null
+    status: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+  }
+
+  export type SecurityGateLogCountAggregateOutputType = {
+    id: number
+    passCode: number
+    vehiclePlate: number
+    driverName: number
+    visitorName: number
+    purpose: number
+    passType: number
+    branchLocation: number
+    gateOfficerName: number
+    checkInTime: number
+    checkOutTime: number
+    status: number
+    isDeleted: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SecurityGateLogMinAggregateInputType = {
+    id?: true
+    passCode?: true
+    vehiclePlate?: true
+    driverName?: true
+    visitorName?: true
+    purpose?: true
+    passType?: true
+    branchLocation?: true
+    gateOfficerName?: true
+    checkInTime?: true
+    checkOutTime?: true
+    status?: true
+    isDeleted?: true
+    createdAt?: true
+  }
+
+  export type SecurityGateLogMaxAggregateInputType = {
+    id?: true
+    passCode?: true
+    vehiclePlate?: true
+    driverName?: true
+    visitorName?: true
+    purpose?: true
+    passType?: true
+    branchLocation?: true
+    gateOfficerName?: true
+    checkInTime?: true
+    checkOutTime?: true
+    status?: true
+    isDeleted?: true
+    createdAt?: true
+  }
+
+  export type SecurityGateLogCountAggregateInputType = {
+    id?: true
+    passCode?: true
+    vehiclePlate?: true
+    driverName?: true
+    visitorName?: true
+    purpose?: true
+    passType?: true
+    branchLocation?: true
+    gateOfficerName?: true
+    checkInTime?: true
+    checkOutTime?: true
+    status?: true
+    isDeleted?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SecurityGateLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SecurityGateLog to aggregate.
+     */
+    where?: SecurityGateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityGateLogs to fetch.
+     */
+    orderBy?: SecurityGateLogOrderByWithRelationInput | SecurityGateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SecurityGateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityGateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityGateLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SecurityGateLogs
+    **/
+    _count?: true | SecurityGateLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SecurityGateLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SecurityGateLogMaxAggregateInputType
+  }
+
+  export type GetSecurityGateLogAggregateType<T extends SecurityGateLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateSecurityGateLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSecurityGateLog[P]>
+      : GetScalarType<T[P], AggregateSecurityGateLog[P]>
+  }
+
+
+
+
+  export type SecurityGateLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SecurityGateLogWhereInput
+    orderBy?: SecurityGateLogOrderByWithAggregationInput | SecurityGateLogOrderByWithAggregationInput[]
+    by: SecurityGateLogScalarFieldEnum[] | SecurityGateLogScalarFieldEnum
+    having?: SecurityGateLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SecurityGateLogCountAggregateInputType | true
+    _min?: SecurityGateLogMinAggregateInputType
+    _max?: SecurityGateLogMaxAggregateInputType
+  }
+
+  export type SecurityGateLogGroupByOutputType = {
+    id: string
+    passCode: string
+    vehiclePlate: string
+    driverName: string
+    visitorName: string | null
+    purpose: string
+    passType: $Enums.GatePassType
+    branchLocation: string
+    gateOfficerName: string
+    checkInTime: Date
+    checkOutTime: Date | null
+    status: string
+    isDeleted: boolean
+    createdAt: Date
+    _count: SecurityGateLogCountAggregateOutputType | null
+    _min: SecurityGateLogMinAggregateOutputType | null
+    _max: SecurityGateLogMaxAggregateOutputType | null
+  }
+
+  type GetSecurityGateLogGroupByPayload<T extends SecurityGateLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SecurityGateLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SecurityGateLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SecurityGateLogGroupByOutputType[P]>
+            : GetScalarType<T[P], SecurityGateLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SecurityGateLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    passCode?: boolean
+    vehiclePlate?: boolean
+    driverName?: boolean
+    visitorName?: boolean
+    purpose?: boolean
+    passType?: boolean
+    branchLocation?: boolean
+    gateOfficerName?: boolean
+    checkInTime?: boolean
+    checkOutTime?: boolean
+    status?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["securityGateLog"]>
+
+  export type SecurityGateLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    passCode?: boolean
+    vehiclePlate?: boolean
+    driverName?: boolean
+    visitorName?: boolean
+    purpose?: boolean
+    passType?: boolean
+    branchLocation?: boolean
+    gateOfficerName?: boolean
+    checkInTime?: boolean
+    checkOutTime?: boolean
+    status?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["securityGateLog"]>
+
+  export type SecurityGateLogSelectScalar = {
+    id?: boolean
+    passCode?: boolean
+    vehiclePlate?: boolean
+    driverName?: boolean
+    visitorName?: boolean
+    purpose?: boolean
+    passType?: boolean
+    branchLocation?: boolean
+    gateOfficerName?: boolean
+    checkInTime?: boolean
+    checkOutTime?: boolean
+    status?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $SecurityGateLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SecurityGateLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      passCode: string
+      vehiclePlate: string
+      driverName: string
+      visitorName: string | null
+      purpose: string
+      passType: $Enums.GatePassType
+      branchLocation: string
+      gateOfficerName: string
+      checkInTime: Date
+      checkOutTime: Date | null
+      status: string
+      isDeleted: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["securityGateLog"]>
+    composites: {}
+  }
+
+  type SecurityGateLogGetPayload<S extends boolean | null | undefined | SecurityGateLogDefaultArgs> = $Result.GetResult<Prisma.$SecurityGateLogPayload, S>
+
+  type SecurityGateLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SecurityGateLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SecurityGateLogCountAggregateInputType | true
+    }
+
+  export interface SecurityGateLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SecurityGateLog'], meta: { name: 'SecurityGateLog' } }
+    /**
+     * Find zero or one SecurityGateLog that matches the filter.
+     * @param {SecurityGateLogFindUniqueArgs} args - Arguments to find a SecurityGateLog
+     * @example
+     * // Get one SecurityGateLog
+     * const securityGateLog = await prisma.securityGateLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SecurityGateLogFindUniqueArgs>(args: SelectSubset<T, SecurityGateLogFindUniqueArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SecurityGateLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SecurityGateLogFindUniqueOrThrowArgs} args - Arguments to find a SecurityGateLog
+     * @example
+     * // Get one SecurityGateLog
+     * const securityGateLog = await prisma.securityGateLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SecurityGateLogFindUniqueOrThrowArgs>(args: SelectSubset<T, SecurityGateLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SecurityGateLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogFindFirstArgs} args - Arguments to find a SecurityGateLog
+     * @example
+     * // Get one SecurityGateLog
+     * const securityGateLog = await prisma.securityGateLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SecurityGateLogFindFirstArgs>(args?: SelectSubset<T, SecurityGateLogFindFirstArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SecurityGateLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogFindFirstOrThrowArgs} args - Arguments to find a SecurityGateLog
+     * @example
+     * // Get one SecurityGateLog
+     * const securityGateLog = await prisma.securityGateLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SecurityGateLogFindFirstOrThrowArgs>(args?: SelectSubset<T, SecurityGateLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SecurityGateLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SecurityGateLogs
+     * const securityGateLogs = await prisma.securityGateLog.findMany()
+     * 
+     * // Get first 10 SecurityGateLogs
+     * const securityGateLogs = await prisma.securityGateLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const securityGateLogWithIdOnly = await prisma.securityGateLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SecurityGateLogFindManyArgs>(args?: SelectSubset<T, SecurityGateLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SecurityGateLog.
+     * @param {SecurityGateLogCreateArgs} args - Arguments to create a SecurityGateLog.
+     * @example
+     * // Create one SecurityGateLog
+     * const SecurityGateLog = await prisma.securityGateLog.create({
+     *   data: {
+     *     // ... data to create a SecurityGateLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends SecurityGateLogCreateArgs>(args: SelectSubset<T, SecurityGateLogCreateArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SecurityGateLogs.
+     * @param {SecurityGateLogCreateManyArgs} args - Arguments to create many SecurityGateLogs.
+     * @example
+     * // Create many SecurityGateLogs
+     * const securityGateLog = await prisma.securityGateLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SecurityGateLogCreateManyArgs>(args?: SelectSubset<T, SecurityGateLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SecurityGateLogs and returns the data saved in the database.
+     * @param {SecurityGateLogCreateManyAndReturnArgs} args - Arguments to create many SecurityGateLogs.
+     * @example
+     * // Create many SecurityGateLogs
+     * const securityGateLog = await prisma.securityGateLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SecurityGateLogs and only return the `id`
+     * const securityGateLogWithIdOnly = await prisma.securityGateLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SecurityGateLogCreateManyAndReturnArgs>(args?: SelectSubset<T, SecurityGateLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SecurityGateLog.
+     * @param {SecurityGateLogDeleteArgs} args - Arguments to delete one SecurityGateLog.
+     * @example
+     * // Delete one SecurityGateLog
+     * const SecurityGateLog = await prisma.securityGateLog.delete({
+     *   where: {
+     *     // ... filter to delete one SecurityGateLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SecurityGateLogDeleteArgs>(args: SelectSubset<T, SecurityGateLogDeleteArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SecurityGateLog.
+     * @param {SecurityGateLogUpdateArgs} args - Arguments to update one SecurityGateLog.
+     * @example
+     * // Update one SecurityGateLog
+     * const securityGateLog = await prisma.securityGateLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SecurityGateLogUpdateArgs>(args: SelectSubset<T, SecurityGateLogUpdateArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SecurityGateLogs.
+     * @param {SecurityGateLogDeleteManyArgs} args - Arguments to filter SecurityGateLogs to delete.
+     * @example
+     * // Delete a few SecurityGateLogs
+     * const { count } = await prisma.securityGateLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SecurityGateLogDeleteManyArgs>(args?: SelectSubset<T, SecurityGateLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SecurityGateLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SecurityGateLogs
+     * const securityGateLog = await prisma.securityGateLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SecurityGateLogUpdateManyArgs>(args: SelectSubset<T, SecurityGateLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SecurityGateLog.
+     * @param {SecurityGateLogUpsertArgs} args - Arguments to update or create a SecurityGateLog.
+     * @example
+     * // Update or create a SecurityGateLog
+     * const securityGateLog = await prisma.securityGateLog.upsert({
+     *   create: {
+     *     // ... data to create a SecurityGateLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SecurityGateLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SecurityGateLogUpsertArgs>(args: SelectSubset<T, SecurityGateLogUpsertArgs<ExtArgs>>): Prisma__SecurityGateLogClient<$Result.GetResult<Prisma.$SecurityGateLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SecurityGateLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogCountArgs} args - Arguments to filter SecurityGateLogs to count.
+     * @example
+     * // Count the number of SecurityGateLogs
+     * const count = await prisma.securityGateLog.count({
+     *   where: {
+     *     // ... the filter for the SecurityGateLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends SecurityGateLogCountArgs>(
+      args?: Subset<T, SecurityGateLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SecurityGateLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SecurityGateLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SecurityGateLogAggregateArgs>(args: Subset<T, SecurityGateLogAggregateArgs>): Prisma.PrismaPromise<GetSecurityGateLogAggregateType<T>>
+
+    /**
+     * Group by SecurityGateLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityGateLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SecurityGateLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SecurityGateLogGroupByArgs['orderBy'] }
+        : { orderBy?: SecurityGateLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SecurityGateLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSecurityGateLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SecurityGateLog model
+   */
+  readonly fields: SecurityGateLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SecurityGateLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SecurityGateLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SecurityGateLog model
+   */ 
+  interface SecurityGateLogFieldRefs {
+    readonly id: FieldRef<"SecurityGateLog", 'String'>
+    readonly passCode: FieldRef<"SecurityGateLog", 'String'>
+    readonly vehiclePlate: FieldRef<"SecurityGateLog", 'String'>
+    readonly driverName: FieldRef<"SecurityGateLog", 'String'>
+    readonly visitorName: FieldRef<"SecurityGateLog", 'String'>
+    readonly purpose: FieldRef<"SecurityGateLog", 'String'>
+    readonly passType: FieldRef<"SecurityGateLog", 'GatePassType'>
+    readonly branchLocation: FieldRef<"SecurityGateLog", 'String'>
+    readonly gateOfficerName: FieldRef<"SecurityGateLog", 'String'>
+    readonly checkInTime: FieldRef<"SecurityGateLog", 'DateTime'>
+    readonly checkOutTime: FieldRef<"SecurityGateLog", 'DateTime'>
+    readonly status: FieldRef<"SecurityGateLog", 'String'>
+    readonly isDeleted: FieldRef<"SecurityGateLog", 'Boolean'>
+    readonly createdAt: FieldRef<"SecurityGateLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SecurityGateLog findUnique
+   */
+  export type SecurityGateLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityGateLog to fetch.
+     */
+    where: SecurityGateLogWhereUniqueInput
+  }
+
+  /**
+   * SecurityGateLog findUniqueOrThrow
+   */
+  export type SecurityGateLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityGateLog to fetch.
+     */
+    where: SecurityGateLogWhereUniqueInput
+  }
+
+  /**
+   * SecurityGateLog findFirst
+   */
+  export type SecurityGateLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityGateLog to fetch.
+     */
+    where?: SecurityGateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityGateLogs to fetch.
+     */
+    orderBy?: SecurityGateLogOrderByWithRelationInput | SecurityGateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SecurityGateLogs.
+     */
+    cursor?: SecurityGateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityGateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityGateLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityGateLogs.
+     */
+    distinct?: SecurityGateLogScalarFieldEnum | SecurityGateLogScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityGateLog findFirstOrThrow
+   */
+  export type SecurityGateLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityGateLog to fetch.
+     */
+    where?: SecurityGateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityGateLogs to fetch.
+     */
+    orderBy?: SecurityGateLogOrderByWithRelationInput | SecurityGateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SecurityGateLogs.
+     */
+    cursor?: SecurityGateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityGateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityGateLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityGateLogs.
+     */
+    distinct?: SecurityGateLogScalarFieldEnum | SecurityGateLogScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityGateLog findMany
+   */
+  export type SecurityGateLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityGateLogs to fetch.
+     */
+    where?: SecurityGateLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityGateLogs to fetch.
+     */
+    orderBy?: SecurityGateLogOrderByWithRelationInput | SecurityGateLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SecurityGateLogs.
+     */
+    cursor?: SecurityGateLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityGateLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityGateLogs.
+     */
+    skip?: number
+    distinct?: SecurityGateLogScalarFieldEnum | SecurityGateLogScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityGateLog create
+   */
+  export type SecurityGateLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SecurityGateLog.
+     */
+    data: XOR<SecurityGateLogCreateInput, SecurityGateLogUncheckedCreateInput>
+  }
+
+  /**
+   * SecurityGateLog createMany
+   */
+  export type SecurityGateLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SecurityGateLogs.
+     */
+    data: SecurityGateLogCreateManyInput | SecurityGateLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SecurityGateLog createManyAndReturn
+   */
+  export type SecurityGateLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SecurityGateLogs.
+     */
+    data: SecurityGateLogCreateManyInput | SecurityGateLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SecurityGateLog update
+   */
+  export type SecurityGateLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SecurityGateLog.
+     */
+    data: XOR<SecurityGateLogUpdateInput, SecurityGateLogUncheckedUpdateInput>
+    /**
+     * Choose, which SecurityGateLog to update.
+     */
+    where: SecurityGateLogWhereUniqueInput
+  }
+
+  /**
+   * SecurityGateLog updateMany
+   */
+  export type SecurityGateLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SecurityGateLogs.
+     */
+    data: XOR<SecurityGateLogUpdateManyMutationInput, SecurityGateLogUncheckedUpdateManyInput>
+    /**
+     * Filter which SecurityGateLogs to update
+     */
+    where?: SecurityGateLogWhereInput
+  }
+
+  /**
+   * SecurityGateLog upsert
+   */
+  export type SecurityGateLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SecurityGateLog to update in case it exists.
+     */
+    where: SecurityGateLogWhereUniqueInput
+    /**
+     * In case the SecurityGateLog found by the `where` argument doesn't exist, create a new SecurityGateLog with this data.
+     */
+    create: XOR<SecurityGateLogCreateInput, SecurityGateLogUncheckedCreateInput>
+    /**
+     * In case the SecurityGateLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SecurityGateLogUpdateInput, SecurityGateLogUncheckedUpdateInput>
+  }
+
+  /**
+   * SecurityGateLog delete
+   */
+  export type SecurityGateLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+    /**
+     * Filter which SecurityGateLog to delete.
+     */
+    where: SecurityGateLogWhereUniqueInput
+  }
+
+  /**
+   * SecurityGateLog deleteMany
+   */
+  export type SecurityGateLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SecurityGateLogs to delete
+     */
+    where?: SecurityGateLogWhereInput
+  }
+
+  /**
+   * SecurityGateLog without action
+   */
+  export type SecurityGateLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityGateLog
+     */
+    select?: SecurityGateLogSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SecurityIncidentReport
+   */
+
+  export type AggregateSecurityIncidentReport = {
+    _count: SecurityIncidentReportCountAggregateOutputType | null
+    _min: SecurityIncidentReportMinAggregateOutputType | null
+    _max: SecurityIncidentReportMaxAggregateOutputType | null
+  }
+
+  export type SecurityIncidentReportMinAggregateOutputType = {
+    id: string | null
+    incidentCode: string | null
+    title: string | null
+    description: string | null
+    location: string | null
+    branchLocation: string | null
+    severity: $Enums.IncidentSeverity | null
+    patrolOfficerName: string | null
+    status: string | null
+    linkedTicketCode: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SecurityIncidentReportMaxAggregateOutputType = {
+    id: string | null
+    incidentCode: string | null
+    title: string | null
+    description: string | null
+    location: string | null
+    branchLocation: string | null
+    severity: $Enums.IncidentSeverity | null
+    patrolOfficerName: string | null
+    status: string | null
+    linkedTicketCode: string | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SecurityIncidentReportCountAggregateOutputType = {
+    id: number
+    incidentCode: number
+    title: number
+    description: number
+    location: number
+    branchLocation: number
+    severity: number
+    patrolOfficerName: number
+    status: number
+    linkedTicketCode: number
+    isDeleted: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SecurityIncidentReportMinAggregateInputType = {
+    id?: true
+    incidentCode?: true
+    title?: true
+    description?: true
+    location?: true
+    branchLocation?: true
+    severity?: true
+    patrolOfficerName?: true
+    status?: true
+    linkedTicketCode?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SecurityIncidentReportMaxAggregateInputType = {
+    id?: true
+    incidentCode?: true
+    title?: true
+    description?: true
+    location?: true
+    branchLocation?: true
+    severity?: true
+    patrolOfficerName?: true
+    status?: true
+    linkedTicketCode?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SecurityIncidentReportCountAggregateInputType = {
+    id?: true
+    incidentCode?: true
+    title?: true
+    description?: true
+    location?: true
+    branchLocation?: true
+    severity?: true
+    patrolOfficerName?: true
+    status?: true
+    linkedTicketCode?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SecurityIncidentReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SecurityIncidentReport to aggregate.
+     */
+    where?: SecurityIncidentReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityIncidentReports to fetch.
+     */
+    orderBy?: SecurityIncidentReportOrderByWithRelationInput | SecurityIncidentReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SecurityIncidentReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityIncidentReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityIncidentReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SecurityIncidentReports
+    **/
+    _count?: true | SecurityIncidentReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SecurityIncidentReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SecurityIncidentReportMaxAggregateInputType
+  }
+
+  export type GetSecurityIncidentReportAggregateType<T extends SecurityIncidentReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateSecurityIncidentReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSecurityIncidentReport[P]>
+      : GetScalarType<T[P], AggregateSecurityIncidentReport[P]>
+  }
+
+
+
+
+  export type SecurityIncidentReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SecurityIncidentReportWhereInput
+    orderBy?: SecurityIncidentReportOrderByWithAggregationInput | SecurityIncidentReportOrderByWithAggregationInput[]
+    by: SecurityIncidentReportScalarFieldEnum[] | SecurityIncidentReportScalarFieldEnum
+    having?: SecurityIncidentReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SecurityIncidentReportCountAggregateInputType | true
+    _min?: SecurityIncidentReportMinAggregateInputType
+    _max?: SecurityIncidentReportMaxAggregateInputType
+  }
+
+  export type SecurityIncidentReportGroupByOutputType = {
+    id: string
+    incidentCode: string
+    title: string
+    description: string
+    location: string
+    branchLocation: string
+    severity: $Enums.IncidentSeverity
+    patrolOfficerName: string
+    status: string
+    linkedTicketCode: string | null
+    isDeleted: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SecurityIncidentReportCountAggregateOutputType | null
+    _min: SecurityIncidentReportMinAggregateOutputType | null
+    _max: SecurityIncidentReportMaxAggregateOutputType | null
+  }
+
+  type GetSecurityIncidentReportGroupByPayload<T extends SecurityIncidentReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SecurityIncidentReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SecurityIncidentReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SecurityIncidentReportGroupByOutputType[P]>
+            : GetScalarType<T[P], SecurityIncidentReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SecurityIncidentReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    incidentCode?: boolean
+    title?: boolean
+    description?: boolean
+    location?: boolean
+    branchLocation?: boolean
+    severity?: boolean
+    patrolOfficerName?: boolean
+    status?: boolean
+    linkedTicketCode?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["securityIncidentReport"]>
+
+  export type SecurityIncidentReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    incidentCode?: boolean
+    title?: boolean
+    description?: boolean
+    location?: boolean
+    branchLocation?: boolean
+    severity?: boolean
+    patrolOfficerName?: boolean
+    status?: boolean
+    linkedTicketCode?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["securityIncidentReport"]>
+
+  export type SecurityIncidentReportSelectScalar = {
+    id?: boolean
+    incidentCode?: boolean
+    title?: boolean
+    description?: boolean
+    location?: boolean
+    branchLocation?: boolean
+    severity?: boolean
+    patrolOfficerName?: boolean
+    status?: boolean
+    linkedTicketCode?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $SecurityIncidentReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SecurityIncidentReport"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      incidentCode: string
+      title: string
+      description: string
+      location: string
+      branchLocation: string
+      severity: $Enums.IncidentSeverity
+      patrolOfficerName: string
+      status: string
+      linkedTicketCode: string | null
+      isDeleted: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["securityIncidentReport"]>
+    composites: {}
+  }
+
+  type SecurityIncidentReportGetPayload<S extends boolean | null | undefined | SecurityIncidentReportDefaultArgs> = $Result.GetResult<Prisma.$SecurityIncidentReportPayload, S>
+
+  type SecurityIncidentReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SecurityIncidentReportFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SecurityIncidentReportCountAggregateInputType | true
+    }
+
+  export interface SecurityIncidentReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SecurityIncidentReport'], meta: { name: 'SecurityIncidentReport' } }
+    /**
+     * Find zero or one SecurityIncidentReport that matches the filter.
+     * @param {SecurityIncidentReportFindUniqueArgs} args - Arguments to find a SecurityIncidentReport
+     * @example
+     * // Get one SecurityIncidentReport
+     * const securityIncidentReport = await prisma.securityIncidentReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SecurityIncidentReportFindUniqueArgs>(args: SelectSubset<T, SecurityIncidentReportFindUniqueArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SecurityIncidentReport that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SecurityIncidentReportFindUniqueOrThrowArgs} args - Arguments to find a SecurityIncidentReport
+     * @example
+     * // Get one SecurityIncidentReport
+     * const securityIncidentReport = await prisma.securityIncidentReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SecurityIncidentReportFindUniqueOrThrowArgs>(args: SelectSubset<T, SecurityIncidentReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SecurityIncidentReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportFindFirstArgs} args - Arguments to find a SecurityIncidentReport
+     * @example
+     * // Get one SecurityIncidentReport
+     * const securityIncidentReport = await prisma.securityIncidentReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SecurityIncidentReportFindFirstArgs>(args?: SelectSubset<T, SecurityIncidentReportFindFirstArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SecurityIncidentReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportFindFirstOrThrowArgs} args - Arguments to find a SecurityIncidentReport
+     * @example
+     * // Get one SecurityIncidentReport
+     * const securityIncidentReport = await prisma.securityIncidentReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SecurityIncidentReportFindFirstOrThrowArgs>(args?: SelectSubset<T, SecurityIncidentReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SecurityIncidentReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SecurityIncidentReports
+     * const securityIncidentReports = await prisma.securityIncidentReport.findMany()
+     * 
+     * // Get first 10 SecurityIncidentReports
+     * const securityIncidentReports = await prisma.securityIncidentReport.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const securityIncidentReportWithIdOnly = await prisma.securityIncidentReport.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SecurityIncidentReportFindManyArgs>(args?: SelectSubset<T, SecurityIncidentReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SecurityIncidentReport.
+     * @param {SecurityIncidentReportCreateArgs} args - Arguments to create a SecurityIncidentReport.
+     * @example
+     * // Create one SecurityIncidentReport
+     * const SecurityIncidentReport = await prisma.securityIncidentReport.create({
+     *   data: {
+     *     // ... data to create a SecurityIncidentReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends SecurityIncidentReportCreateArgs>(args: SelectSubset<T, SecurityIncidentReportCreateArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SecurityIncidentReports.
+     * @param {SecurityIncidentReportCreateManyArgs} args - Arguments to create many SecurityIncidentReports.
+     * @example
+     * // Create many SecurityIncidentReports
+     * const securityIncidentReport = await prisma.securityIncidentReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SecurityIncidentReportCreateManyArgs>(args?: SelectSubset<T, SecurityIncidentReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SecurityIncidentReports and returns the data saved in the database.
+     * @param {SecurityIncidentReportCreateManyAndReturnArgs} args - Arguments to create many SecurityIncidentReports.
+     * @example
+     * // Create many SecurityIncidentReports
+     * const securityIncidentReport = await prisma.securityIncidentReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SecurityIncidentReports and only return the `id`
+     * const securityIncidentReportWithIdOnly = await prisma.securityIncidentReport.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SecurityIncidentReportCreateManyAndReturnArgs>(args?: SelectSubset<T, SecurityIncidentReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SecurityIncidentReport.
+     * @param {SecurityIncidentReportDeleteArgs} args - Arguments to delete one SecurityIncidentReport.
+     * @example
+     * // Delete one SecurityIncidentReport
+     * const SecurityIncidentReport = await prisma.securityIncidentReport.delete({
+     *   where: {
+     *     // ... filter to delete one SecurityIncidentReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SecurityIncidentReportDeleteArgs>(args: SelectSubset<T, SecurityIncidentReportDeleteArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SecurityIncidentReport.
+     * @param {SecurityIncidentReportUpdateArgs} args - Arguments to update one SecurityIncidentReport.
+     * @example
+     * // Update one SecurityIncidentReport
+     * const securityIncidentReport = await prisma.securityIncidentReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SecurityIncidentReportUpdateArgs>(args: SelectSubset<T, SecurityIncidentReportUpdateArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SecurityIncidentReports.
+     * @param {SecurityIncidentReportDeleteManyArgs} args - Arguments to filter SecurityIncidentReports to delete.
+     * @example
+     * // Delete a few SecurityIncidentReports
+     * const { count } = await prisma.securityIncidentReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SecurityIncidentReportDeleteManyArgs>(args?: SelectSubset<T, SecurityIncidentReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SecurityIncidentReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SecurityIncidentReports
+     * const securityIncidentReport = await prisma.securityIncidentReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SecurityIncidentReportUpdateManyArgs>(args: SelectSubset<T, SecurityIncidentReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SecurityIncidentReport.
+     * @param {SecurityIncidentReportUpsertArgs} args - Arguments to update or create a SecurityIncidentReport.
+     * @example
+     * // Update or create a SecurityIncidentReport
+     * const securityIncidentReport = await prisma.securityIncidentReport.upsert({
+     *   create: {
+     *     // ... data to create a SecurityIncidentReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SecurityIncidentReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SecurityIncidentReportUpsertArgs>(args: SelectSubset<T, SecurityIncidentReportUpsertArgs<ExtArgs>>): Prisma__SecurityIncidentReportClient<$Result.GetResult<Prisma.$SecurityIncidentReportPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SecurityIncidentReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportCountArgs} args - Arguments to filter SecurityIncidentReports to count.
+     * @example
+     * // Count the number of SecurityIncidentReports
+     * const count = await prisma.securityIncidentReport.count({
+     *   where: {
+     *     // ... the filter for the SecurityIncidentReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends SecurityIncidentReportCountArgs>(
+      args?: Subset<T, SecurityIncidentReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SecurityIncidentReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SecurityIncidentReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SecurityIncidentReportAggregateArgs>(args: Subset<T, SecurityIncidentReportAggregateArgs>): Prisma.PrismaPromise<GetSecurityIncidentReportAggregateType<T>>
+
+    /**
+     * Group by SecurityIncidentReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityIncidentReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SecurityIncidentReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SecurityIncidentReportGroupByArgs['orderBy'] }
+        : { orderBy?: SecurityIncidentReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SecurityIncidentReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSecurityIncidentReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SecurityIncidentReport model
+   */
+  readonly fields: SecurityIncidentReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SecurityIncidentReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SecurityIncidentReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SecurityIncidentReport model
+   */ 
+  interface SecurityIncidentReportFieldRefs {
+    readonly id: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly incidentCode: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly title: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly description: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly location: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly branchLocation: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly severity: FieldRef<"SecurityIncidentReport", 'IncidentSeverity'>
+    readonly patrolOfficerName: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly status: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly linkedTicketCode: FieldRef<"SecurityIncidentReport", 'String'>
+    readonly isDeleted: FieldRef<"SecurityIncidentReport", 'Boolean'>
+    readonly createdAt: FieldRef<"SecurityIncidentReport", 'DateTime'>
+    readonly updatedAt: FieldRef<"SecurityIncidentReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SecurityIncidentReport findUnique
+   */
+  export type SecurityIncidentReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityIncidentReport to fetch.
+     */
+    where: SecurityIncidentReportWhereUniqueInput
+  }
+
+  /**
+   * SecurityIncidentReport findUniqueOrThrow
+   */
+  export type SecurityIncidentReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityIncidentReport to fetch.
+     */
+    where: SecurityIncidentReportWhereUniqueInput
+  }
+
+  /**
+   * SecurityIncidentReport findFirst
+   */
+  export type SecurityIncidentReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityIncidentReport to fetch.
+     */
+    where?: SecurityIncidentReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityIncidentReports to fetch.
+     */
+    orderBy?: SecurityIncidentReportOrderByWithRelationInput | SecurityIncidentReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SecurityIncidentReports.
+     */
+    cursor?: SecurityIncidentReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityIncidentReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityIncidentReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityIncidentReports.
+     */
+    distinct?: SecurityIncidentReportScalarFieldEnum | SecurityIncidentReportScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityIncidentReport findFirstOrThrow
+   */
+  export type SecurityIncidentReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityIncidentReport to fetch.
+     */
+    where?: SecurityIncidentReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityIncidentReports to fetch.
+     */
+    orderBy?: SecurityIncidentReportOrderByWithRelationInput | SecurityIncidentReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SecurityIncidentReports.
+     */
+    cursor?: SecurityIncidentReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityIncidentReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityIncidentReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityIncidentReports.
+     */
+    distinct?: SecurityIncidentReportScalarFieldEnum | SecurityIncidentReportScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityIncidentReport findMany
+   */
+  export type SecurityIncidentReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * Filter, which SecurityIncidentReports to fetch.
+     */
+    where?: SecurityIncidentReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityIncidentReports to fetch.
+     */
+    orderBy?: SecurityIncidentReportOrderByWithRelationInput | SecurityIncidentReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SecurityIncidentReports.
+     */
+    cursor?: SecurityIncidentReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityIncidentReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityIncidentReports.
+     */
+    skip?: number
+    distinct?: SecurityIncidentReportScalarFieldEnum | SecurityIncidentReportScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityIncidentReport create
+   */
+  export type SecurityIncidentReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * The data needed to create a SecurityIncidentReport.
+     */
+    data: XOR<SecurityIncidentReportCreateInput, SecurityIncidentReportUncheckedCreateInput>
+  }
+
+  /**
+   * SecurityIncidentReport createMany
+   */
+  export type SecurityIncidentReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SecurityIncidentReports.
+     */
+    data: SecurityIncidentReportCreateManyInput | SecurityIncidentReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SecurityIncidentReport createManyAndReturn
+   */
+  export type SecurityIncidentReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SecurityIncidentReports.
+     */
+    data: SecurityIncidentReportCreateManyInput | SecurityIncidentReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SecurityIncidentReport update
+   */
+  export type SecurityIncidentReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * The data needed to update a SecurityIncidentReport.
+     */
+    data: XOR<SecurityIncidentReportUpdateInput, SecurityIncidentReportUncheckedUpdateInput>
+    /**
+     * Choose, which SecurityIncidentReport to update.
+     */
+    where: SecurityIncidentReportWhereUniqueInput
+  }
+
+  /**
+   * SecurityIncidentReport updateMany
+   */
+  export type SecurityIncidentReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SecurityIncidentReports.
+     */
+    data: XOR<SecurityIncidentReportUpdateManyMutationInput, SecurityIncidentReportUncheckedUpdateManyInput>
+    /**
+     * Filter which SecurityIncidentReports to update
+     */
+    where?: SecurityIncidentReportWhereInput
+  }
+
+  /**
+   * SecurityIncidentReport upsert
+   */
+  export type SecurityIncidentReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * The filter to search for the SecurityIncidentReport to update in case it exists.
+     */
+    where: SecurityIncidentReportWhereUniqueInput
+    /**
+     * In case the SecurityIncidentReport found by the `where` argument doesn't exist, create a new SecurityIncidentReport with this data.
+     */
+    create: XOR<SecurityIncidentReportCreateInput, SecurityIncidentReportUncheckedCreateInput>
+    /**
+     * In case the SecurityIncidentReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SecurityIncidentReportUpdateInput, SecurityIncidentReportUncheckedUpdateInput>
+  }
+
+  /**
+   * SecurityIncidentReport delete
+   */
+  export type SecurityIncidentReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+    /**
+     * Filter which SecurityIncidentReport to delete.
+     */
+    where: SecurityIncidentReportWhereUniqueInput
+  }
+
+  /**
+   * SecurityIncidentReport deleteMany
+   */
+  export type SecurityIncidentReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SecurityIncidentReports to delete
+     */
+    where?: SecurityIncidentReportWhereInput
+  }
+
+  /**
+   * SecurityIncidentReport without action
+   */
+  export type SecurityIncidentReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityIncidentReport
+     */
+    select?: SecurityIncidentReportSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17488,6 +23071,98 @@ export namespace Prisma {
   export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
 
 
+  export const MeetingTicketScalarFieldEnum: {
+    id: 'id',
+    ticketCode: 'ticketCode',
+    title: 'title',
+    description: 'description',
+    category: 'category',
+    priority: 'priority',
+    status: 'status',
+    branchLocation: 'branchLocation',
+    createdByName: 'createdByName',
+    assignedToName: 'assignedToName',
+    solutionNote: 'solutionNote',
+    resolvedAt: 'resolvedAt',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MeetingTicketScalarFieldEnum = (typeof MeetingTicketScalarFieldEnum)[keyof typeof MeetingTicketScalarFieldEnum]
+
+
+  export const MeetingSessionScalarFieldEnum: {
+    id: 'id',
+    sessionCode: 'sessionCode',
+    title: 'title',
+    meetingDate: 'meetingDate',
+    chairpersonName: 'chairpersonName',
+    secretaryName: 'secretaryName',
+    status: 'status',
+    notes: 'notes',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MeetingSessionScalarFieldEnum = (typeof MeetingSessionScalarFieldEnum)[keyof typeof MeetingSessionScalarFieldEnum]
+
+
+  export const MeetingAgendaItemScalarFieldEnum: {
+    id: 'id',
+    sessionId: 'sessionId',
+    ticketId: 'ticketId',
+    status: 'status',
+    decisionNote: 'decisionNote',
+    actionItem: 'actionItem',
+    picName: 'picName',
+    dueDate: 'dueDate',
+    createdAt: 'createdAt'
+  };
+
+  export type MeetingAgendaItemScalarFieldEnum = (typeof MeetingAgendaItemScalarFieldEnum)[keyof typeof MeetingAgendaItemScalarFieldEnum]
+
+
+  export const SecurityGateLogScalarFieldEnum: {
+    id: 'id',
+    passCode: 'passCode',
+    vehiclePlate: 'vehiclePlate',
+    driverName: 'driverName',
+    visitorName: 'visitorName',
+    purpose: 'purpose',
+    passType: 'passType',
+    branchLocation: 'branchLocation',
+    gateOfficerName: 'gateOfficerName',
+    checkInTime: 'checkInTime',
+    checkOutTime: 'checkOutTime',
+    status: 'status',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt'
+  };
+
+  export type SecurityGateLogScalarFieldEnum = (typeof SecurityGateLogScalarFieldEnum)[keyof typeof SecurityGateLogScalarFieldEnum]
+
+
+  export const SecurityIncidentReportScalarFieldEnum: {
+    id: 'id',
+    incidentCode: 'incidentCode',
+    title: 'title',
+    description: 'description',
+    location: 'location',
+    branchLocation: 'branchLocation',
+    severity: 'severity',
+    patrolOfficerName: 'patrolOfficerName',
+    status: 'status',
+    linkedTicketCode: 'linkedTicketCode',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SecurityIncidentReportScalarFieldEnum = (typeof SecurityIncidentReportScalarFieldEnum)[keyof typeof SecurityIncidentReportScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -17647,6 +23322,62 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketPriority'
+   */
+  export type EnumTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketPriority'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketPriority[]'
+   */
+  export type ListEnumTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketPriority[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketStatus'
+   */
+  export type EnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TicketStatus[]'
+   */
+  export type ListEnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GatePassType'
+   */
+  export type EnumGatePassTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GatePassType'>
+    
+
+
+  /**
+   * Reference to a field of type 'GatePassType[]'
+   */
+  export type ListEnumGatePassTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GatePassType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'IncidentSeverity'
+   */
+  export type EnumIncidentSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IncidentSeverity'>
+    
+
+
+  /**
+   * Reference to a field of type 'IncidentSeverity[]'
+   */
+  export type ListEnumIncidentSeverityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IncidentSeverity[]'>
     
 
 
@@ -18673,6 +24404,463 @@ export namespace Prisma {
     fileType?: StringNullableWithAggregatesFilter<"ChatMessage"> | string | null
     fileSize?: IntNullableWithAggregatesFilter<"ChatMessage"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"ChatMessage"> | Date | string
+  }
+
+  export type MeetingTicketWhereInput = {
+    AND?: MeetingTicketWhereInput | MeetingTicketWhereInput[]
+    OR?: MeetingTicketWhereInput[]
+    NOT?: MeetingTicketWhereInput | MeetingTicketWhereInput[]
+    id?: StringFilter<"MeetingTicket"> | string
+    ticketCode?: StringFilter<"MeetingTicket"> | string
+    title?: StringFilter<"MeetingTicket"> | string
+    description?: StringFilter<"MeetingTicket"> | string
+    category?: StringFilter<"MeetingTicket"> | string
+    priority?: EnumTicketPriorityFilter<"MeetingTicket"> | $Enums.TicketPriority
+    status?: EnumTicketStatusFilter<"MeetingTicket"> | $Enums.TicketStatus
+    branchLocation?: StringFilter<"MeetingTicket"> | string
+    createdByName?: StringFilter<"MeetingTicket"> | string
+    assignedToName?: StringNullableFilter<"MeetingTicket"> | string | null
+    solutionNote?: StringNullableFilter<"MeetingTicket"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"MeetingTicket"> | Date | string | null
+    isDeleted?: BoolFilter<"MeetingTicket"> | boolean
+    createdAt?: DateTimeFilter<"MeetingTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"MeetingTicket"> | Date | string
+    agendaItems?: MeetingAgendaItemListRelationFilter
+  }
+
+  export type MeetingTicketOrderByWithRelationInput = {
+    id?: SortOrder
+    ticketCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    branchLocation?: SortOrder
+    createdByName?: SortOrder
+    assignedToName?: SortOrderInput | SortOrder
+    solutionNote?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    agendaItems?: MeetingAgendaItemOrderByRelationAggregateInput
+  }
+
+  export type MeetingTicketWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    ticketCode?: string
+    AND?: MeetingTicketWhereInput | MeetingTicketWhereInput[]
+    OR?: MeetingTicketWhereInput[]
+    NOT?: MeetingTicketWhereInput | MeetingTicketWhereInput[]
+    title?: StringFilter<"MeetingTicket"> | string
+    description?: StringFilter<"MeetingTicket"> | string
+    category?: StringFilter<"MeetingTicket"> | string
+    priority?: EnumTicketPriorityFilter<"MeetingTicket"> | $Enums.TicketPriority
+    status?: EnumTicketStatusFilter<"MeetingTicket"> | $Enums.TicketStatus
+    branchLocation?: StringFilter<"MeetingTicket"> | string
+    createdByName?: StringFilter<"MeetingTicket"> | string
+    assignedToName?: StringNullableFilter<"MeetingTicket"> | string | null
+    solutionNote?: StringNullableFilter<"MeetingTicket"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"MeetingTicket"> | Date | string | null
+    isDeleted?: BoolFilter<"MeetingTicket"> | boolean
+    createdAt?: DateTimeFilter<"MeetingTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"MeetingTicket"> | Date | string
+    agendaItems?: MeetingAgendaItemListRelationFilter
+  }, "id" | "ticketCode">
+
+  export type MeetingTicketOrderByWithAggregationInput = {
+    id?: SortOrder
+    ticketCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    branchLocation?: SortOrder
+    createdByName?: SortOrder
+    assignedToName?: SortOrderInput | SortOrder
+    solutionNote?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MeetingTicketCountOrderByAggregateInput
+    _max?: MeetingTicketMaxOrderByAggregateInput
+    _min?: MeetingTicketMinOrderByAggregateInput
+  }
+
+  export type MeetingTicketScalarWhereWithAggregatesInput = {
+    AND?: MeetingTicketScalarWhereWithAggregatesInput | MeetingTicketScalarWhereWithAggregatesInput[]
+    OR?: MeetingTicketScalarWhereWithAggregatesInput[]
+    NOT?: MeetingTicketScalarWhereWithAggregatesInput | MeetingTicketScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    ticketCode?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    title?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    description?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    category?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    priority?: EnumTicketPriorityWithAggregatesFilter<"MeetingTicket"> | $Enums.TicketPriority
+    status?: EnumTicketStatusWithAggregatesFilter<"MeetingTicket"> | $Enums.TicketStatus
+    branchLocation?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    createdByName?: StringWithAggregatesFilter<"MeetingTicket"> | string
+    assignedToName?: StringNullableWithAggregatesFilter<"MeetingTicket"> | string | null
+    solutionNote?: StringNullableWithAggregatesFilter<"MeetingTicket"> | string | null
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"MeetingTicket"> | Date | string | null
+    isDeleted?: BoolWithAggregatesFilter<"MeetingTicket"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"MeetingTicket"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MeetingTicket"> | Date | string
+  }
+
+  export type MeetingSessionWhereInput = {
+    AND?: MeetingSessionWhereInput | MeetingSessionWhereInput[]
+    OR?: MeetingSessionWhereInput[]
+    NOT?: MeetingSessionWhereInput | MeetingSessionWhereInput[]
+    id?: StringFilter<"MeetingSession"> | string
+    sessionCode?: StringFilter<"MeetingSession"> | string
+    title?: StringFilter<"MeetingSession"> | string
+    meetingDate?: DateTimeFilter<"MeetingSession"> | Date | string
+    chairpersonName?: StringFilter<"MeetingSession"> | string
+    secretaryName?: StringFilter<"MeetingSession"> | string
+    status?: StringFilter<"MeetingSession"> | string
+    notes?: StringNullableFilter<"MeetingSession"> | string | null
+    isDeleted?: BoolFilter<"MeetingSession"> | boolean
+    createdAt?: DateTimeFilter<"MeetingSession"> | Date | string
+    updatedAt?: DateTimeFilter<"MeetingSession"> | Date | string
+    agendaItems?: MeetingAgendaItemListRelationFilter
+  }
+
+  export type MeetingSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    sessionCode?: SortOrder
+    title?: SortOrder
+    meetingDate?: SortOrder
+    chairpersonName?: SortOrder
+    secretaryName?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    agendaItems?: MeetingAgendaItemOrderByRelationAggregateInput
+  }
+
+  export type MeetingSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sessionCode?: string
+    AND?: MeetingSessionWhereInput | MeetingSessionWhereInput[]
+    OR?: MeetingSessionWhereInput[]
+    NOT?: MeetingSessionWhereInput | MeetingSessionWhereInput[]
+    title?: StringFilter<"MeetingSession"> | string
+    meetingDate?: DateTimeFilter<"MeetingSession"> | Date | string
+    chairpersonName?: StringFilter<"MeetingSession"> | string
+    secretaryName?: StringFilter<"MeetingSession"> | string
+    status?: StringFilter<"MeetingSession"> | string
+    notes?: StringNullableFilter<"MeetingSession"> | string | null
+    isDeleted?: BoolFilter<"MeetingSession"> | boolean
+    createdAt?: DateTimeFilter<"MeetingSession"> | Date | string
+    updatedAt?: DateTimeFilter<"MeetingSession"> | Date | string
+    agendaItems?: MeetingAgendaItemListRelationFilter
+  }, "id" | "sessionCode">
+
+  export type MeetingSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    sessionCode?: SortOrder
+    title?: SortOrder
+    meetingDate?: SortOrder
+    chairpersonName?: SortOrder
+    secretaryName?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MeetingSessionCountOrderByAggregateInput
+    _max?: MeetingSessionMaxOrderByAggregateInput
+    _min?: MeetingSessionMinOrderByAggregateInput
+  }
+
+  export type MeetingSessionScalarWhereWithAggregatesInput = {
+    AND?: MeetingSessionScalarWhereWithAggregatesInput | MeetingSessionScalarWhereWithAggregatesInput[]
+    OR?: MeetingSessionScalarWhereWithAggregatesInput[]
+    NOT?: MeetingSessionScalarWhereWithAggregatesInput | MeetingSessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MeetingSession"> | string
+    sessionCode?: StringWithAggregatesFilter<"MeetingSession"> | string
+    title?: StringWithAggregatesFilter<"MeetingSession"> | string
+    meetingDate?: DateTimeWithAggregatesFilter<"MeetingSession"> | Date | string
+    chairpersonName?: StringWithAggregatesFilter<"MeetingSession"> | string
+    secretaryName?: StringWithAggregatesFilter<"MeetingSession"> | string
+    status?: StringWithAggregatesFilter<"MeetingSession"> | string
+    notes?: StringNullableWithAggregatesFilter<"MeetingSession"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"MeetingSession"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"MeetingSession"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MeetingSession"> | Date | string
+  }
+
+  export type MeetingAgendaItemWhereInput = {
+    AND?: MeetingAgendaItemWhereInput | MeetingAgendaItemWhereInput[]
+    OR?: MeetingAgendaItemWhereInput[]
+    NOT?: MeetingAgendaItemWhereInput | MeetingAgendaItemWhereInput[]
+    id?: StringFilter<"MeetingAgendaItem"> | string
+    sessionId?: StringFilter<"MeetingAgendaItem"> | string
+    ticketId?: StringFilter<"MeetingAgendaItem"> | string
+    status?: StringFilter<"MeetingAgendaItem"> | string
+    decisionNote?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    actionItem?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    picName?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    dueDate?: DateTimeNullableFilter<"MeetingAgendaItem"> | Date | string | null
+    createdAt?: DateTimeFilter<"MeetingAgendaItem"> | Date | string
+    session?: XOR<MeetingSessionRelationFilter, MeetingSessionWhereInput>
+    ticket?: XOR<MeetingTicketRelationFilter, MeetingTicketWhereInput>
+  }
+
+  export type MeetingAgendaItemOrderByWithRelationInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    ticketId?: SortOrder
+    status?: SortOrder
+    decisionNote?: SortOrderInput | SortOrder
+    actionItem?: SortOrderInput | SortOrder
+    picName?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    session?: MeetingSessionOrderByWithRelationInput
+    ticket?: MeetingTicketOrderByWithRelationInput
+  }
+
+  export type MeetingAgendaItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MeetingAgendaItemWhereInput | MeetingAgendaItemWhereInput[]
+    OR?: MeetingAgendaItemWhereInput[]
+    NOT?: MeetingAgendaItemWhereInput | MeetingAgendaItemWhereInput[]
+    sessionId?: StringFilter<"MeetingAgendaItem"> | string
+    ticketId?: StringFilter<"MeetingAgendaItem"> | string
+    status?: StringFilter<"MeetingAgendaItem"> | string
+    decisionNote?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    actionItem?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    picName?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    dueDate?: DateTimeNullableFilter<"MeetingAgendaItem"> | Date | string | null
+    createdAt?: DateTimeFilter<"MeetingAgendaItem"> | Date | string
+    session?: XOR<MeetingSessionRelationFilter, MeetingSessionWhereInput>
+    ticket?: XOR<MeetingTicketRelationFilter, MeetingTicketWhereInput>
+  }, "id">
+
+  export type MeetingAgendaItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    ticketId?: SortOrder
+    status?: SortOrder
+    decisionNote?: SortOrderInput | SortOrder
+    actionItem?: SortOrderInput | SortOrder
+    picName?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: MeetingAgendaItemCountOrderByAggregateInput
+    _max?: MeetingAgendaItemMaxOrderByAggregateInput
+    _min?: MeetingAgendaItemMinOrderByAggregateInput
+  }
+
+  export type MeetingAgendaItemScalarWhereWithAggregatesInput = {
+    AND?: MeetingAgendaItemScalarWhereWithAggregatesInput | MeetingAgendaItemScalarWhereWithAggregatesInput[]
+    OR?: MeetingAgendaItemScalarWhereWithAggregatesInput[]
+    NOT?: MeetingAgendaItemScalarWhereWithAggregatesInput | MeetingAgendaItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MeetingAgendaItem"> | string
+    sessionId?: StringWithAggregatesFilter<"MeetingAgendaItem"> | string
+    ticketId?: StringWithAggregatesFilter<"MeetingAgendaItem"> | string
+    status?: StringWithAggregatesFilter<"MeetingAgendaItem"> | string
+    decisionNote?: StringNullableWithAggregatesFilter<"MeetingAgendaItem"> | string | null
+    actionItem?: StringNullableWithAggregatesFilter<"MeetingAgendaItem"> | string | null
+    picName?: StringNullableWithAggregatesFilter<"MeetingAgendaItem"> | string | null
+    dueDate?: DateTimeNullableWithAggregatesFilter<"MeetingAgendaItem"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MeetingAgendaItem"> | Date | string
+  }
+
+  export type SecurityGateLogWhereInput = {
+    AND?: SecurityGateLogWhereInput | SecurityGateLogWhereInput[]
+    OR?: SecurityGateLogWhereInput[]
+    NOT?: SecurityGateLogWhereInput | SecurityGateLogWhereInput[]
+    id?: StringFilter<"SecurityGateLog"> | string
+    passCode?: StringFilter<"SecurityGateLog"> | string
+    vehiclePlate?: StringFilter<"SecurityGateLog"> | string
+    driverName?: StringFilter<"SecurityGateLog"> | string
+    visitorName?: StringNullableFilter<"SecurityGateLog"> | string | null
+    purpose?: StringFilter<"SecurityGateLog"> | string
+    passType?: EnumGatePassTypeFilter<"SecurityGateLog"> | $Enums.GatePassType
+    branchLocation?: StringFilter<"SecurityGateLog"> | string
+    gateOfficerName?: StringFilter<"SecurityGateLog"> | string
+    checkInTime?: DateTimeFilter<"SecurityGateLog"> | Date | string
+    checkOutTime?: DateTimeNullableFilter<"SecurityGateLog"> | Date | string | null
+    status?: StringFilter<"SecurityGateLog"> | string
+    isDeleted?: BoolFilter<"SecurityGateLog"> | boolean
+    createdAt?: DateTimeFilter<"SecurityGateLog"> | Date | string
+  }
+
+  export type SecurityGateLogOrderByWithRelationInput = {
+    id?: SortOrder
+    passCode?: SortOrder
+    vehiclePlate?: SortOrder
+    driverName?: SortOrder
+    visitorName?: SortOrderInput | SortOrder
+    purpose?: SortOrder
+    passType?: SortOrder
+    branchLocation?: SortOrder
+    gateOfficerName?: SortOrder
+    checkInTime?: SortOrder
+    checkOutTime?: SortOrderInput | SortOrder
+    status?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SecurityGateLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    passCode?: string
+    AND?: SecurityGateLogWhereInput | SecurityGateLogWhereInput[]
+    OR?: SecurityGateLogWhereInput[]
+    NOT?: SecurityGateLogWhereInput | SecurityGateLogWhereInput[]
+    vehiclePlate?: StringFilter<"SecurityGateLog"> | string
+    driverName?: StringFilter<"SecurityGateLog"> | string
+    visitorName?: StringNullableFilter<"SecurityGateLog"> | string | null
+    purpose?: StringFilter<"SecurityGateLog"> | string
+    passType?: EnumGatePassTypeFilter<"SecurityGateLog"> | $Enums.GatePassType
+    branchLocation?: StringFilter<"SecurityGateLog"> | string
+    gateOfficerName?: StringFilter<"SecurityGateLog"> | string
+    checkInTime?: DateTimeFilter<"SecurityGateLog"> | Date | string
+    checkOutTime?: DateTimeNullableFilter<"SecurityGateLog"> | Date | string | null
+    status?: StringFilter<"SecurityGateLog"> | string
+    isDeleted?: BoolFilter<"SecurityGateLog"> | boolean
+    createdAt?: DateTimeFilter<"SecurityGateLog"> | Date | string
+  }, "id" | "passCode">
+
+  export type SecurityGateLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    passCode?: SortOrder
+    vehiclePlate?: SortOrder
+    driverName?: SortOrder
+    visitorName?: SortOrderInput | SortOrder
+    purpose?: SortOrder
+    passType?: SortOrder
+    branchLocation?: SortOrder
+    gateOfficerName?: SortOrder
+    checkInTime?: SortOrder
+    checkOutTime?: SortOrderInput | SortOrder
+    status?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    _count?: SecurityGateLogCountOrderByAggregateInput
+    _max?: SecurityGateLogMaxOrderByAggregateInput
+    _min?: SecurityGateLogMinOrderByAggregateInput
+  }
+
+  export type SecurityGateLogScalarWhereWithAggregatesInput = {
+    AND?: SecurityGateLogScalarWhereWithAggregatesInput | SecurityGateLogScalarWhereWithAggregatesInput[]
+    OR?: SecurityGateLogScalarWhereWithAggregatesInput[]
+    NOT?: SecurityGateLogScalarWhereWithAggregatesInput | SecurityGateLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    passCode?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    vehiclePlate?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    driverName?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    visitorName?: StringNullableWithAggregatesFilter<"SecurityGateLog"> | string | null
+    purpose?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    passType?: EnumGatePassTypeWithAggregatesFilter<"SecurityGateLog"> | $Enums.GatePassType
+    branchLocation?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    gateOfficerName?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    checkInTime?: DateTimeWithAggregatesFilter<"SecurityGateLog"> | Date | string
+    checkOutTime?: DateTimeNullableWithAggregatesFilter<"SecurityGateLog"> | Date | string | null
+    status?: StringWithAggregatesFilter<"SecurityGateLog"> | string
+    isDeleted?: BoolWithAggregatesFilter<"SecurityGateLog"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SecurityGateLog"> | Date | string
+  }
+
+  export type SecurityIncidentReportWhereInput = {
+    AND?: SecurityIncidentReportWhereInput | SecurityIncidentReportWhereInput[]
+    OR?: SecurityIncidentReportWhereInput[]
+    NOT?: SecurityIncidentReportWhereInput | SecurityIncidentReportWhereInput[]
+    id?: StringFilter<"SecurityIncidentReport"> | string
+    incidentCode?: StringFilter<"SecurityIncidentReport"> | string
+    title?: StringFilter<"SecurityIncidentReport"> | string
+    description?: StringFilter<"SecurityIncidentReport"> | string
+    location?: StringFilter<"SecurityIncidentReport"> | string
+    branchLocation?: StringFilter<"SecurityIncidentReport"> | string
+    severity?: EnumIncidentSeverityFilter<"SecurityIncidentReport"> | $Enums.IncidentSeverity
+    patrolOfficerName?: StringFilter<"SecurityIncidentReport"> | string
+    status?: StringFilter<"SecurityIncidentReport"> | string
+    linkedTicketCode?: StringNullableFilter<"SecurityIncidentReport"> | string | null
+    isDeleted?: BoolFilter<"SecurityIncidentReport"> | boolean
+    createdAt?: DateTimeFilter<"SecurityIncidentReport"> | Date | string
+    updatedAt?: DateTimeFilter<"SecurityIncidentReport"> | Date | string
+  }
+
+  export type SecurityIncidentReportOrderByWithRelationInput = {
+    id?: SortOrder
+    incidentCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    branchLocation?: SortOrder
+    severity?: SortOrder
+    patrolOfficerName?: SortOrder
+    status?: SortOrder
+    linkedTicketCode?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SecurityIncidentReportWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    incidentCode?: string
+    AND?: SecurityIncidentReportWhereInput | SecurityIncidentReportWhereInput[]
+    OR?: SecurityIncidentReportWhereInput[]
+    NOT?: SecurityIncidentReportWhereInput | SecurityIncidentReportWhereInput[]
+    title?: StringFilter<"SecurityIncidentReport"> | string
+    description?: StringFilter<"SecurityIncidentReport"> | string
+    location?: StringFilter<"SecurityIncidentReport"> | string
+    branchLocation?: StringFilter<"SecurityIncidentReport"> | string
+    severity?: EnumIncidentSeverityFilter<"SecurityIncidentReport"> | $Enums.IncidentSeverity
+    patrolOfficerName?: StringFilter<"SecurityIncidentReport"> | string
+    status?: StringFilter<"SecurityIncidentReport"> | string
+    linkedTicketCode?: StringNullableFilter<"SecurityIncidentReport"> | string | null
+    isDeleted?: BoolFilter<"SecurityIncidentReport"> | boolean
+    createdAt?: DateTimeFilter<"SecurityIncidentReport"> | Date | string
+    updatedAt?: DateTimeFilter<"SecurityIncidentReport"> | Date | string
+  }, "id" | "incidentCode">
+
+  export type SecurityIncidentReportOrderByWithAggregationInput = {
+    id?: SortOrder
+    incidentCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    branchLocation?: SortOrder
+    severity?: SortOrder
+    patrolOfficerName?: SortOrder
+    status?: SortOrder
+    linkedTicketCode?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SecurityIncidentReportCountOrderByAggregateInput
+    _max?: SecurityIncidentReportMaxOrderByAggregateInput
+    _min?: SecurityIncidentReportMinOrderByAggregateInput
+  }
+
+  export type SecurityIncidentReportScalarWhereWithAggregatesInput = {
+    AND?: SecurityIncidentReportScalarWhereWithAggregatesInput | SecurityIncidentReportScalarWhereWithAggregatesInput[]
+    OR?: SecurityIncidentReportScalarWhereWithAggregatesInput[]
+    NOT?: SecurityIncidentReportScalarWhereWithAggregatesInput | SecurityIncidentReportScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    incidentCode?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    title?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    description?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    location?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    branchLocation?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    severity?: EnumIncidentSeverityWithAggregatesFilter<"SecurityIncidentReport"> | $Enums.IncidentSeverity
+    patrolOfficerName?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    status?: StringWithAggregatesFilter<"SecurityIncidentReport"> | string
+    linkedTicketCode?: StringNullableWithAggregatesFilter<"SecurityIncidentReport"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"SecurityIncidentReport"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SecurityIncidentReport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SecurityIncidentReport"> | Date | string
   }
 
   export type BranchCreateInput = {
@@ -19729,6 +25917,551 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MeetingTicketCreateInput = {
+    id?: string
+    ticketCode: string
+    title: string
+    description: string
+    category: string
+    priority?: $Enums.TicketPriority
+    status?: $Enums.TicketStatus
+    branchLocation: string
+    createdByName: string
+    assignedToName?: string | null
+    solutionNote?: string | null
+    resolvedAt?: Date | string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendaItems?: MeetingAgendaItemCreateNestedManyWithoutTicketInput
+  }
+
+  export type MeetingTicketUncheckedCreateInput = {
+    id?: string
+    ticketCode: string
+    title: string
+    description: string
+    category: string
+    priority?: $Enums.TicketPriority
+    status?: $Enums.TicketStatus
+    branchLocation: string
+    createdByName: string
+    assignedToName?: string | null
+    solutionNote?: string | null
+    resolvedAt?: Date | string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendaItems?: MeetingAgendaItemUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type MeetingTicketUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    assignedToName?: NullableStringFieldUpdateOperationsInput | string | null
+    solutionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendaItems?: MeetingAgendaItemUpdateManyWithoutTicketNestedInput
+  }
+
+  export type MeetingTicketUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    assignedToName?: NullableStringFieldUpdateOperationsInput | string | null
+    solutionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendaItems?: MeetingAgendaItemUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type MeetingTicketCreateManyInput = {
+    id?: string
+    ticketCode: string
+    title: string
+    description: string
+    category: string
+    priority?: $Enums.TicketPriority
+    status?: $Enums.TicketStatus
+    branchLocation: string
+    createdByName: string
+    assignedToName?: string | null
+    solutionNote?: string | null
+    resolvedAt?: Date | string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingTicketUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    assignedToName?: NullableStringFieldUpdateOperationsInput | string | null
+    solutionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingTicketUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    assignedToName?: NullableStringFieldUpdateOperationsInput | string | null
+    solutionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingSessionCreateInput = {
+    id?: string
+    sessionCode: string
+    title: string
+    meetingDate: Date | string
+    chairpersonName: string
+    secretaryName: string
+    status?: string
+    notes?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendaItems?: MeetingAgendaItemCreateNestedManyWithoutSessionInput
+  }
+
+  export type MeetingSessionUncheckedCreateInput = {
+    id?: string
+    sessionCode: string
+    title: string
+    meetingDate: Date | string
+    chairpersonName: string
+    secretaryName: string
+    status?: string
+    notes?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    agendaItems?: MeetingAgendaItemUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type MeetingSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    chairpersonName?: StringFieldUpdateOperationsInput | string
+    secretaryName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendaItems?: MeetingAgendaItemUpdateManyWithoutSessionNestedInput
+  }
+
+  export type MeetingSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    chairpersonName?: StringFieldUpdateOperationsInput | string
+    secretaryName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    agendaItems?: MeetingAgendaItemUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type MeetingSessionCreateManyInput = {
+    id?: string
+    sessionCode: string
+    title: string
+    meetingDate: Date | string
+    chairpersonName: string
+    secretaryName: string
+    status?: string
+    notes?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    chairpersonName?: StringFieldUpdateOperationsInput | string
+    secretaryName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    chairpersonName?: StringFieldUpdateOperationsInput | string
+    secretaryName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingAgendaItemCreateInput = {
+    id?: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+    session: MeetingSessionCreateNestedOneWithoutAgendaItemsInput
+    ticket: MeetingTicketCreateNestedOneWithoutAgendaItemsInput
+  }
+
+  export type MeetingAgendaItemUncheckedCreateInput = {
+    id?: string
+    sessionId: string
+    ticketId: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type MeetingAgendaItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: MeetingSessionUpdateOneRequiredWithoutAgendaItemsNestedInput
+    ticket?: MeetingTicketUpdateOneRequiredWithoutAgendaItemsNestedInput
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingAgendaItemCreateManyInput = {
+    id?: string
+    sessionId: string
+    ticketId: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type MeetingAgendaItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityGateLogCreateInput = {
+    id?: string
+    passCode: string
+    vehiclePlate: string
+    driverName: string
+    visitorName?: string | null
+    purpose: string
+    passType?: $Enums.GatePassType
+    branchLocation: string
+    gateOfficerName: string
+    checkInTime?: Date | string
+    checkOutTime?: Date | string | null
+    status?: string
+    isDeleted?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SecurityGateLogUncheckedCreateInput = {
+    id?: string
+    passCode: string
+    vehiclePlate: string
+    driverName: string
+    visitorName?: string | null
+    purpose: string
+    passType?: $Enums.GatePassType
+    branchLocation: string
+    gateOfficerName: string
+    checkInTime?: Date | string
+    checkOutTime?: Date | string | null
+    status?: string
+    isDeleted?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SecurityGateLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    passCode?: StringFieldUpdateOperationsInput | string
+    vehiclePlate?: StringFieldUpdateOperationsInput | string
+    driverName?: StringFieldUpdateOperationsInput | string
+    visitorName?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    passType?: EnumGatePassTypeFieldUpdateOperationsInput | $Enums.GatePassType
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    gateOfficerName?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityGateLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    passCode?: StringFieldUpdateOperationsInput | string
+    vehiclePlate?: StringFieldUpdateOperationsInput | string
+    driverName?: StringFieldUpdateOperationsInput | string
+    visitorName?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    passType?: EnumGatePassTypeFieldUpdateOperationsInput | $Enums.GatePassType
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    gateOfficerName?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityGateLogCreateManyInput = {
+    id?: string
+    passCode: string
+    vehiclePlate: string
+    driverName: string
+    visitorName?: string | null
+    purpose: string
+    passType?: $Enums.GatePassType
+    branchLocation: string
+    gateOfficerName: string
+    checkInTime?: Date | string
+    checkOutTime?: Date | string | null
+    status?: string
+    isDeleted?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SecurityGateLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    passCode?: StringFieldUpdateOperationsInput | string
+    vehiclePlate?: StringFieldUpdateOperationsInput | string
+    driverName?: StringFieldUpdateOperationsInput | string
+    visitorName?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    passType?: EnumGatePassTypeFieldUpdateOperationsInput | $Enums.GatePassType
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    gateOfficerName?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityGateLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    passCode?: StringFieldUpdateOperationsInput | string
+    vehiclePlate?: StringFieldUpdateOperationsInput | string
+    driverName?: StringFieldUpdateOperationsInput | string
+    visitorName?: NullableStringFieldUpdateOperationsInput | string | null
+    purpose?: StringFieldUpdateOperationsInput | string
+    passType?: EnumGatePassTypeFieldUpdateOperationsInput | $Enums.GatePassType
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    gateOfficerName?: StringFieldUpdateOperationsInput | string
+    checkInTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkOutTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityIncidentReportCreateInput = {
+    id?: string
+    incidentCode: string
+    title: string
+    description: string
+    location: string
+    branchLocation: string
+    severity?: $Enums.IncidentSeverity
+    patrolOfficerName: string
+    status?: string
+    linkedTicketCode?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SecurityIncidentReportUncheckedCreateInput = {
+    id?: string
+    incidentCode: string
+    title: string
+    description: string
+    location: string
+    branchLocation: string
+    severity?: $Enums.IncidentSeverity
+    patrolOfficerName: string
+    status?: string
+    linkedTicketCode?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SecurityIncidentReportUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    severity?: EnumIncidentSeverityFieldUpdateOperationsInput | $Enums.IncidentSeverity
+    patrolOfficerName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    linkedTicketCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityIncidentReportUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    severity?: EnumIncidentSeverityFieldUpdateOperationsInput | $Enums.IncidentSeverity
+    patrolOfficerName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    linkedTicketCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityIncidentReportCreateManyInput = {
+    id?: string
+    incidentCode: string
+    title: string
+    description: string
+    location: string
+    branchLocation: string
+    severity?: $Enums.IncidentSeverity
+    patrolOfficerName: string
+    status?: string
+    linkedTicketCode?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SecurityIncidentReportUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    severity?: EnumIncidentSeverityFieldUpdateOperationsInput | $Enums.IncidentSeverity
+    patrolOfficerName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    linkedTicketCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityIncidentReportUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    severity?: EnumIncidentSeverityFieldUpdateOperationsInput | $Enums.IncidentSeverity
+    patrolOfficerName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    linkedTicketCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -20608,6 +27341,350 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumTicketPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityFilter<$PrismaModel> | $Enums.TicketPriority
+  }
+
+  export type EnumTicketStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusFilter<$PrismaModel> | $Enums.TicketStatus
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type MeetingAgendaItemListRelationFilter = {
+    every?: MeetingAgendaItemWhereInput
+    some?: MeetingAgendaItemWhereInput
+    none?: MeetingAgendaItemWhereInput
+  }
+
+  export type MeetingAgendaItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MeetingTicketCountOrderByAggregateInput = {
+    id?: SortOrder
+    ticketCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    branchLocation?: SortOrder
+    createdByName?: SortOrder
+    assignedToName?: SortOrder
+    solutionNote?: SortOrder
+    resolvedAt?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingTicketMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ticketCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    branchLocation?: SortOrder
+    createdByName?: SortOrder
+    assignedToName?: SortOrder
+    solutionNote?: SortOrder
+    resolvedAt?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingTicketMinOrderByAggregateInput = {
+    id?: SortOrder
+    ticketCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    branchLocation?: SortOrder
+    createdByName?: SortOrder
+    assignedToName?: SortOrder
+    solutionNote?: SortOrder
+    resolvedAt?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumTicketPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityWithAggregatesFilter<$PrismaModel> | $Enums.TicketPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketPriorityFilter<$PrismaModel>
+    _max?: NestedEnumTicketPriorityFilter<$PrismaModel>
+  }
+
+  export type EnumTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel> | $Enums.TicketStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketStatusFilter<$PrismaModel>
+    _max?: NestedEnumTicketStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type MeetingSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    sessionCode?: SortOrder
+    title?: SortOrder
+    meetingDate?: SortOrder
+    chairpersonName?: SortOrder
+    secretaryName?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sessionCode?: SortOrder
+    title?: SortOrder
+    meetingDate?: SortOrder
+    chairpersonName?: SortOrder
+    secretaryName?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    sessionCode?: SortOrder
+    title?: SortOrder
+    meetingDate?: SortOrder
+    chairpersonName?: SortOrder
+    secretaryName?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingSessionRelationFilter = {
+    is?: MeetingSessionWhereInput
+    isNot?: MeetingSessionWhereInput
+  }
+
+  export type MeetingTicketRelationFilter = {
+    is?: MeetingTicketWhereInput
+    isNot?: MeetingTicketWhereInput
+  }
+
+  export type MeetingAgendaItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    ticketId?: SortOrder
+    status?: SortOrder
+    decisionNote?: SortOrder
+    actionItem?: SortOrder
+    picName?: SortOrder
+    dueDate?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MeetingAgendaItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    ticketId?: SortOrder
+    status?: SortOrder
+    decisionNote?: SortOrder
+    actionItem?: SortOrder
+    picName?: SortOrder
+    dueDate?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MeetingAgendaItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    ticketId?: SortOrder
+    status?: SortOrder
+    decisionNote?: SortOrder
+    actionItem?: SortOrder
+    picName?: SortOrder
+    dueDate?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumGatePassTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.GatePassType | EnumGatePassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGatePassTypeFilter<$PrismaModel> | $Enums.GatePassType
+  }
+
+  export type SecurityGateLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    passCode?: SortOrder
+    vehiclePlate?: SortOrder
+    driverName?: SortOrder
+    visitorName?: SortOrder
+    purpose?: SortOrder
+    passType?: SortOrder
+    branchLocation?: SortOrder
+    gateOfficerName?: SortOrder
+    checkInTime?: SortOrder
+    checkOutTime?: SortOrder
+    status?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SecurityGateLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    passCode?: SortOrder
+    vehiclePlate?: SortOrder
+    driverName?: SortOrder
+    visitorName?: SortOrder
+    purpose?: SortOrder
+    passType?: SortOrder
+    branchLocation?: SortOrder
+    gateOfficerName?: SortOrder
+    checkInTime?: SortOrder
+    checkOutTime?: SortOrder
+    status?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SecurityGateLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    passCode?: SortOrder
+    vehiclePlate?: SortOrder
+    driverName?: SortOrder
+    visitorName?: SortOrder
+    purpose?: SortOrder
+    passType?: SortOrder
+    branchLocation?: SortOrder
+    gateOfficerName?: SortOrder
+    checkInTime?: SortOrder
+    checkOutTime?: SortOrder
+    status?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumGatePassTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GatePassType | EnumGatePassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGatePassTypeWithAggregatesFilter<$PrismaModel> | $Enums.GatePassType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGatePassTypeFilter<$PrismaModel>
+    _max?: NestedEnumGatePassTypeFilter<$PrismaModel>
+  }
+
+  export type EnumIncidentSeverityFilter<$PrismaModel = never> = {
+    equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumIncidentSeverityFilter<$PrismaModel> | $Enums.IncidentSeverity
+  }
+
+  export type SecurityIncidentReportCountOrderByAggregateInput = {
+    id?: SortOrder
+    incidentCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    branchLocation?: SortOrder
+    severity?: SortOrder
+    patrolOfficerName?: SortOrder
+    status?: SortOrder
+    linkedTicketCode?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SecurityIncidentReportMaxOrderByAggregateInput = {
+    id?: SortOrder
+    incidentCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    branchLocation?: SortOrder
+    severity?: SortOrder
+    patrolOfficerName?: SortOrder
+    status?: SortOrder
+    linkedTicketCode?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SecurityIncidentReportMinOrderByAggregateInput = {
+    id?: SortOrder
+    incidentCode?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    branchLocation?: SortOrder
+    severity?: SortOrder
+    patrolOfficerName?: SortOrder
+    status?: SortOrder
+    linkedTicketCode?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumIncidentSeverityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumIncidentSeverityWithAggregatesFilter<$PrismaModel> | $Enums.IncidentSeverity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumIncidentSeverityFilter<$PrismaModel>
+    _max?: NestedEnumIncidentSeverityFilter<$PrismaModel>
   }
 
   export type DepartmentCreateNestedManyWithoutBranchInput = {
@@ -21608,6 +28685,138 @@ export namespace Prisma {
     update?: XOR<XOR<LocalUserUpdateToOneWithWhereWithoutSentMessagesInput, LocalUserUpdateWithoutSentMessagesInput>, LocalUserUncheckedUpdateWithoutSentMessagesInput>
   }
 
+  export type MeetingAgendaItemCreateNestedManyWithoutTicketInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutTicketInput, MeetingAgendaItemUncheckedCreateWithoutTicketInput> | MeetingAgendaItemCreateWithoutTicketInput[] | MeetingAgendaItemUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutTicketInput | MeetingAgendaItemCreateOrConnectWithoutTicketInput[]
+    createMany?: MeetingAgendaItemCreateManyTicketInputEnvelope
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+  }
+
+  export type MeetingAgendaItemUncheckedCreateNestedManyWithoutTicketInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutTicketInput, MeetingAgendaItemUncheckedCreateWithoutTicketInput> | MeetingAgendaItemCreateWithoutTicketInput[] | MeetingAgendaItemUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutTicketInput | MeetingAgendaItemCreateOrConnectWithoutTicketInput[]
+    createMany?: MeetingAgendaItemCreateManyTicketInputEnvelope
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+  }
+
+  export type EnumTicketPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.TicketPriority
+  }
+
+  export type EnumTicketStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TicketStatus
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type MeetingAgendaItemUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutTicketInput, MeetingAgendaItemUncheckedCreateWithoutTicketInput> | MeetingAgendaItemCreateWithoutTicketInput[] | MeetingAgendaItemUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutTicketInput | MeetingAgendaItemCreateOrConnectWithoutTicketInput[]
+    upsert?: MeetingAgendaItemUpsertWithWhereUniqueWithoutTicketInput | MeetingAgendaItemUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: MeetingAgendaItemCreateManyTicketInputEnvelope
+    set?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    disconnect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    delete?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    update?: MeetingAgendaItemUpdateWithWhereUniqueWithoutTicketInput | MeetingAgendaItemUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: MeetingAgendaItemUpdateManyWithWhereWithoutTicketInput | MeetingAgendaItemUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: MeetingAgendaItemScalarWhereInput | MeetingAgendaItemScalarWhereInput[]
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutTicketInput, MeetingAgendaItemUncheckedCreateWithoutTicketInput> | MeetingAgendaItemCreateWithoutTicketInput[] | MeetingAgendaItemUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutTicketInput | MeetingAgendaItemCreateOrConnectWithoutTicketInput[]
+    upsert?: MeetingAgendaItemUpsertWithWhereUniqueWithoutTicketInput | MeetingAgendaItemUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: MeetingAgendaItemCreateManyTicketInputEnvelope
+    set?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    disconnect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    delete?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    update?: MeetingAgendaItemUpdateWithWhereUniqueWithoutTicketInput | MeetingAgendaItemUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: MeetingAgendaItemUpdateManyWithWhereWithoutTicketInput | MeetingAgendaItemUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: MeetingAgendaItemScalarWhereInput | MeetingAgendaItemScalarWhereInput[]
+  }
+
+  export type MeetingAgendaItemCreateNestedManyWithoutSessionInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutSessionInput, MeetingAgendaItemUncheckedCreateWithoutSessionInput> | MeetingAgendaItemCreateWithoutSessionInput[] | MeetingAgendaItemUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutSessionInput | MeetingAgendaItemCreateOrConnectWithoutSessionInput[]
+    createMany?: MeetingAgendaItemCreateManySessionInputEnvelope
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+  }
+
+  export type MeetingAgendaItemUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutSessionInput, MeetingAgendaItemUncheckedCreateWithoutSessionInput> | MeetingAgendaItemCreateWithoutSessionInput[] | MeetingAgendaItemUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutSessionInput | MeetingAgendaItemCreateOrConnectWithoutSessionInput[]
+    createMany?: MeetingAgendaItemCreateManySessionInputEnvelope
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+  }
+
+  export type MeetingAgendaItemUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutSessionInput, MeetingAgendaItemUncheckedCreateWithoutSessionInput> | MeetingAgendaItemCreateWithoutSessionInput[] | MeetingAgendaItemUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutSessionInput | MeetingAgendaItemCreateOrConnectWithoutSessionInput[]
+    upsert?: MeetingAgendaItemUpsertWithWhereUniqueWithoutSessionInput | MeetingAgendaItemUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: MeetingAgendaItemCreateManySessionInputEnvelope
+    set?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    disconnect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    delete?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    update?: MeetingAgendaItemUpdateWithWhereUniqueWithoutSessionInput | MeetingAgendaItemUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: MeetingAgendaItemUpdateManyWithWhereWithoutSessionInput | MeetingAgendaItemUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: MeetingAgendaItemScalarWhereInput | MeetingAgendaItemScalarWhereInput[]
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<MeetingAgendaItemCreateWithoutSessionInput, MeetingAgendaItemUncheckedCreateWithoutSessionInput> | MeetingAgendaItemCreateWithoutSessionInput[] | MeetingAgendaItemUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: MeetingAgendaItemCreateOrConnectWithoutSessionInput | MeetingAgendaItemCreateOrConnectWithoutSessionInput[]
+    upsert?: MeetingAgendaItemUpsertWithWhereUniqueWithoutSessionInput | MeetingAgendaItemUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: MeetingAgendaItemCreateManySessionInputEnvelope
+    set?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    disconnect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    delete?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    connect?: MeetingAgendaItemWhereUniqueInput | MeetingAgendaItemWhereUniqueInput[]
+    update?: MeetingAgendaItemUpdateWithWhereUniqueWithoutSessionInput | MeetingAgendaItemUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: MeetingAgendaItemUpdateManyWithWhereWithoutSessionInput | MeetingAgendaItemUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: MeetingAgendaItemScalarWhereInput | MeetingAgendaItemScalarWhereInput[]
+  }
+
+  export type MeetingSessionCreateNestedOneWithoutAgendaItemsInput = {
+    create?: XOR<MeetingSessionCreateWithoutAgendaItemsInput, MeetingSessionUncheckedCreateWithoutAgendaItemsInput>
+    connectOrCreate?: MeetingSessionCreateOrConnectWithoutAgendaItemsInput
+    connect?: MeetingSessionWhereUniqueInput
+  }
+
+  export type MeetingTicketCreateNestedOneWithoutAgendaItemsInput = {
+    create?: XOR<MeetingTicketCreateWithoutAgendaItemsInput, MeetingTicketUncheckedCreateWithoutAgendaItemsInput>
+    connectOrCreate?: MeetingTicketCreateOrConnectWithoutAgendaItemsInput
+    connect?: MeetingTicketWhereUniqueInput
+  }
+
+  export type MeetingSessionUpdateOneRequiredWithoutAgendaItemsNestedInput = {
+    create?: XOR<MeetingSessionCreateWithoutAgendaItemsInput, MeetingSessionUncheckedCreateWithoutAgendaItemsInput>
+    connectOrCreate?: MeetingSessionCreateOrConnectWithoutAgendaItemsInput
+    upsert?: MeetingSessionUpsertWithoutAgendaItemsInput
+    connect?: MeetingSessionWhereUniqueInput
+    update?: XOR<XOR<MeetingSessionUpdateToOneWithWhereWithoutAgendaItemsInput, MeetingSessionUpdateWithoutAgendaItemsInput>, MeetingSessionUncheckedUpdateWithoutAgendaItemsInput>
+  }
+
+  export type MeetingTicketUpdateOneRequiredWithoutAgendaItemsNestedInput = {
+    create?: XOR<MeetingTicketCreateWithoutAgendaItemsInput, MeetingTicketUncheckedCreateWithoutAgendaItemsInput>
+    connectOrCreate?: MeetingTicketCreateOrConnectWithoutAgendaItemsInput
+    upsert?: MeetingTicketUpsertWithoutAgendaItemsInput
+    connect?: MeetingTicketWhereUniqueInput
+    update?: XOR<XOR<MeetingTicketUpdateToOneWithWhereWithoutAgendaItemsInput, MeetingTicketUpdateWithoutAgendaItemsInput>, MeetingTicketUncheckedUpdateWithoutAgendaItemsInput>
+  }
+
+  export type EnumGatePassTypeFieldUpdateOperationsInput = {
+    set?: $Enums.GatePassType
+  }
+
+  export type EnumIncidentSeverityFieldUpdateOperationsInput = {
+    set?: $Enums.IncidentSeverity
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -21867,6 +29076,99 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumTicketPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityFilter<$PrismaModel> | $Enums.TicketPriority
+  }
+
+  export type NestedEnumTicketStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusFilter<$PrismaModel> | $Enums.TicketStatus
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumTicketPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketPriority | EnumTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketPriority[] | ListEnumTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketPriorityWithAggregatesFilter<$PrismaModel> | $Enums.TicketPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketPriorityFilter<$PrismaModel>
+    _max?: NestedEnumTicketPriorityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel> | $Enums.TicketStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTicketStatusFilter<$PrismaModel>
+    _max?: NestedEnumTicketStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGatePassTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.GatePassType | EnumGatePassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGatePassTypeFilter<$PrismaModel> | $Enums.GatePassType
+  }
+
+  export type NestedEnumGatePassTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GatePassType | EnumGatePassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GatePassType[] | ListEnumGatePassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumGatePassTypeWithAggregatesFilter<$PrismaModel> | $Enums.GatePassType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGatePassTypeFilter<$PrismaModel>
+    _max?: NestedEnumGatePassTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumIncidentSeverityFilter<$PrismaModel = never> = {
+    equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumIncidentSeverityFilter<$PrismaModel> | $Enums.IncidentSeverity
+  }
+
+  export type NestedEnumIncidentSeverityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.IncidentSeverity | EnumIncidentSeverityFieldRefInput<$PrismaModel>
+    in?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.IncidentSeverity[] | ListEnumIncidentSeverityFieldRefInput<$PrismaModel>
+    not?: NestedEnumIncidentSeverityWithAggregatesFilter<$PrismaModel> | $Enums.IncidentSeverity
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumIncidentSeverityFilter<$PrismaModel>
+    _max?: NestedEnumIncidentSeverityFilter<$PrismaModel>
   }
 
   export type DepartmentCreateWithoutBranchInput = {
@@ -23851,6 +31153,277 @@ export namespace Prisma {
     employeeProfile?: EmployeeUncheckedUpdateOneWithoutLocalUserNestedInput
   }
 
+  export type MeetingAgendaItemCreateWithoutTicketInput = {
+    id?: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+    session: MeetingSessionCreateNestedOneWithoutAgendaItemsInput
+  }
+
+  export type MeetingAgendaItemUncheckedCreateWithoutTicketInput = {
+    id?: string
+    sessionId: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type MeetingAgendaItemCreateOrConnectWithoutTicketInput = {
+    where: MeetingAgendaItemWhereUniqueInput
+    create: XOR<MeetingAgendaItemCreateWithoutTicketInput, MeetingAgendaItemUncheckedCreateWithoutTicketInput>
+  }
+
+  export type MeetingAgendaItemCreateManyTicketInputEnvelope = {
+    data: MeetingAgendaItemCreateManyTicketInput | MeetingAgendaItemCreateManyTicketInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MeetingAgendaItemUpsertWithWhereUniqueWithoutTicketInput = {
+    where: MeetingAgendaItemWhereUniqueInput
+    update: XOR<MeetingAgendaItemUpdateWithoutTicketInput, MeetingAgendaItemUncheckedUpdateWithoutTicketInput>
+    create: XOR<MeetingAgendaItemCreateWithoutTicketInput, MeetingAgendaItemUncheckedCreateWithoutTicketInput>
+  }
+
+  export type MeetingAgendaItemUpdateWithWhereUniqueWithoutTicketInput = {
+    where: MeetingAgendaItemWhereUniqueInput
+    data: XOR<MeetingAgendaItemUpdateWithoutTicketInput, MeetingAgendaItemUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type MeetingAgendaItemUpdateManyWithWhereWithoutTicketInput = {
+    where: MeetingAgendaItemScalarWhereInput
+    data: XOR<MeetingAgendaItemUpdateManyMutationInput, MeetingAgendaItemUncheckedUpdateManyWithoutTicketInput>
+  }
+
+  export type MeetingAgendaItemScalarWhereInput = {
+    AND?: MeetingAgendaItemScalarWhereInput | MeetingAgendaItemScalarWhereInput[]
+    OR?: MeetingAgendaItemScalarWhereInput[]
+    NOT?: MeetingAgendaItemScalarWhereInput | MeetingAgendaItemScalarWhereInput[]
+    id?: StringFilter<"MeetingAgendaItem"> | string
+    sessionId?: StringFilter<"MeetingAgendaItem"> | string
+    ticketId?: StringFilter<"MeetingAgendaItem"> | string
+    status?: StringFilter<"MeetingAgendaItem"> | string
+    decisionNote?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    actionItem?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    picName?: StringNullableFilter<"MeetingAgendaItem"> | string | null
+    dueDate?: DateTimeNullableFilter<"MeetingAgendaItem"> | Date | string | null
+    createdAt?: DateTimeFilter<"MeetingAgendaItem"> | Date | string
+  }
+
+  export type MeetingAgendaItemCreateWithoutSessionInput = {
+    id?: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+    ticket: MeetingTicketCreateNestedOneWithoutAgendaItemsInput
+  }
+
+  export type MeetingAgendaItemUncheckedCreateWithoutSessionInput = {
+    id?: string
+    ticketId: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type MeetingAgendaItemCreateOrConnectWithoutSessionInput = {
+    where: MeetingAgendaItemWhereUniqueInput
+    create: XOR<MeetingAgendaItemCreateWithoutSessionInput, MeetingAgendaItemUncheckedCreateWithoutSessionInput>
+  }
+
+  export type MeetingAgendaItemCreateManySessionInputEnvelope = {
+    data: MeetingAgendaItemCreateManySessionInput | MeetingAgendaItemCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MeetingAgendaItemUpsertWithWhereUniqueWithoutSessionInput = {
+    where: MeetingAgendaItemWhereUniqueInput
+    update: XOR<MeetingAgendaItemUpdateWithoutSessionInput, MeetingAgendaItemUncheckedUpdateWithoutSessionInput>
+    create: XOR<MeetingAgendaItemCreateWithoutSessionInput, MeetingAgendaItemUncheckedCreateWithoutSessionInput>
+  }
+
+  export type MeetingAgendaItemUpdateWithWhereUniqueWithoutSessionInput = {
+    where: MeetingAgendaItemWhereUniqueInput
+    data: XOR<MeetingAgendaItemUpdateWithoutSessionInput, MeetingAgendaItemUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type MeetingAgendaItemUpdateManyWithWhereWithoutSessionInput = {
+    where: MeetingAgendaItemScalarWhereInput
+    data: XOR<MeetingAgendaItemUpdateManyMutationInput, MeetingAgendaItemUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type MeetingSessionCreateWithoutAgendaItemsInput = {
+    id?: string
+    sessionCode: string
+    title: string
+    meetingDate: Date | string
+    chairpersonName: string
+    secretaryName: string
+    status?: string
+    notes?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingSessionUncheckedCreateWithoutAgendaItemsInput = {
+    id?: string
+    sessionCode: string
+    title: string
+    meetingDate: Date | string
+    chairpersonName: string
+    secretaryName: string
+    status?: string
+    notes?: string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingSessionCreateOrConnectWithoutAgendaItemsInput = {
+    where: MeetingSessionWhereUniqueInput
+    create: XOR<MeetingSessionCreateWithoutAgendaItemsInput, MeetingSessionUncheckedCreateWithoutAgendaItemsInput>
+  }
+
+  export type MeetingTicketCreateWithoutAgendaItemsInput = {
+    id?: string
+    ticketCode: string
+    title: string
+    description: string
+    category: string
+    priority?: $Enums.TicketPriority
+    status?: $Enums.TicketStatus
+    branchLocation: string
+    createdByName: string
+    assignedToName?: string | null
+    solutionNote?: string | null
+    resolvedAt?: Date | string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingTicketUncheckedCreateWithoutAgendaItemsInput = {
+    id?: string
+    ticketCode: string
+    title: string
+    description: string
+    category: string
+    priority?: $Enums.TicketPriority
+    status?: $Enums.TicketStatus
+    branchLocation: string
+    createdByName: string
+    assignedToName?: string | null
+    solutionNote?: string | null
+    resolvedAt?: Date | string | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MeetingTicketCreateOrConnectWithoutAgendaItemsInput = {
+    where: MeetingTicketWhereUniqueInput
+    create: XOR<MeetingTicketCreateWithoutAgendaItemsInput, MeetingTicketUncheckedCreateWithoutAgendaItemsInput>
+  }
+
+  export type MeetingSessionUpsertWithoutAgendaItemsInput = {
+    update: XOR<MeetingSessionUpdateWithoutAgendaItemsInput, MeetingSessionUncheckedUpdateWithoutAgendaItemsInput>
+    create: XOR<MeetingSessionCreateWithoutAgendaItemsInput, MeetingSessionUncheckedCreateWithoutAgendaItemsInput>
+    where?: MeetingSessionWhereInput
+  }
+
+  export type MeetingSessionUpdateToOneWithWhereWithoutAgendaItemsInput = {
+    where?: MeetingSessionWhereInput
+    data: XOR<MeetingSessionUpdateWithoutAgendaItemsInput, MeetingSessionUncheckedUpdateWithoutAgendaItemsInput>
+  }
+
+  export type MeetingSessionUpdateWithoutAgendaItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    chairpersonName?: StringFieldUpdateOperationsInput | string
+    secretaryName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingSessionUncheckedUpdateWithoutAgendaItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    chairpersonName?: StringFieldUpdateOperationsInput | string
+    secretaryName?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingTicketUpsertWithoutAgendaItemsInput = {
+    update: XOR<MeetingTicketUpdateWithoutAgendaItemsInput, MeetingTicketUncheckedUpdateWithoutAgendaItemsInput>
+    create: XOR<MeetingTicketCreateWithoutAgendaItemsInput, MeetingTicketUncheckedCreateWithoutAgendaItemsInput>
+    where?: MeetingTicketWhereInput
+  }
+
+  export type MeetingTicketUpdateToOneWithWhereWithoutAgendaItemsInput = {
+    where?: MeetingTicketWhereInput
+    data: XOR<MeetingTicketUpdateWithoutAgendaItemsInput, MeetingTicketUncheckedUpdateWithoutAgendaItemsInput>
+  }
+
+  export type MeetingTicketUpdateWithoutAgendaItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    assignedToName?: NullableStringFieldUpdateOperationsInput | string | null
+    solutionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingTicketUncheckedUpdateWithoutAgendaItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketCode?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    branchLocation?: StringFieldUpdateOperationsInput | string
+    createdByName?: StringFieldUpdateOperationsInput | string
+    assignedToName?: NullableStringFieldUpdateOperationsInput | string | null
+    solutionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type DepartmentCreateManyBranchInput = {
     id?: string
     code: string
@@ -24385,6 +31958,94 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MeetingAgendaItemCreateManyTicketInput = {
+    id?: string
+    sessionId: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type MeetingAgendaItemUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: MeetingSessionUpdateOneRequiredWithoutAgendaItemsNestedInput
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateManyWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingAgendaItemCreateManySessionInput = {
+    id?: string
+    ticketId: string
+    status?: string
+    decisionNote?: string | null
+    actionItem?: string | null
+    picName?: string | null
+    dueDate?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type MeetingAgendaItemUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: MeetingTicketUpdateOneRequiredWithoutAgendaItemsNestedInput
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingAgendaItemUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    decisionNote?: NullableStringFieldUpdateOperationsInput | string | null
+    actionItem?: NullableStringFieldUpdateOperationsInput | string | null
+    picName?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -24422,6 +32083,14 @@ export namespace Prisma {
      * @deprecated Use ChatChannelCountOutputTypeDefaultArgs instead
      */
     export type ChatChannelCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChatChannelCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MeetingTicketCountOutputTypeDefaultArgs instead
+     */
+    export type MeetingTicketCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MeetingTicketCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MeetingSessionCountOutputTypeDefaultArgs instead
+     */
+    export type MeetingSessionCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MeetingSessionCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use BranchDefaultArgs instead
      */
@@ -24482,6 +32151,26 @@ export namespace Prisma {
      * @deprecated Use ChatMessageDefaultArgs instead
      */
     export type ChatMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChatMessageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MeetingTicketDefaultArgs instead
+     */
+    export type MeetingTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MeetingTicketDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MeetingSessionDefaultArgs instead
+     */
+    export type MeetingSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MeetingSessionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MeetingAgendaItemDefaultArgs instead
+     */
+    export type MeetingAgendaItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MeetingAgendaItemDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SecurityGateLogDefaultArgs instead
+     */
+    export type SecurityGateLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SecurityGateLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SecurityIncidentReportDefaultArgs instead
+     */
+    export type SecurityIncidentReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SecurityIncidentReportDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

@@ -277,5 +277,29 @@ export const holdingCategories: ModuleCategory[] = [
       { name: 'Laporan Sistem', href: '/settings/reports' },
       { name: 'Audit Log', href: '/settings/audit-log' }
     ]
+  },
+  {
+    id: 'meeting-notes',
+    name: 'Meeting Notes & Escalation',
+    icon: Mail,
+    subMenus: [
+      { name: 'Overview Rapat', href: '/meeting-notes/overview' },
+      { name: 'Tiket Kendala', href: '/meeting-notes/tickets' },
+      { name: 'Board Rapat & Risalah', href: '/meeting-notes/sessions' },
+      { name: 'Laporan Resolusi', href: '/meeting-notes/reports' },
+      { name: 'Audit Log', href: '/meeting-notes/audit-log' }
+    ]
+  },
+  {
+    id: 'security-ops',
+    name: 'Security & Gate Control',
+    icon: ShieldCheck,
+    subMenus: [
+      { name: 'Overview Keamanan', href: '/security-ops/overview' },
+      { name: 'Gate Pass & Buku Tamu', href: '/security-ops/gate-log' },
+      { name: 'Laporan Insiden Patroli', href: '/security-ops/patrol-incidents' },
+      { name: 'Laporan Keamanan', href: '/security-ops/reports' },
+      { name: 'Audit Log', href: '/security-ops/audit-log' }
+    ]
   }
 ];

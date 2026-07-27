@@ -285,3 +285,133 @@ model ChatMessage {
 
   @@map("chat_messages")
 }
+
+// =========================================================
+// 8. MEETING NOTES & ESCALATION TICKETING
+// =========================================================
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum TicketStatus {
+  OPEN
+  ESCALATED_TO_HO
+  RESOLVED
+  CLOSED
+}
+
+model MeetingTicket {
+  id             String         @id @default(uuid())
+  ticketCode     String         @unique
+  title          String
+  description    String
+  category       String         // e.g. "HEAVY_EQUIPMENT", "RAW_MATERIAL", "HOSPITALITY_AC", "SECURITY"
+  priority       TicketPriority @default(MEDIUM)
+  status         TicketStatus   @default(OPEN)
+  branchLocation String
+  createdByName  String
+  assignedToName String?
+  solutionNote   String?
+  resolvedAt     DateTime?
+  isDeleted      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  agendaItems MeetingAgendaItem[]
+
+  @@map("meeting_tickets")
+}
+
+model MeetingSession {
+  id              String   @id @default(uuid())
+  sessionCode     String   @unique
+  title           String
+  meetingDate     DateTime
+  chairpersonName String
+  secretaryName   String
+  status          String   @default("SCHEDULED") // SCHEDULED, IN_PROGRESS, COMPLETED
+  notes           String?
+  isDeleted       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  agendaItems MeetingAgendaItem[]
+
+  @@map("meeting_sessions")
+}
+
+model MeetingAgendaItem {
+  id           String   @id @default(uuid())
+  sessionId    String
+  ticketId     String
+  status       String   @default("PENDING_CARRY_OVER") // PENDING_CARRY_OVER, RESOLVED_WITH_DECISION
+  decisionNote String?
+  actionItem   String?
+  picName      String?
+  dueDate      DateTime?
+  createdAt    DateTime @default(now())
+
+  session MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  ticket  MeetingTicket  @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("meeting_agenda_items")
+}
+
+// =========================================================
+// 9. SECURITY OPS & GATE CONTROL
+// =========================================================
+
+enum GatePassType {
+  INBOUND_SUPPLIER
+  OUTBOUND_HAULING
+  VISITOR
+  STAFF
+}
+
+enum IncidentSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model SecurityGateLog {
+  id              String       @id @default(uuid())
+  passCode        String       @unique
+  vehiclePlate    String
+  driverName      String
+  visitorName     String?
+  purpose         String
+  passType        GatePassType @default(VISITOR)
+  branchLocation  String
+  gateOfficerName String
+  checkInTime     DateTime     @default(now())
+  checkOutTime    DateTime?
+  status          String       @default("INSIDE") // INSIDE, CHECKED_OUT
+  isDeleted       Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+
+  @@map("security_gate_logs")
+}
+
+model SecurityIncidentReport {
+  id                 String           @id @default(uuid())
+  incidentCode       String           @unique
+  title              String
+  description        String
+  location           String
+  branchLocation     String
+  severity           IncidentSeverity @default(MEDIUM)
+  patrolOfficerName  String
+  status             String           @default("REPORTED") // REPORTED, ESCALATED_TO_TICKET, RESOLVED
+  linkedTicketCode   String?
+  isDeleted          Boolean          @default(false)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@map("security_incident_reports")
+}

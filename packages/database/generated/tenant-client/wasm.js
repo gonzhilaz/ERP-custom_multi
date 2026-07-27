@@ -265,6 +265,83 @@ exports.Prisma.ChatMessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MeetingTicketScalarFieldEnum = {
+  id: 'id',
+  ticketCode: 'ticketCode',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  priority: 'priority',
+  status: 'status',
+  branchLocation: 'branchLocation',
+  createdByName: 'createdByName',
+  assignedToName: 'assignedToName',
+  solutionNote: 'solutionNote',
+  resolvedAt: 'resolvedAt',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MeetingSessionScalarFieldEnum = {
+  id: 'id',
+  sessionCode: 'sessionCode',
+  title: 'title',
+  meetingDate: 'meetingDate',
+  chairpersonName: 'chairpersonName',
+  secretaryName: 'secretaryName',
+  status: 'status',
+  notes: 'notes',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MeetingAgendaItemScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  ticketId: 'ticketId',
+  status: 'status',
+  decisionNote: 'decisionNote',
+  actionItem: 'actionItem',
+  picName: 'picName',
+  dueDate: 'dueDate',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SecurityGateLogScalarFieldEnum = {
+  id: 'id',
+  passCode: 'passCode',
+  vehiclePlate: 'vehiclePlate',
+  driverName: 'driverName',
+  visitorName: 'visitorName',
+  purpose: 'purpose',
+  passType: 'passType',
+  branchLocation: 'branchLocation',
+  gateOfficerName: 'gateOfficerName',
+  checkInTime: 'checkInTime',
+  checkOutTime: 'checkOutTime',
+  status: 'status',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SecurityIncidentReportScalarFieldEnum = {
+  id: 'id',
+  incidentCode: 'incidentCode',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  branchLocation: 'branchLocation',
+  severity: 'severity',
+  patrolOfficerName: 'patrolOfficerName',
+  status: 'status',
+  linkedTicketCode: 'linkedTicketCode',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -312,6 +389,34 @@ exports.MessageType = exports.$Enums.MessageType = {
   SYSTEM_ALERT: 'SYSTEM_ALERT'
 };
 
+exports.TicketPriority = exports.$Enums.TicketPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.TicketStatus = exports.$Enums.TicketStatus = {
+  OPEN: 'OPEN',
+  ESCALATED_TO_HO: 'ESCALATED_TO_HO',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
+exports.GatePassType = exports.$Enums.GatePassType = {
+  INBOUND_SUPPLIER: 'INBOUND_SUPPLIER',
+  OUTBOUND_HAULING: 'OUTBOUND_HAULING',
+  VISITOR: 'VISITOR',
+  STAFF: 'STAFF'
+};
+
+exports.IncidentSeverity = exports.$Enums.IncidentSeverity = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
 exports.Prisma.ModelName = {
   Branch: 'Branch',
   Department: 'Department',
@@ -327,7 +432,12 @@ exports.Prisma.ModelName = {
   Employee: 'Employee',
   ChatChannel: 'ChatChannel',
   ChatMember: 'ChatMember',
-  ChatMessage: 'ChatMessage'
+  ChatMessage: 'ChatMessage',
+  MeetingTicket: 'MeetingTicket',
+  MeetingSession: 'MeetingSession',
+  MeetingAgendaItem: 'MeetingAgendaItem',
+  SecurityGateLog: 'SecurityGateLog',
+  SecurityIncidentReport: 'SecurityIncidentReport'
 };
 
 /**
