@@ -1,25 +1,27 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Cpu, Send, Sparkles, Brain, MessageSquare, FileSpreadsheet, FileScan, ShieldCheck } from 'lucide-react';
+import { Cpu, Send, Sparkles, Brain, MessageSquare, FileSpreadsheet, FileScan, ShieldCheck, Lock } from 'lucide-react';
 import { useAi } from '@/hooks/ai/useAi';
 import { SkeletonTable } from '@/components/ui/loader/skeleton/SkeletonTable';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DeepSeekProviderSelector } from './DeepSeekProviderSelector';
 import { DeepSeekTrainingTab } from './DeepSeekTrainingTab';
+import { DeepSeekGuardrailsTab } from './DeepSeekGuardrailsTab';
 import { ExcelMigrationModal } from './ExcelMigrationModal';
 import { PdfDocumentScannerModal } from './PdfDocumentScannerModal';
 
 export const AiView = () => {
   const { logs, loading, queryInput, setQueryInput, isProcessing, sendAiQuery } = useAi();
-  const [activeTab, setActiveTab] = useState<'QUERY' | 'TRAINING'>('QUERY');
+  const [activeTab, setActiveTab] = useState<'QUERY' | 'TRAINING' | 'GUARDRAILS'>('QUERY');
   const [showExcelModal, setShowExcelModal] = useState(false);
   const [showPdfModal, setShowPdfModal] = useState(false);
 
   const subTabs: SubTabItem[] = [
     { id: 'QUERY', label: 'Interaktif AI Chat', icon: MessageSquare },
-    { id: 'TRAINING', label: 'Pelatihan & Knowledge DeepSeek', icon: Brain }
+    { id: 'TRAINING', label: 'Pelatihan & Knowledge DeepSeek', icon: Brain },
+    { id: 'GUARDRAILS', label: 'Guardrail & 10 Keahlian Spesialis', icon: Lock }
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -153,6 +155,9 @@ export const AiView = () => {
 
       {/* Tab 2: DeepSeek Model Training & Knowledge Manager */}
       {activeTab === 'TRAINING' && <DeepSeekTrainingTab />}
+
+      {/* Tab 3: DeepSeek Guardrails & 10 Specialist Skill Matrix */}
+      {activeTab === 'GUARDRAILS' && <DeepSeekGuardrailsTab />}
 
       {/* Modal Actions */}
       <ExcelMigrationModal isOpen={showExcelModal} onClose={() => setShowExcelModal(false)} />
