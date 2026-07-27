@@ -14,6 +14,7 @@ export default function AuthenticatedLayout({
 }) {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuthContext();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -38,13 +39,29 @@ export default function AuthenticatedLayout({
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-      {/* Dynamic Accordion Sidebar Navigation */}
-      <Sidebar />
+      {/* Desktop Fixed Sidebar Navigation */}
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
+
+      {/* Mobile Slide-Over Sidebar Drawer */}
+      {isMobileSidebarOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop Overlay */}
+          <div
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          ></div>
+          <div className="relative z-10 animate-in slide-in-from-left duration-200">
+            <Sidebar onCloseMobile={() => setIsMobileSidebarOpen(false)} />
+          </div>
+        </div>
+      )}
 
       {/* Main Content Body */}
       <div className="flex-1 flex flex-col min-w-0">
-        <Header />
-        <main className="flex-1 p-6 overflow-y-auto">
+        <Header onToggleMobileSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)} />
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto">
           {children}
         </main>
       </div>

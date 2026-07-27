@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Wallet, Plus, ArrowDownLeft, ArrowUpRight, CheckCircle2, FileText, XCircle } from 'lucide-react';
+import { Wallet, Plus, ArrowDownLeft, ArrowUpRight, CheckCircle2, FileText, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { CreateCashVoucherModal } from '@/components/ui/modals/CreateCashVoucherModal';
 import { CreateGiroModal } from '@/components/ui/modals/CreateGiroModal';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface CashVoucherRow {
   voucherNumber: string;
@@ -39,6 +40,8 @@ export const FinanceCashView = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCashModalOpen, setIsCashModalOpen] = useState(false);
   const [isGiroModalOpen, setIsGiroModalOpen] = useState(false);
+  const [selectedCash, setSelectedCash] = useState<CashVoucherRow | null>(null);
+  const [selectedGiro, setSelectedGiro] = useState<GiroRow | null>(null);
 
   const [cashVouchers, setCashVouchers] = useState<CashVoucherRow[]>([
     { voucherNumber: 'VKM/2026/07/0014', date: '2026-07-24', voucherType: 'VKM', cashierName: 'Kasir Utama HO', payeeOrPayer: 'Bpk. H. Ahmad Fauzi', amount: 35000000, description: 'Setoran Tunai Hasil Penjualan Resto F&B Cabang Selatan', contraAccountCode: '4-10100', contraAccountName: 'Pendapatan Penjualan Resto', status: 'POSTED' },
@@ -90,7 +93,21 @@ export const FinanceCashView = () => {
     { key: 'payeeOrPayer', header: 'Penerima / Pembayar', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.payeeOrPayer },
     { key: 'description', header: 'Keterangan Voucher Tunai', render: (i) => i.description },
     { key: 'amount', header: 'Nominal Kas (Rp)', align: 'right', className: 'font-mono font-bold text-emerald-600 dark:text-emerald-400', render: (i) => `Rp ${i.amount.toLocaleString('id-ID')}` },
-    { key: 'status', header: 'Status', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> }
+    { key: 'status', header: 'Status', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedCash(i)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Voucher Kas"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   const giroColumns: ColumnDef<GiroRow>[] = [
@@ -125,15 +142,24 @@ export const FinanceCashView = () => {
     },
     {
       key: 'actions',
-      header: 'Aksi Kliring',
+      header: 'Aksi',
       align: 'center',
       render: (i) => (
-        i.status === 'DIENDAPKAN' ? (
-          <button onClick={() => handleClearGiro(i.giroNumber)} className="px-2.5 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 font-bold rounded-lg flex items-center gap-1 mx-auto cursor-pointer text-[10px]">
-            <CheckCircle2 className="w-3 h-3" />
-            <span>Cairkan Giro</span>
+        <div className="flex items-center justify-center gap-1">
+          <button
+            onClick={() => setSelectedGiro(i)}
+            className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Warkat Giro"
+          >
+            <Eye className="w-4 h-4" />
           </button>
-        ) : <span className="text-slate-400 font-mono text-[10px]">-</span>
+          {i.status === 'DIENDAPKAN' && (
+            <button onClick={() => handleClearGiro(i.giroNumber)} className="px-2 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 font-bold rounded-lg flex items-center gap-1 cursor-pointer text-[10px]">
+              <CheckCircle2 className="w-3 h-3" />
+              <span>Cairkan</span>
+            </button>
+          )}
+        </div>
       )
     }
   ];
@@ -201,7 +227,73 @@ export const FinanceCashView = () => {
         />
       )}
 
-      {/* Modals */}
+      {/* Cash Voucher Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedCash !== null}
+        onClose={() => setSelectedCash(null)}
+        title={`Detail Voucher ${selectedCash?.voucherType === 'VKM' ? 'Kas Masuk (VKM)' : 'Kas Keluar (VKK)'}`}
+        subtitle={selectedCash ? `${selectedCash.voucherNumber} • Tanggal: ${selectedCash.date}` : ''}
+        badgeLabel={selectedCash?.status}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Nominal Kas', value: selectedCash ? `Rp ${selectedCash.amount.toLocaleString('id-ID')}` : '0', color: selectedCash?.voucherType === 'VKM' ? 'text-emerald-600' : 'text-rose-600' },
+          { label: 'Tipe Voucher', value: selectedCash?.voucherType || '-' },
+          { label: 'Petugas Kasir', value: selectedCash?.cashierName || '-' }
+        ]}
+        metadata={[
+          { label: 'No. Voucher Kas', value: selectedCash?.voucherNumber, mono: true, highlight: true },
+          { label: 'Tanggal Transaksi', value: selectedCash?.date, mono: true },
+          { label: 'Nama Pihak Terkait', value: selectedCash?.payeeOrPayer },
+          { label: 'Akun Kontra (Lawan)', value: selectedCash ? `${selectedCash.contraAccountCode} - ${selectedCash.contraAccountName}` : '-' }
+        ]}
+        lineItemsHeader="Posting Jurnal Otomatis (GL Breakdown)"
+        columns={[
+          { header: 'Kode COA', accessor: 'coaCode', mono: true },
+          { header: 'Nama Akun Buku Besar', accessor: 'accountName' },
+          { header: 'Debet (Rp)', accessor: 'debit', align: 'right', isCurrency: true },
+          { header: 'Kredit (Rp)', accessor: 'credit', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          {
+            coaCode: selectedCash?.voucherType === 'VKM' ? '1-10100' : (selectedCash?.contraAccountCode || '6-10200'),
+            accountName: selectedCash?.voucherType === 'VKM' ? 'Kas Kasir Utama HO' : (selectedCash?.contraAccountName || 'Beban Operasional'),
+            debit: selectedCash?.amount || 0,
+            credit: 0
+          },
+          {
+            coaCode: selectedCash?.voucherType === 'VKM' ? (selectedCash?.contraAccountCode || '4-10100') : '1-10100',
+            accountName: selectedCash?.voucherType === 'VKM' ? (selectedCash?.contraAccountName || 'Pendapatan') : 'Kas Kasir Utama HO',
+            debit: 0,
+            credit: selectedCash?.amount || 0
+          }
+        ]}
+        footerNotes="Pengeluaran dan penerimaan kas tunai wajib divalidasi oleh Kasir Utama HO."
+      />
+
+      {/* Giro Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedGiro !== null}
+        onClose={() => setSelectedGiro(null)}
+        title="Detail Warkat Cek & Giro Perbankan"
+        subtitle={selectedGiro ? `${selectedGiro.giroNumber} • ${selectedGiro.bankName}` : ''}
+        badgeLabel={selectedGiro?.status}
+        badgeType={selectedGiro?.status === 'CAIR' ? 'ACTIVE' : selectedGiro?.status === 'DIENDAPKAN' ? 'NEUTRAL' : 'ALERT'}
+        summaryCards={[
+          { label: 'Nominal Giro', value: selectedGiro ? `Rp ${selectedGiro.amount.toLocaleString('id-ID')}` : '0' },
+          { label: 'Tipe Warkat', value: selectedGiro?.type === 'GIRO_MASUK' ? 'Giro Masuk' : 'Giro Keluar' },
+          { label: 'Jatuh Tempo Kliring', value: selectedGiro?.dueDate || '-' }
+        ]}
+        metadata={[
+          { label: 'No. Warkat Giro', value: selectedGiro?.giroNumber, mono: true, highlight: true },
+          { label: 'Bank Penerbit', value: selectedGiro?.bankName },
+          { label: 'Tanggal Terbit', value: selectedGiro?.issueDate, mono: true },
+          { label: 'Penarik / Penerima', value: selectedGiro?.issuerOrPayee },
+          { label: 'Keterangan Giro', value: selectedGiro?.description }
+        ]}
+        footerNotes="Warkat giro yang telah dicairkan akan memutasi rekening bank dan akun clearing giro otomatis."
+      />
+
+      {/* Create Modals */}
       <CreateCashVoucherModal
         isOpen={isCashModalOpen}
         onClose={() => setIsCashModalOpen(false)}
@@ -216,3 +308,4 @@ export const FinanceCashView = () => {
     </div>
   );
 };
+

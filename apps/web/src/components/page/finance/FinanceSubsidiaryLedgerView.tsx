@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Layers, Search } from 'lucide-react';
+import { Layers, Search, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface SubsidiaryEntry {
   id: string;
@@ -23,6 +24,7 @@ interface SubsidiaryEntry {
 export const FinanceSubsidiaryLedgerView = ({ defaultType }: { defaultType?: 'CUSTOMER_AR' | 'SUPPLIER_AP' }) => {
   const [filterType, setFilterType] = useState<'ALL' | 'CUSTOMER_AR' | 'SUPPLIER_AP'>(defaultType || 'ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSub, setSelectedSub] = useState<SubsidiaryEntry | null>(null);
 
   const mockSubsidiaryData: SubsidiaryEntry[] = [
     { id: '1', subAccountCode: 'AR-CUST-001', entityName: 'PT Nusantara Jaya Mandiri', entityType: 'CUSTOMER_AR', refInvoice: 'INV/2026/07/0012', date: '2026-07-10', description: 'Penjualan Katering Event Corporate', debit: 45000000, credit: 0, runningBalance: 45000000 },
@@ -48,7 +50,21 @@ export const FinanceSubsidiaryLedgerView = ({ defaultType }: { defaultType?: 'CU
     { key: 'description', header: 'Keterangan Mutasi Kartu', render: (i) => i.description },
     { key: 'debit', header: 'Debet (Rp)', align: 'right', className: 'font-mono font-bold text-emerald-600 dark:text-emerald-400', render: (i) => i.debit ? `Rp ${i.debit.toLocaleString('id-ID')}` : '-' },
     { key: 'credit', header: 'Kredit (Rp)', align: 'right', className: 'font-mono font-bold text-rose-600 dark:text-rose-400', render: (i) => i.credit ? `Rp ${i.credit.toLocaleString('id-ID')}` : '-' },
-    { key: 'runningBalance', header: 'Saldo Akhir Kartu (Rp)', align: 'right', className: 'font-mono font-bold text-slate-900 dark:text-white', render: (i) => `Rp ${i.runningBalance.toLocaleString('id-ID')}` }
+    { key: 'runningBalance', header: 'Saldo Akhir Kartu (Rp)', align: 'right', className: 'font-mono font-bold text-slate-900 dark:text-white', render: (i) => `Rp ${i.runningBalance.toLocaleString('id-ID')}` },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedSub(i)}
+          className="p-1.5 hover:bg-violet-50 dark:hover:bg-violet-950/40 text-violet-600 dark:text-violet-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Kartu Pembantu"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   const titleText =
@@ -91,6 +107,30 @@ export const FinanceSubsidiaryLedgerView = ({ defaultType }: { defaultType?: 'CU
         data={filteredData}
         keyExtractor={(i) => i.id}
       />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedSub !== null}
+        onClose={() => setSelectedSub(null)}
+        title="Detail Mutasi Kartu Buku Besar Pembantu"
+        subtitle={selectedSub ? `${selectedSub.subAccountCode} • ${selectedSub.entityName}` : ''}
+        badgeLabel={selectedSub?.entityType === 'CUSTOMER_AR' ? 'KARTU PIUTANG' : 'KARTU UTANG'}
+        badgeType={selectedSub?.entityType === 'CUSTOMER_AR' ? 'ACTIVE' : 'NEUTRAL'}
+        summaryCards={[
+          { label: 'Saldo Berjalan Kartu', value: selectedSub ? `Rp ${selectedSub.runningBalance.toLocaleString('id-ID')}` : '0' },
+          { label: 'Mutasi Debet', value: selectedSub?.debit ? `Rp ${selectedSub.debit.toLocaleString('id-ID')}` : '-', color: 'text-emerald-600' },
+          { label: 'Mutasi Kredit', value: selectedSub?.credit ? `Rp ${selectedSub.credit.toLocaleString('id-ID')}` : '-', color: 'text-rose-600' }
+        ]}
+        metadata={[
+          { label: 'Kode Kartu Sub', value: selectedSub?.subAccountCode, mono: true, highlight: true },
+          { label: 'Nama Entitas / Relasi', value: selectedSub?.entityName },
+          { label: 'No. Acuan (Ref Invoice/Pay)', value: selectedSub?.refInvoice, mono: true },
+          { label: 'Tanggal Mutasi', value: selectedSub?.date, mono: true },
+          { label: 'Keterangan Mutasi Kartu', value: selectedSub?.description }
+        ]}
+        footerNotes="Buku pembantu disinkronisasi otomatis dengan voucher transaksi penerimaan & pembayaran."
+      />
     </div>
   );
 };
+

@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
-import { Clock, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, AlertCircle, Eye } from 'lucide-react';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface ArAgingRow {
   customerName: string;
@@ -15,6 +16,8 @@ interface ArAgingRow {
 }
 
 export const ArAgingTab = () => {
+  const [selectedRow, setSelectedRow] = useState<ArAgingRow | null>(null);
+
   const agingData: ArAgingRow[] = [
     { customerName: 'PT Nusantara Jaya Mandiri', totalAr: 45000000, current: 45000000, days31to60: 0, days61to90: 0, over90: 0, badDebtProvision: 0 },
     { customerName: 'PT Kalimantan Mining Resources', totalAr: 250000000, current: 150000000, days31to60: 100000000, days61to90: 0, over90: 0, badDebtProvision: 1000000 },
@@ -36,7 +39,21 @@ export const ArAgingTab = () => {
     { key: 'days61to90', header: '61-90 Hari', align: 'right', className: 'font-mono text-amber-600 dark:text-amber-400 font-bold', render: (i) => `Rp ${i.days61to90.toLocaleString('id-ID')}` },
     { key: 'over90', header: '>90 Hari (Macet)', align: 'right', className: 'font-mono text-rose-600 dark:text-rose-400 font-bold', render: (i) => `Rp ${i.over90.toLocaleString('id-ID')}` },
     { key: 'totalAr', header: 'Total Piutang (Rp)', align: 'right', className: 'font-mono font-extrabold text-slate-900 dark:text-white', render: (i) => `Rp ${i.totalAr.toLocaleString('id-ID')}` },
-    { key: 'badDebtProvision', header: 'Cadangan Bad Debt', align: 'right', className: 'font-mono text-rose-500 font-semibold', render: (i) => `Rp ${i.badDebtProvision.toLocaleString('id-ID')}` }
+    { key: 'badDebtProvision', header: 'Cadangan Bad Debt', align: 'right', className: 'font-mono text-rose-500 font-semibold', render: (i) => `Rp ${i.badDebtProvision.toLocaleString('id-ID')}` },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedRow(i)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Umur Piutang Pelanggan"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -71,6 +88,40 @@ export const ArAgingTab = () => {
         data={agingData}
         keyExtractor={(i) => i.customerName}
       />
+
+      <FinanceItemDetailModal
+        isOpen={selectedRow !== null}
+        onClose={() => setSelectedRow(null)}
+        title="Detail Analisis Umur Piutang Pelanggan"
+        subtitle={selectedRow?.customerName}
+        badgeLabel={selectedRow && selectedRow.over90 > 0 ? 'RISIKO MACET' : 'LANCAR'}
+        badgeType={selectedRow && selectedRow.over90 > 0 ? 'ALERT' : 'ACTIVE'}
+        summaryCards={[
+          { label: 'Total Piutang', value: selectedRow ? `Rp ${selectedRow.totalAr.toLocaleString('id-ID')}` : '0' },
+          { label: '0-30 Hari', value: selectedRow ? `Rp ${selectedRow.current.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: '31-60 Hari', value: selectedRow ? `Rp ${selectedRow.days31to60.toLocaleString('id-ID')}` : '0', color: 'text-sky-600' },
+          { label: 'Cadangan Bad Debt', value: selectedRow ? `Rp ${selectedRow.badDebtProvision.toLocaleString('id-ID')}` : '0', color: 'text-rose-600' }
+        ]}
+        metadata={[
+          { label: 'Nama Pelanggan', value: selectedRow?.customerName, highlight: true },
+          { label: 'Term Kredit Customer', value: 'Credit Limit 30 Hari' },
+          { label: 'Cadangan Piutang Ragu', value: selectedRow ? `Rp ${selectedRow.badDebtProvision.toLocaleString('id-ID')}` : '0', mono: true }
+        ]}
+        lineItemsHeader="Breakdown Invoice Tagihan Pelanggan"
+        columns={[
+          { header: 'No. Invoice AR', accessor: 'invoiceNo', mono: true },
+          { header: 'Tanggal Penjualan', accessor: 'saleDate' },
+          { header: 'Jatuh Tempo', accessor: 'dueDate' },
+          { header: 'Kategori Aging', accessor: 'agingCategory' },
+          { header: 'Nominal Piutang', accessor: 'amount', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          { invoiceNo: 'INV-CLI-2026-104', saleDate: '2026-07-05', dueDate: '2026-08-10', agingCategory: '0-30 Hari (Lancar)', amount: selectedRow?.current || 0 },
+          { invoiceNo: 'INV-CLI-2026-099', saleDate: '2026-06-10', dueDate: '2026-07-10', agingCategory: '31-60 Hari', amount: selectedRow?.days31to60 || 0 }
+        ].filter(item => item.amount > 0)}
+        footerNotes="Cadangan piutang tak tertagih (Allowance for Bad Debt) dibentuk secara otomatis sesuai standar PSAK."
+      />
     </div>
   );
 };
+

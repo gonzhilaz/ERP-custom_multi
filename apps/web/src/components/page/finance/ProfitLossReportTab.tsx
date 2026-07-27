@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
-import { DollarSign, TrendingUp, TrendingDown, Layers } from 'lucide-react';
+import React, { useState } from 'react';
+import { DollarSign, TrendingUp, TrendingDown, Layers, Eye } from 'lucide-react';
 import { IncomeStatementLine } from '@/lib/mock/financial-reports';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface Props {
   incomeStatement: IncomeStatementLine[];
@@ -25,6 +26,8 @@ export const ProfitLossReportTab = ({
   grossMarginPercentage,
   netMarginPercentage
 }: Props) => {
+  const [selectedLine, setSelectedLine] = useState<IncomeStatementLine | null>(null);
+
   const revenueLines = incomeStatement.filter((i) => i.category === 'REVENUE');
   const cogsLines = incomeStatement.filter((i) => i.category === 'COGS');
   const opexLines = incomeStatement.filter((i) => i.category === 'OPERATING_EXPENSE');
@@ -83,12 +86,13 @@ export const ProfitLossReportTab = ({
                 <th className="py-2.5 px-4 text-right">Resto & Catering</th>
                 <th className="py-2.5 px-4 text-right">Hotelier PMS</th>
                 <th className="py-2.5 px-4 text-right">Tambang Emas</th>
+                <th className="py-2.5 px-4 text-center">Detail</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
               {/* REVENUE SECTION */}
               <tr className="bg-emerald-500/10 font-bold text-emerald-800 dark:text-emerald-300">
-                <td colSpan={6} className="py-2 px-4 uppercase text-[10px]">I. PENDAPATAN USAHA (REVENUE)</td>
+                <td colSpan={7} className="py-2 px-4 uppercase text-[10px]">I. PENDAPATAN USAHA (REVENUE)</td>
               </tr>
               {revenueLines.map((line) => (
                 <tr key={line.accountCode} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
@@ -101,12 +105,21 @@ export const ProfitLossReportTab = ({
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.restoFnB ? `Rp ${line.restoFnB.toLocaleString('id-ID')}` : '-'}</td>
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.hotelPms ? `Rp ${line.hotelPms.toLocaleString('id-ID')}` : '-'}</td>
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.miningOps ? `Rp ${line.miningOps.toLocaleString('id-ID')}` : '-'}</td>
+                  <td className="py-2.5 px-4 text-center">
+                    <button
+                      onClick={() => setSelectedLine(line)}
+                      className="p-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-lg cursor-pointer transition-colors"
+                      title="Rincian Drilldown Akun"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                  </td>
                 </tr>
               ))}
 
               {/* COGS SECTION */}
               <tr className="bg-rose-500/10 font-bold text-rose-800 dark:text-rose-300">
-                <td colSpan={6} className="py-2 px-4 uppercase text-[10px]">II. HARGA POKOK PENJUALAN / COGM (COGS)</td>
+                <td colSpan={7} className="py-2 px-4 uppercase text-[10px]">II. HARGA POKOK PENJUALAN / COGM (COGS)</td>
               </tr>
               {cogsLines.map((line) => (
                 <tr key={line.accountCode} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
@@ -119,12 +132,21 @@ export const ProfitLossReportTab = ({
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.restoFnB ? `Rp ${line.restoFnB.toLocaleString('id-ID')}` : '-'}</td>
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.hotelPms ? `Rp ${line.hotelPms.toLocaleString('id-ID')}` : '-'}</td>
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.miningOps ? `Rp ${line.miningOps.toLocaleString('id-ID')}` : '-'}</td>
+                  <td className="py-2.5 px-4 text-center">
+                    <button
+                      onClick={() => setSelectedLine(line)}
+                      className="p-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-lg cursor-pointer transition-colors"
+                      title="Rincian Drilldown Akun"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                  </td>
                 </tr>
               ))}
 
               {/* OPERATING EXPENSE SECTION */}
               <tr className="bg-amber-500/10 font-bold text-amber-800 dark:text-amber-300">
-                <td colSpan={6} className="py-2 px-4 uppercase text-[10px]">III. BEBAN OPERASIONAL (OPERATING EXPENSES)</td>
+                <td colSpan={7} className="py-2 px-4 uppercase text-[10px]">III. BEBAN OPERASIONAL (OPERATING EXPENSES)</td>
               </tr>
               {opexLines.map((line) => (
                 <tr key={line.accountCode} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
@@ -137,6 +159,15 @@ export const ProfitLossReportTab = ({
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.restoFnB ? `Rp ${line.restoFnB.toLocaleString('id-ID')}` : '-'}</td>
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.hotelPms ? `Rp ${line.hotelPms.toLocaleString('id-ID')}` : '-'}</td>
                   <td className="py-2.5 px-4 text-right font-mono text-slate-500">{line.miningOps ? `Rp ${line.miningOps.toLocaleString('id-ID')}` : '-'}</td>
+                  <td className="py-2.5 px-4 text-center">
+                    <button
+                      onClick={() => setSelectedLine(line)}
+                      className="p-1.5 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg cursor-pointer transition-colors"
+                      title="Rincian Drilldown Akun"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                  </td>
                 </tr>
               ))}
 
@@ -148,11 +179,37 @@ export const ProfitLossReportTab = ({
                 <td className="py-3 px-4 text-right font-mono text-emerald-400">Rp 232.000.000</td>
                 <td className="py-3 px-4 text-right font-mono text-emerald-400">Rp 195.000.000</td>
                 <td className="py-3 px-4 text-right font-mono text-emerald-400">Rp 2.385.000.000</td>
+                <td className="py-3 px-4 text-center"></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedLine !== null}
+        onClose={() => setSelectedLine(null)}
+        title="Drilldown Rincian Pos Laba Rugi"
+        subtitle={selectedLine ? `${selectedLine.accountCode} • ${selectedLine.accountName}` : ''}
+        badgeLabel={selectedLine?.category}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Holding Total', value: selectedLine ? `Rp ${selectedLine.holdingTotal.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Kategori Laporan', value: selectedLine?.category || '-' },
+          { label: 'Kode COA', value: selectedLine?.accountCode || '-' }
+        ]}
+        metadata={[
+          { label: 'Kode Akun Buku Besar', value: selectedLine?.accountCode, mono: true, highlight: true },
+          { label: 'Nama Akun Pos P&L', value: selectedLine?.accountName },
+          { label: 'Kontribusi Toko Roti & Retail', value: selectedLine?.bakeryRetail ? `Rp ${selectedLine.bakeryRetail.toLocaleString('id-ID')}` : 'Rp 0', mono: true },
+          { label: 'Kontribusi Resto & Catering', value: selectedLine?.restoFnB ? `Rp ${selectedLine.restoFnB.toLocaleString('id-ID')}` : 'Rp 0', mono: true },
+          { label: 'Kontribusi Hotelier PMS', value: selectedLine?.hotelPms ? `Rp ${selectedLine.hotelPms.toLocaleString('id-ID')}` : 'Rp 0', mono: true },
+          { label: 'Kontribusi Tambang Emas', value: selectedLine?.miningOps ? `Rp ${selectedLine.miningOps.toLocaleString('id-ID')}` : 'Rp 0', mono: true }
+        ]}
+        footerNotes="Drilldown pos laporan laba rugi dihitung otomatis dari posting voucher General Ledger seluruh unit bisnis."
+      />
     </div>
   );
 };
+

@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sliders, Plus, Trash2, CheckCircle2, Edit3, ShieldAlert } from 'lucide-react';
+import { Sliders, Plus, Trash2, CheckCircle2, Edit3, ShieldAlert, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { SearchableSelect, SearchSelectOption } from '@/components/ui/dropdowns/SearchableSelect';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 import { COA_DATA } from '@/lib/mock/finance';
 
 interface TaxRuleParam {
@@ -99,6 +100,8 @@ export const AturanPajakParamView = () => {
     setIsModalOpen(false);
   };
 
+  const [selectedDetailRule, setSelectedDetailRule] = useState<TaxRuleParam | null>(null);
+
   const columns: ColumnDef<TaxRuleParam>[] = [
     { key: 'ruleCode', header: 'Kode Aturan Pajak', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (i) => i.ruleCode },
     { key: 'ruleName', header: 'Nama Aturan Pajak', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.ruleName },
@@ -111,10 +114,17 @@ export const AturanPajakParamView = () => {
       align: 'center',
       render: (i) => (
         <div className="flex justify-center items-center gap-1.5">
-          <button onClick={() => handleOpenEdit(i)} className="p-1.5 text-sky-600 hover:bg-sky-500/10 rounded-lg cursor-pointer">
+          <button
+            onClick={() => setSelectedDetailRule(i)}
+            className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Aturan Pajak"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleOpenEdit(i)} className="p-1.5 text-sky-600 hover:bg-sky-500/10 rounded-lg cursor-pointer" title="Edit Aturan">
             <Edit3 className="w-3.5 h-3.5" />
           </button>
-          <button onClick={() => handleDelete(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer">
+          <button onClick={() => handleDelete(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer" title="Hapus Aturan">
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -162,7 +172,30 @@ export const AturanPajakParamView = () => {
         keyExtractor={(i) => i.id}
       />
 
-      {/* Modal Add/Edit Tax Rule */}
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedDetailRule !== null}
+        onClose={() => setSelectedDetailRule(null)}
+        title="Detail Master Aturan Pajak & Map COA"
+        subtitle={selectedDetailRule?.ruleCode}
+        badgeLabel="ACTIVE RULE"
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Tarif Pajak (%)', value: selectedDetailRule?.taxRatePct || '0%', color: 'text-emerald-600' },
+          { label: 'Akun COA Penampung', value: selectedDetailRule?.glAccountCode || '-' },
+          { label: 'Status Master', value: 'Active Master' }
+        ]}
+        metadata={[
+          { label: 'Kode Aturan Pajak', value: selectedDetailRule?.ruleCode, mono: true, highlight: true },
+          { label: 'Nama Aturan Pajak', value: selectedDetailRule?.ruleName },
+          { label: 'Tarif Potongan', value: selectedDetailRule?.taxRatePct, mono: true },
+          { label: 'Kode COA GL Penampung', value: selectedDetailRule?.glAccountCode, mono: true },
+          { label: 'Skop Transaksi Terkena', value: selectedDetailRule?.appliesTo }
+        ]}
+        footerNotes="Aturan pajak ini digunakan otomatis saat pembuatan Invoice, Cash Voucher, dan PO."
+      />
+
+      {/* Add / Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex justify-center items-center p-4">
           <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 shadow-2xl animate-in zoom-in-95 duration-150 text-xs">

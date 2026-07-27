@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DollarSign, Plus, RefreshCw, Receipt } from 'lucide-react';
+import { DollarSign, Plus, RefreshCw, Receipt, Eye } from 'lucide-react';
 import { usePettyCash } from '@/hooks/finance/usePettyCash';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { DynamicSearchFilter } from '@/components/ui/forms/DynamicSearchFilter';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface PettyCashTx {
   id: string;
@@ -24,6 +25,7 @@ export const FinancePettyCashView = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [showModal, setShowModal] = useState(false);
+  const [selectedTx, setSelectedTx] = useState<PettyCashTx | null>(null);
 
   const filteredTransactions = transactions.filter((t) => {
     const matchesSearch =
@@ -71,7 +73,21 @@ export const FinancePettyCashView = () => {
     { key: 'category', header: 'Kategori Biaya', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-slate-500/10 text-slate-600 dark:text-slate-300 font-bold font-mono text-[10px] rounded">{i.category}</span> },
     { key: 'description', header: 'Keterangan Pengeluaran Kas', render: (i) => i.description },
     { key: 'amount', header: 'Nominal Biaya', align: 'right', className: 'font-mono font-bold text-emerald-600 dark:text-emerald-400', render: (i) => `Rp ${i.amount.toLocaleString('id-ID')}` },
-    { key: 'status', header: 'Status Approval', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold font-mono text-[10px] rounded">{i.status}</span> }
+    { key: 'status', header: 'Status Approval', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold font-mono text-[10px] rounded">{i.status}</span> },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedTx(i)}
+          className="p-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Kas Kecil"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -126,6 +142,40 @@ export const FinancePettyCashView = () => {
         keyExtractor={(i) => i.id}
       />
 
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedTx !== null}
+        onClose={() => setSelectedTx(null)}
+        title="Detail Voucher Pengeluaran Kas Kecil"
+        subtitle={selectedTx ? `${selectedTx.id} • Pemohon: ${selectedTx.requestedBy}` : ''}
+        badgeLabel={selectedTx?.status}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Nominal Biaya', value: selectedTx ? `Rp ${selectedTx.amount.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Kategori Biaya', value: selectedTx?.category || '-' },
+          { label: 'Metode Imprest', value: 'Fixed Petty Cash' }
+        ]}
+        metadata={[
+          { label: 'Voucher ID', value: selectedTx?.id, mono: true, highlight: true },
+          { label: 'Tanggal Cair', value: selectedTx?.date, mono: true },
+          { label: 'Penanggung Jawab', value: selectedTx?.requestedBy },
+          { label: 'Keterangan Pengeluaran', value: selectedTx?.description },
+          { label: 'Berkas Struk/Nota', value: selectedTx?.receiptFileName || 'Struk_Fisik_Terlampir.pdf' }
+        ]}
+        lineItemsHeader="Pos Beban & Alokasi Jurnal Imprest"
+        columns={[
+          { header: 'Kode COA', accessor: 'coaCode', mono: true },
+          { header: 'Nama Akun Beban', accessor: 'accountName' },
+          { header: 'Debet (Rp)', accessor: 'debit', align: 'right', isCurrency: true },
+          { header: 'Kredit (Rp)', accessor: 'credit', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          { coaCode: '6-10300', accountName: `Beban ${selectedTx?.category || 'Operasional Kas Kecil'}`, debit: selectedTx?.amount || 0, credit: 0 },
+          { coaCode: '1-10200', accountName: 'Kas Kecil Pemegang Imprest', debit: 0, credit: selectedTx?.amount || 0 }
+        ]}
+        footerNotes="Struk dan nota fisik pengeluaran kas kecil wajib diarsip secara fisik oleh Custodian Kas Kecil."
+      />
+
       {/* Form Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -164,3 +214,4 @@ export const FinancePettyCashView = () => {
     </div>
   );
 };
+

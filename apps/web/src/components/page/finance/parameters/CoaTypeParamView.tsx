@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Tag, Plus, Trash2, CheckCircle2, Edit3 } from 'lucide-react';
+import { Tag, Plus, Trash2, CheckCircle2, Edit3, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { SearchableSelect, SearchSelectOption } from '@/components/ui/dropdowns/SearchableSelect';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 import { COA_CATEGORIES, CoaCategory } from '@/lib/mock/finance';
 
 export const CoaTypeParamView = () => {
@@ -89,6 +90,8 @@ export const CoaTypeParamView = () => {
     setIsModalOpen(false);
   };
 
+  const [selectedDetailCategory, setSelectedDetailCategory] = useState<CoaCategory | null>(null);
+
   const columns: ColumnDef<CoaCategory>[] = [
     { key: 'code', header: 'Kode Tipe COA', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (i) => i.code },
     { key: 'name', header: 'Nama Tipe Kategori', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.name },
@@ -109,10 +112,17 @@ export const CoaTypeParamView = () => {
       align: 'center',
       render: (i) => (
         <div className="flex justify-center items-center gap-1.5">
-          <button onClick={() => handleOpenEdit(i)} className="p-1.5 text-sky-600 hover:bg-sky-500/10 rounded-lg cursor-pointer">
+          <button
+            onClick={() => setSelectedDetailCategory(i)}
+            className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Tipe COA"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleOpenEdit(i)} className="p-1.5 text-sky-600 hover:bg-sky-500/10 rounded-lg cursor-pointer" title="Edit Tipe">
             <Edit3 className="w-3.5 h-3.5" />
           </button>
-          <button onClick={() => handleDelete(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer">
+          <button onClick={() => handleDelete(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer" title="Hapus Tipe">
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -158,6 +168,29 @@ export const CoaTypeParamView = () => {
         columns={columns}
         data={filteredCategories}
         keyExtractor={(i) => i.id}
+      />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedDetailCategory !== null}
+        onClose={() => setSelectedDetailCategory(null)}
+        title="Detail Tipe & Kategori COA"
+        subtitle={selectedDetailCategory?.code}
+        badgeLabel={selectedDetailCategory?.type}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Jumlah Akun COA', value: selectedDetailCategory?.accountCount || 0, color: 'text-sky-600' },
+          { label: 'Klasifikasi', value: selectedDetailCategory?.type || '-' },
+          { label: 'Status Master', value: 'Active Master' }
+        ]}
+        metadata={[
+          { label: 'Kode Tipe COA', value: selectedDetailCategory?.code, mono: true, highlight: true },
+          { label: 'Nama Tipe Kategori', value: selectedDetailCategory?.name },
+          { label: 'Klasifikasi Utama', value: selectedDetailCategory?.type, mono: true },
+          { label: 'Jumlah Akun Terhubung', value: selectedDetailCategory?.accountCount || 0 },
+          { label: 'Keterangan Akuntansi', value: selectedDetailCategory?.description }
+        ]}
+        footerNotes="Kategori COA menjadi fondasi pengelompokan laporan Neraca & Laba Rugi konsolidasi."
       />
 
       {/* Modal Add/Edit COA Type */}

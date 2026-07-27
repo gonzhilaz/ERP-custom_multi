@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DollarSign, ArrowDownLeft, ArrowUpRight, TrendingUp, Download, RefreshCw } from 'lucide-react';
+import { DollarSign, ArrowDownLeft, ArrowUpRight, TrendingUp, Download, RefreshCw, Eye } from 'lucide-react';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 export const CashFlowReportTab = () => {
   const [method, setMethod] = useState<'DIRECT' | 'INDIRECT'>('INDIRECT');
   const [period, setPeriod] = useState('2026-07');
+  const [selectedCashFlowItem, setSelectedCashFlowItem] = useState<{ title: string; amount: string; category: string } | null>(null);
 
   const methodOptions = [
     { id: 'INDIRECT', label: 'Metode Tidak Langsung (Indirect Method)', subLabel: 'Standard IAS 7 / PSAK 2 (Reconcile Net Income)' },
@@ -52,30 +54,45 @@ export const CashFlowReportTab = () => {
                 <span>(IDR)</span>
               </h4>
               <div className="space-y-1.5 pl-3 text-slate-700 dark:text-slate-300">
-                <div className="flex justify-between font-bold text-sky-600 dark:text-sky-400">
+                <div className="flex justify-between items-center font-bold text-sky-600 dark:text-sky-400">
                   <span>Laba Bersih Setelah Pajak (Net Income)</span>
-                  <span className="font-mono">Rp 485.200.000</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono">Rp 485.200.000</span>
+                    <button onClick={() => setSelectedCashFlowItem({ title: 'Laba Bersih Setelah Pajak', amount: 'Rp 485.200.000', category: 'Aktivitas Operasional' })} className="p-1 hover:bg-sky-100 dark:hover:bg-sky-950/60 rounded text-sky-600" title="Detail Arus Kas"><Eye className="w-3.5 h-3.5" /></button>
+                  </div>
                 </div>
                 <div className="pl-3 space-y-1 text-slate-500">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span>+ Penyusutan & Amortisasi Aset Tetap</span>
-                    <span className="font-mono">Rp 42.500.000</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono">Rp 42.500.000</span>
+                      <button onClick={() => setSelectedCashFlowItem({ title: 'Penyusutan & Amortisasi Aset Tetap', amount: 'Rp 42.500.000', category: 'Aktivitas Operasional' })} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-600" title="Detail Arus Kas"><Eye className="w-3.5 h-3.5" /></button>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span>( + / - ) Kerugian / Keuntungan Penjualan Aset</span>
                     <span className="font-mono">Rp 0</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span>( + / - ) Perubahan Piutang Usaha (AR)</span>
-                    <span className="font-mono text-rose-500">(Rp 35.000.000)</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-rose-500">(Rp 35.000.000)</span>
+                      <button onClick={() => setSelectedCashFlowItem({ title: 'Perubahan Piutang Usaha (AR)', amount: '(Rp 35.000.000)', category: 'Aktivitas Operasional' })} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-600" title="Detail Arus Kas"><Eye className="w-3.5 h-3.5" /></button>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span>( + / - ) Perubahan Persediaan Barang (Inventory)</span>
-                    <span className="font-mono text-rose-500">(Rp 18.200.000)</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-rose-500">(Rp 18.200.000)</span>
+                      <button onClick={() => setSelectedCashFlowItem({ title: 'Perubahan Persediaan Barang', amount: '(Rp 18.200.000)', category: 'Aktivitas Operasional' })} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-600" title="Detail Arus Kas"><Eye className="w-3.5 h-3.5" /></button>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span>( + / - ) Perubahan Utang Usaha (AP)</span>
-                    <span className="font-mono text-emerald-500">Rp 24.800.000</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-emerald-500">Rp 24.800.000</span>
+                      <button onClick={() => setSelectedCashFlowItem({ title: 'Perubahan Utang Usaha (AP)', amount: 'Rp 24.800.000', category: 'Aktivitas Operasional' })} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-600" title="Detail Arus Kas"><Eye className="w-3.5 h-3.5" /></button>
+                    </div>
                   </div>
                 </div>
                 <div className="flex justify-between font-bold text-slate-900 dark:text-white border-t border-dashed border-slate-200 dark:border-slate-800 pt-1">
@@ -176,6 +193,28 @@ export const CashFlowReportTab = () => {
           </div>
         )}
       </div>
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedCashFlowItem !== null}
+        onClose={() => setSelectedCashFlowItem(null)}
+        title="Drilldown Rincian Pos Arus Kas"
+        subtitle={selectedCashFlowItem?.title}
+        badgeLabel={selectedCashFlowItem?.category}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Nominal Mutasi Arus Kas', value: selectedCashFlowItem?.amount || '0', color: 'text-emerald-600' },
+          { label: 'Kategori Aktivitas', value: selectedCashFlowItem?.category || '-' },
+          { label: 'Metode Laporan', value: method }
+        ]}
+        metadata={[
+          { label: 'Nama Pos Arus Kas', value: selectedCashFlowItem?.title, highlight: true },
+          { label: 'Nilai Nominal', value: selectedCashFlowItem?.amount, mono: true },
+          { label: 'Klasifikasi Aktivitas', value: selectedCashFlowItem?.category }
+        ]}
+        footerNotes="Rincian arus kas diselaraskan dengan mutasi kas bank & posting jurnal penerimaan/pengeluaran kas."
+      />
     </div>
   );
 };
+

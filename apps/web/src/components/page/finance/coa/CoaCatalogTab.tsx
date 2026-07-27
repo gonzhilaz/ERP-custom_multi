@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Trash2, FileSpreadsheet } from 'lucide-react';
+import { Trash2, FileSpreadsheet, Eye } from 'lucide-react';
 import { CoaCategory, CoaItem } from '@/lib/mock/finance';
 import { DynamicSearchFilter, FilterOption } from '@/components/ui/forms/DynamicSearchFilter';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface Props {
   coaList: CoaItem[];
@@ -15,6 +16,7 @@ interface Props {
 export const CoaCatalogTab: React.FC<Props> = ({ coaList, coaCategories, deleteCoaItem }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('ALL');
+  const [selectedCoa, setSelectedCoa] = useState<CoaItem | null>(null);
 
   const filteredCoa = coaList.filter((item) => {
     const matchesSearch =
@@ -58,9 +60,18 @@ export const CoaCatalogTab: React.FC<Props> = ({ coaList, coaCategories, deleteC
       header: 'Aksi',
       align: 'center',
       render: (i) => (
-        <button onClick={() => deleteCoaItem(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer" title="Hapus Akun">
-          <Trash2 className="w-4 h-4" />
-        </button>
+        <div className="flex items-center justify-center gap-1">
+          <button
+            onClick={() => setSelectedCoa(i)}
+            className="p-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Akun COA"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button onClick={() => deleteCoaItem(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer" title="Hapus Akun">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       )
     }
   ];
@@ -84,6 +95,30 @@ export const CoaCatalogTab: React.FC<Props> = ({ coaList, coaCategories, deleteC
         data={filteredCoa}
         keyExtractor={(i) => i.id}
       />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedCoa !== null}
+        onClose={() => setSelectedCoa(null)}
+        title="Detail Akun Buku Besar (Chart of Accounts)"
+        subtitle={selectedCoa ? `${selectedCoa.code} • ${selectedCoa.name}` : ''}
+        badgeLabel={selectedCoa?.type}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Saldo Berjalan', value: selectedCoa ? `Rp ${selectedCoa.balance.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Kelompok Akun', value: selectedCoa?.categoryName || '-' },
+          { label: 'Tipe Akun', value: selectedCoa?.type || '-' }
+        ]}
+        metadata={[
+          { label: 'Kode COA Akun', value: selectedCoa?.code, mono: true, highlight: true },
+          { label: 'Nama Lengkap Akun', value: selectedCoa?.name },
+          { label: 'Tipe Akun Utama', value: selectedCoa?.type },
+          { label: 'Kategori Kelompok', value: selectedCoa?.categoryName },
+          { label: 'Status Penggunaan', value: 'Aktif Digunakan dalam Ledger' }
+        ]}
+        footerNotes="Kode COA mengikuti bagan standar akuntansi PSAK Indonesia & struktur HO ERP."
+      />
     </div>
   );
 };
+

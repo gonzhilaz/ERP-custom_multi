@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CreditCard, Plus, Link, Building2 } from 'lucide-react';
+import { CreditCard, Plus, Link, Building2, Eye } from 'lucide-react';
 import { CorporateBankAccount } from '@/lib/mock/bank-accounts';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface Props {
   bankAccounts: CorporateBankAccount[];
@@ -13,6 +14,7 @@ interface Props {
 
 export const BankAccountsMasterTab = ({ bankAccounts, totalBankBalance, addBankAccount }: Props) => {
   const [showModal, setShowModal] = useState(false);
+  const [selectedAcc, setSelectedAcc] = useState<CorporateBankAccount | null>(null);
   const [formData, setFormData] = useState({
     bankName: 'PT Bank Central Asia Tbk (BCA)',
     accountNumber: '8830-990-112',
@@ -104,6 +106,20 @@ export const BankAccountsMasterTab = ({ bankAccounts, totalBankBalance, addBankA
           {acc.status}
         </span>
       )
+    },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (acc) => (
+        <button
+          onClick={() => setSelectedAcc(acc)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Rekening Bank"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
     }
   ];
 
@@ -114,6 +130,29 @@ export const BankAccountsMasterTab = ({ bankAccounts, totalBankBalance, addBankA
         columns={columns}
         data={bankAccounts}
         keyExtractor={(acc) => acc.id}
+      />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedAcc !== null}
+        onClose={() => setSelectedAcc(null)}
+        title="Detail Rekening Bank Corporate"
+        subtitle={selectedAcc ? `${selectedAcc.bankName} • ${selectedAcc.accountNumber}` : ''}
+        badgeLabel={selectedAcc?.status}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Saldo Kas Bank', value: selectedAcc ? `${selectedAcc.currency} ${selectedAcc.currentBalance.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Mata Uang', value: selectedAcc?.currency || 'IDR' },
+          { label: 'SWIFT Code', value: selectedAcc?.swiftCode || '-' }
+        ]}
+        metadata={[
+          { label: 'Nama Lembaga Bank', value: selectedAcc?.bankName, highlight: true },
+          { label: 'Nomor Rekening', value: selectedAcc?.accountNumber, mono: true, highlight: true },
+          { label: 'Atas Nama Pemilik', value: selectedAcc?.accountHolderName },
+          { label: 'Cabang Pembuka', value: selectedAcc?.branchName },
+          { label: 'Akun COA ERP Tautan', value: selectedAcc ? `${selectedAcc.linkedCoaAccountCode} - ${selectedAcc.linkedCoaAccountName}` : '-', mono: true }
+        ]}
+        footerNotes="Seluruh mutasi pada rekening bank disinkronkan otomatis dengan laporan Kas & Rekonsiliasi Bank."
       />
 
       {/* Modal Form Tambah Rekening Bank */}
@@ -138,7 +177,7 @@ export const BankAccountsMasterTab = ({ bankAccounts, totalBankBalance, addBankA
                 </div>
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">Mata Uang</label>
-                  <input type="text" value={formData.currency} onChange={(e) => setFormData({ ...formData, currency: e.target.value })} className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono font-bold" required />
+                  <input type="text" value={formData.currency} onChange={(e) => setFormData({ ...formData, currency: e.target.value })} className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono uppercase" required />
                 </div>
               </div>
 

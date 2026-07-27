@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
-import { Scale, CheckCircle2, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { Scale, CheckCircle2, ShieldCheck, Eye } from 'lucide-react';
 import { BalanceSheetLine } from '@/lib/mock/financial-reports';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface Props {
   balanceSheet: BalanceSheetLine[];
@@ -17,6 +18,8 @@ export const BalanceSheetReportTab = ({
   totalLiabilities,
   totalEquity
 }: Props) => {
+  const [selectedBs, setSelectedBs] = useState<BalanceSheetLine | null>(null);
+
   const assets = balanceSheet.filter((b) => b.classification === 'CURRENT_ASSET' || b.classification === 'NON_CURRENT_ASSET');
   const liabilities = balanceSheet.filter((b) => b.classification === 'SHORT_TERM_LIABILITY' || b.classification === 'LONG_TERM_LIABILITY');
   const equity = balanceSheet.filter((b) => b.classification === 'EQUITY');
@@ -55,7 +58,16 @@ export const BalanceSheetReportTab = ({
                 {assets.filter((a) => a.classification === 'CURRENT_ASSET').map((item) => (
                   <div key={item.accountCode} className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                     <span className="font-semibold text-slate-800 dark:text-slate-200">[{item.accountCode}] {item.accountName}</span>
-                    <span className="font-mono font-bold text-sky-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-sky-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                      <button
+                        onClick={() => setSelectedBs(item)}
+                        className="p-1 hover:bg-sky-100 dark:hover:bg-sky-950/60 text-sky-600 rounded cursor-pointer transition-colors"
+                        title="Lihat Detail Neraca"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -67,7 +79,16 @@ export const BalanceSheetReportTab = ({
                 {assets.filter((a) => a.classification === 'NON_CURRENT_ASSET').map((item) => (
                   <div key={item.accountCode} className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                     <span className="font-semibold text-slate-800 dark:text-slate-200">[{item.accountCode}] {item.accountName}</span>
-                    <span className="font-mono font-bold text-sky-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-sky-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                      <button
+                        onClick={() => setSelectedBs(item)}
+                        className="p-1 hover:bg-sky-100 dark:hover:bg-sky-950/60 text-sky-600 rounded cursor-pointer transition-colors"
+                        title="Lihat Detail Neraca"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -94,7 +115,16 @@ export const BalanceSheetReportTab = ({
                 {liabilities.map((item) => (
                   <div key={item.accountCode} className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                     <span className="font-semibold text-slate-800 dark:text-slate-200">[{item.accountCode}] {item.accountName}</span>
-                    <span className="font-mono font-bold text-rose-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-rose-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                      <button
+                        onClick={() => setSelectedBs(item)}
+                        className="p-1 hover:bg-rose-100 dark:hover:bg-rose-950/60 text-rose-600 rounded cursor-pointer transition-colors"
+                        title="Lihat Detail Neraca"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -106,7 +136,16 @@ export const BalanceSheetReportTab = ({
                 {equity.map((item) => (
                   <div key={item.accountCode} className="flex justify-between items-center p-2 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                     <span className="font-semibold text-slate-800 dark:text-slate-200">[{item.accountCode}] {item.accountName}</span>
-                    <span className="font-mono font-bold text-emerald-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-emerald-600">Rp {item.amount.toLocaleString('id-ID')}</span>
+                      <button
+                        onClick={() => setSelectedBs(item)}
+                        className="p-1 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 text-emerald-600 rounded cursor-pointer transition-colors"
+                        title="Lihat Detail Neraca"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -119,6 +158,28 @@ export const BalanceSheetReportTab = ({
           </div>
         </div>
       </div>
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedBs !== null}
+        onClose={() => setSelectedBs(null)}
+        title="Drilldown Rincian Pos Neraca (Balance Sheet)"
+        subtitle={selectedBs ? `${selectedBs.accountCode} • ${selectedBs.accountName}` : ''}
+        badgeLabel={selectedBs?.classification}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Saldo Akhir Neraca', value: selectedBs ? `Rp ${selectedBs.amount.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Klasifikasi Pos', value: selectedBs?.classification || '-' },
+          { label: 'Kode COA', value: selectedBs?.accountCode || '-' }
+        ]}
+        metadata={[
+          { label: 'Kode Akun Buku Besar', value: selectedBs?.accountCode, mono: true, highlight: true },
+          { label: 'Nama Akun Pos Neraca', value: selectedBs?.accountName },
+          { label: 'Klasifikasi Neraca', value: selectedBs?.classification, mono: true }
+        ]}
+        footerNotes="Pos Neraca merupakan akumulasi saldo riil kas, piutang, aset, utang, dan ekuitas modal perusahaan."
+      />
     </div>
   );
 };
+

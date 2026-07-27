@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowUpRight, ArrowDownLeft, FileText, Filter } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, FileText, Filter, Eye } from 'lucide-react';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface BankMutationRow {
   id: string;
@@ -19,6 +20,7 @@ interface BankMutationRow {
 
 export const BankStatementMutationTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMutation, setSelectedMutation] = useState<BankMutationRow | null>(null);
 
   const mutations: BankMutationRow[] = [
     { id: '1', bankAccount: 'Bank Mandiri (122-00-988277-1)', date: '2026-07-24', refNumber: 'TRF-889102', description: 'Transfer Masuk: Pelunasan Invoice PT Nusantara Jaya', type: 'DEBIT_IN', amount: 45000000, balanceAfter: 285000000, reconciledStatus: 'RECONCILED' },
@@ -64,6 +66,20 @@ export const BankStatementMutationTab = () => {
           {i.reconciledStatus}
         </span>
       )
+    },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedMutation(i)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Mutasi Bank"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
     }
   ];
 
@@ -85,6 +101,29 @@ export const BankStatementMutationTab = () => {
         data={filteredMutations}
         keyExtractor={(i) => i.id}
       />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedMutation !== null}
+        onClose={() => setSelectedMutation(null)}
+        title="Detail Mutasi Rekening Koran Bank"
+        subtitle={selectedMutation ? `${selectedMutation.refNumber} • ${selectedMutation.bankAccount}` : ''}
+        badgeLabel={selectedMutation?.reconciledStatus}
+        badgeType={selectedMutation?.reconciledStatus === 'RECONCILED' ? 'ACTIVE' : 'NEUTRAL'}
+        summaryCards={[
+          { label: 'Nominal Mutasi', value: selectedMutation ? `${selectedMutation.type === 'DEBIT_IN' ? '+' : '-'} Rp ${selectedMutation.amount.toLocaleString('id-ID')}` : '0', color: selectedMutation?.type === 'DEBIT_IN' ? 'text-emerald-600' : 'text-rose-600' },
+          { label: 'Saldo Akhir Bank', value: selectedMutation ? `Rp ${selectedMutation.balanceAfter.toLocaleString('id-ID')}` : '0' },
+          { label: 'Status Rekonsiliasi', value: selectedMutation?.reconciledStatus || '-' }
+        ]}
+        metadata={[
+          { label: 'No. Referensi Bank', value: selectedMutation?.refNumber, mono: true, highlight: true },
+          { label: 'Rekening Bank Terkait', value: selectedMutation?.bankAccount },
+          { label: 'Tanggal Mutasi Koran', value: selectedMutation?.date, mono: true },
+          { label: 'Uraian Transaksi Bank', value: selectedMutation?.description }
+        ]}
+        footerNotes="Mutasi rekening koran bank diimpor otomatis dari e-Banking Host-to-Host."
+      />
     </div>
   );
 };
+

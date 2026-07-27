@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TrendingUp, FileText, Clock } from 'lucide-react';
+import { TrendingUp, FileText, Clock, Eye } from 'lucide-react';
 import { StatusBadge } from '@/components/ui/badge/StatusBadge';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 import { ArAgingTab } from './ArAgingTab';
 
 interface ArItem {
@@ -48,6 +50,7 @@ export const FinanceArView = () => {
   const [activeTab, setActiveTab] = useState<'DAFTAR_AR' | 'AGING_AR'>('DAFTAR_AR');
   const [arItems, setArItems] = useState<ArItem[]>(INITIAL_AR_ITEMS);
   const [selectedAr, setSelectedAr] = useState<ArItem | null>(null);
+  const [detailArItem, setDetailArItem] = useState<ArItem | null>(null);
   const [showCollectionModal, setShowCollectionModal] = useState(false);
 
   const [collectionForm, setCollectionForm] = useState({
@@ -90,6 +93,46 @@ export const FinanceArView = () => {
     { id: 'AGING_AR', label: 'Analisis Umur Piutang (AR Aging)', icon: Clock }
   ];
 
+  const columns: ColumnDef<ArItem>[] = [
+    { key: 'invoiceNumber', header: 'No. Invoice', className: 'font-mono font-bold text-sky-600', render: (i) => i.invoiceNumber },
+    { key: 'customerName', header: 'Nama Pelanggan', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.customerName },
+    { key: 'unitUsaha', header: 'Unit Usaha', className: 'text-slate-500', render: (i) => i.unitUsaha },
+    { key: 'dueDate', header: 'Jatuh Tempo', className: 'font-mono text-slate-500', render: (i) => i.dueDate },
+    { key: 'amount', header: 'Nominal Tagihan', align: 'right', className: 'font-mono font-bold text-emerald-600', render: (i) => `Rp ${i.amount.toLocaleString('id-ID')}` },
+    {
+      key: 'status',
+      header: 'Status',
+      align: 'center',
+      render: (i) => <StatusBadge type={i.status === 'PAID' ? 'ACTIVE' : 'ALERT'} label={i.status} />
+    },
+    {
+      key: 'actions',
+      header: 'Aksi Penerimaan',
+      align: 'center',
+      render: (i) => (
+        <div className="flex items-center justify-center gap-1.5">
+          <button
+            onClick={() => setDetailArItem(i)}
+            className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Piutang"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          {i.status === 'PAID' ? (
+            <span className="font-mono text-emerald-600 font-bold text-[11px]">{i.receiptRef}</span>
+          ) : (
+            <button
+              onClick={() => handleOpenCollection(i)}
+              className="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-lg font-bold shadow-sm cursor-pointer text-[11px]"
+            >
+              Konfirmasi Penerimaan
+            </button>
+          )}
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
@@ -118,50 +161,49 @@ export const FinanceArView = () => {
       {activeTab === 'AGING_AR' ? (
         <ArAgingTab />
       ) : (
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 dark:bg-slate-800 text-slate-500 font-bold border-b border-slate-200 dark:border-slate-700">
-                  <th className="py-3 px-4">No. Invoice</th>
-                  <th className="py-3 px-4">Nama Pelanggan</th>
-                  <th className="py-3 px-4">Unit Usaha</th>
-                  <th className="py-3 px-4">Jatuh Tempo</th>
-                  <th className="py-3 px-4 text-right">Nominal Tagihan</th>
-                  <th className="py-3 px-4 text-center">Status</th>
-                  <th className="py-3 px-4 text-center">Aksi Penerimaan</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {arItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
-                    <td className="py-3.5 px-4 font-mono font-bold text-sky-600">{item.invoiceNumber}</td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{item.customerName}</td>
-                    <td className="py-3.5 px-4 text-slate-500">{item.unitUsaha}</td>
-                    <td className="py-3.5 px-4 font-mono text-slate-500">{item.dueDate}</td>
-                    <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-600">Rp {item.amount.toLocaleString('id-ID')}</td>
-                    <td className="py-3.5 px-4 text-center">
-                      <StatusBadge type={item.status === 'PAID' ? 'ACTIVE' : 'ALERT'} label={item.status} />
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      {item.status === 'PAID' ? (
-                        <span className="font-mono text-emerald-600 font-bold">{item.receiptRef}</span>
-                      ) : (
-                        <button
-                          onClick={() => handleOpenCollection(item)}
-                          className="px-3 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-lg font-bold shadow-sm cursor-pointer"
-                        >
-                          Konfirmasi Penerimaan
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <DataTable
+          headerTitle="Daftar Tagihan Piutang Dagang Pelanggan"
+          columns={columns}
+          data={arItems}
+          keyExtractor={(i) => i.id}
+        />
       )}
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={detailArItem !== null}
+        onClose={() => setDetailArItem(null)}
+        title="Detail Tagihan Piutang Pelanggan (Accounts Receivable)"
+        subtitle={detailArItem ? `${detailArItem.invoiceNumber} • ${detailArItem.customerName}` : ''}
+        badgeLabel={detailArItem?.status}
+        badgeType={detailArItem?.status === 'PAID' ? 'ACTIVE' : 'ALERT'}
+        summaryCards={[
+          { label: 'Nominal Piutang', value: detailArItem ? `Rp ${detailArItem.amount.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Aging (Umur Tagihan)', value: detailArItem ? `${detailArItem.agingDays} Hari` : '0 Hari' },
+          { label: 'Status Penagihan', value: detailArItem?.status || '-', color: detailArItem?.status === 'PAID' ? 'text-emerald-600' : 'text-amber-600' }
+        ]}
+        metadata={[
+          { label: 'No. Invoice AR', value: detailArItem?.invoiceNumber, mono: true, highlight: true },
+          { label: 'Nama Pelanggan', value: detailArItem?.customerName },
+          { label: 'Unit Usaha Penerbit', value: detailArItem?.unitUsaha },
+          { label: 'Jatuh Tempo', value: detailArItem?.dueDate, mono: true },
+          { label: 'Kwitansi Receipt', value: detailArItem?.receiptRef || 'Belum Lunas', mono: true },
+          { label: 'File Bukti Bayar', value: detailArItem?.proofFile || 'Tidak Ada Lampiran' }
+        ]}
+        lineItemsHeader="Pos Alokasi Akun Buku Besar (GL Posting)"
+        columns={[
+          { header: 'Kode COA', accessor: 'coaCode', mono: true },
+          { header: 'Nama Akun Buku Besar', accessor: 'accountName' },
+          { header: 'Debet (Rp)', accessor: 'debit', align: 'right', isCurrency: true },
+          { header: 'Kredit (Rp)', accessor: 'credit', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          { coaCode: '1-10400', accountName: 'Piutang Usaha Pelanggan (AR Sub-Ledger)', debit: detailArItem?.amount || 0, credit: 0 },
+          { coaCode: '4-10100', accountName: 'Pendapatan Penjualan Produksi / Layanan', debit: 0, credit: Math.round((detailArItem?.amount || 0) / 1.12) },
+          { coaCode: '2-10300', accountName: 'Utang PPN Keluaran (12%)', debit: 0, credit: (detailArItem?.amount || 0) - Math.round((detailArItem?.amount || 0) / 1.12) }
+        ]}
+        footerNotes="Tagihan piutang diterbitkan otomatis oleh sistem saat penyerahan produk/layanan disetujui."
+      />
 
       {/* Collection Modal */}
       {showCollectionModal && selectedAr && (
@@ -194,3 +236,4 @@ export const FinanceArView = () => {
     </div>
   );
 };
+

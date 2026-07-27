@@ -5,6 +5,7 @@ import { FileCheck, Plus, ArrowDownLeft, ArrowUpRight, Eye } from 'lucide-react'
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { CreateBankVoucherModal } from '@/components/ui/modals/CreateBankVoucherModal';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface BankVoucherRow {
   voucherNumber: string;
@@ -22,6 +23,7 @@ interface BankVoucherRow {
 export const BankVouchersTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedVoucher, setSelectedVoucher] = useState<BankVoucherRow | null>(null);
 
   const [vouchers, setVouchers] = useState<BankVoucherRow[]>([
     { voucherNumber: 'BKM/2026/07/0081', date: '2026-07-24', voucherType: 'BKM', bankAccount: '122-00-988277-1 (Bank Mandiri)', payeeOrPayer: 'PT Nusantara Jaya Mandiri', amount: 45000000, description: 'Penerimaan Pelunasan Invoice Katering Event', contraAccountCode: '1-10400', contraAccountName: 'Piutang Usaha AR Customer', status: 'POSTED' },
@@ -59,7 +61,21 @@ export const BankVouchersTab = () => {
     { key: 'payeeOrPayer', header: 'Penerima / Pembayar', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.payeeOrPayer },
     { key: 'description', header: 'Uraian Transaksi Voucher', render: (i) => i.description },
     { key: 'amount', header: 'Nominal (Rp)', align: 'right', className: 'font-mono font-bold text-slate-900 dark:text-white', render: (i) => `Rp ${i.amount.toLocaleString('id-ID')}` },
-    { key: 'status', header: 'Status', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> }
+    { key: 'status', header: 'Status', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedVoucher(i)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Voucher Bank"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -85,6 +101,49 @@ export const BankVouchersTab = () => {
         keyExtractor={(i) => i.voucherNumber}
       />
 
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedVoucher !== null}
+        onClose={() => setSelectedVoucher(null)}
+        title={`Detail Voucher ${selectedVoucher?.voucherType === 'BKM' ? 'Bank Masuk (BKM)' : 'Bank Keluar (BKK)'}`}
+        subtitle={selectedVoucher ? `${selectedVoucher.voucherNumber} • Tanggal: ${selectedVoucher.date}` : ''}
+        badgeLabel={selectedVoucher?.status}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Nominal Voucher', value: selectedVoucher ? `Rp ${selectedVoucher.amount.toLocaleString('id-ID')}` : '0', color: selectedVoucher?.voucherType === 'BKM' ? 'text-emerald-600' : 'text-rose-600' },
+          { label: 'Tipe Voucher', value: selectedVoucher?.voucherType || '-' },
+          { label: 'Rekening Bank', value: selectedVoucher?.bankAccount || '-' }
+        ]}
+        metadata={[
+          { label: 'No. Voucher Bank', value: selectedVoucher?.voucherNumber, mono: true, highlight: true },
+          { label: 'Pihak Terkait', value: selectedVoucher?.payeeOrPayer },
+          { label: 'Uraian Transaksi', value: selectedVoucher?.description },
+          { label: 'Akun Kontra (COA)', value: selectedVoucher ? `${selectedVoucher.contraAccountCode} - ${selectedVoucher.contraAccountName}` : '-', mono: true }
+        ]}
+        lineItemsHeader="Posting Jurnal Otomatis (GL Breakdown)"
+        columns={[
+          { header: 'Kode COA', accessor: 'coaCode', mono: true },
+          { header: 'Nama Akun Buku Besar', accessor: 'accountName' },
+          { header: 'Debet (Rp)', accessor: 'debit', align: 'right', isCurrency: true },
+          { header: 'Kredit (Rp)', accessor: 'credit', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          {
+            coaCode: selectedVoucher?.voucherType === 'BKM' ? '1-10101' : (selectedVoucher?.contraAccountCode || '2-10100'),
+            accountName: selectedVoucher?.voucherType === 'BKM' ? 'Kas Bank Utama HO' : (selectedVoucher?.contraAccountName || 'Utang Vendor'),
+            debit: selectedVoucher?.amount || 0,
+            credit: 0
+          },
+          {
+            coaCode: selectedVoucher?.voucherType === 'BKM' ? (selectedVoucher?.contraAccountCode || '1-10400') : '1-10101',
+            accountName: selectedVoucher?.voucherType === 'BKM' ? (selectedVoucher?.contraAccountName || 'Piutang') : 'Kas Bank Utama HO',
+            debit: 0,
+            credit: selectedVoucher?.amount || 0
+          }
+        ]}
+        footerNotes="Voucher Bank memicu mutasi kas perbankan & bukti posting ledger resmi."
+      />
+
       {/* Modal Terbitkan Voucher Bank */}
       <CreateBankVoucherModal
         isOpen={isModalOpen}
@@ -94,3 +153,4 @@ export const BankVouchersTab = () => {
     </div>
   );
 };
+

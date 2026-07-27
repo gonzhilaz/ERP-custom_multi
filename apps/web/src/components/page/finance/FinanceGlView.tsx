@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BookOpen, Search, Filter } from 'lucide-react';
+import { BookOpen, Search, Filter, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 import { useFinance } from '@/hooks/finance/useFinance';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface GlTransaction {
   id: string;
@@ -24,6 +25,7 @@ export const FinanceGlView = () => {
   const { coaList } = useFinance();
   const [selectedCoaCode, setSelectedCoaCode] = useState('1-10100');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGl, setSelectedGl] = useState<GlTransaction | null>(null);
 
   const coaOptions = coaList.map((c) => ({
     id: c.code,
@@ -51,7 +53,21 @@ export const FinanceGlView = () => {
     { key: 'description', header: 'Keterangan Transaksi GL', className: 'font-medium text-slate-900 dark:text-white', render: (i) => i.description },
     { key: 'debit', header: 'Debet (Rp)', align: 'right', className: 'font-mono font-bold text-emerald-600 dark:text-emerald-400', render: (i) => i.debit ? `Rp ${i.debit.toLocaleString('id-ID')}` : '-' },
     { key: 'credit', header: 'Kredit (Rp)', align: 'right', className: 'font-mono font-bold text-rose-600 dark:text-rose-400', render: (i) => i.credit ? `Rp ${i.credit.toLocaleString('id-ID')}` : '-' },
-    { key: 'runningBalance', header: 'Saldo Akhir (Rp)', align: 'right', className: 'font-mono font-bold text-slate-900 dark:text-white', render: (i) => `Rp ${i.runningBalance.toLocaleString('id-ID')}` }
+    { key: 'runningBalance', header: 'Saldo Akhir (Rp)', align: 'right', className: 'font-mono font-bold text-slate-900 dark:text-white', render: (i) => `Rp ${i.runningBalance.toLocaleString('id-ID')}` },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedGl(i)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Transaksi Buku Besar"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -98,6 +114,41 @@ export const FinanceGlView = () => {
         data={filteredGl}
         keyExtractor={(i) => i.id}
       />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedGl !== null}
+        onClose={() => setSelectedGl(null)}
+        title="Detail Mutasi Transaksi Buku Besar (General Ledger)"
+        subtitle={selectedGl ? `${selectedGl.jvNumber} • Akun: ${selectedGl.accountCode}` : ''}
+        badgeLabel="POSTED & BALANCED"
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Saldo Berjalan', value: selectedGl ? `Rp ${selectedGl.runningBalance.toLocaleString('id-ID')}` : '0' },
+          { label: 'Mutasi Debet', value: selectedGl?.debit ? `Rp ${selectedGl.debit.toLocaleString('id-ID')}` : '-', color: 'text-emerald-600' },
+          { label: 'Mutasi Kredit', value: selectedGl?.credit ? `Rp ${selectedGl.credit.toLocaleString('id-ID')}` : '-', color: 'text-rose-600' }
+        ]}
+        metadata={[
+          { label: 'No. Voucher Jurnal', value: selectedGl?.jvNumber, mono: true, highlight: true },
+          { label: 'Tanggal Posting', value: selectedGl?.date, mono: true },
+          { label: 'Kode Akun COA', value: selectedGl?.accountCode, mono: true },
+          { label: 'Nama Akun COA', value: selectedGl?.accountName },
+          { label: 'Keterangan Mutasi', value: selectedGl?.description }
+        ]}
+        lineItemsHeader="Sepasang Pos Jurnal Penyeimbang (Double Entry)"
+        columns={[
+          { header: 'Kode COA', accessor: 'coaCode', mono: true },
+          { header: 'Nama Akun Penyeimbang', accessor: 'accountName' },
+          { header: 'Debet (Rp)', accessor: 'debit', align: 'right', isCurrency: true },
+          { header: 'Kredit (Rp)', accessor: 'credit', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          { coaCode: selectedGl?.accountCode || '1-10100', accountName: selectedGl?.accountName || 'Kas', debit: selectedGl?.debit || 0, credit: selectedGl?.credit || 0 },
+          { coaCode: selectedGl?.debit ? '4-10100' : '1-10101', accountName: selectedGl?.debit ? 'Pendapatan Penjualan' : 'Kas Bank Mandiri Ops', debit: selectedGl?.credit || 0, credit: selectedGl?.debit || 0 }
+        ]}
+        footerNotes="Buku Besar bersifat immutable setelah tanggal penutupan periode bulanan disahkan."
+      />
     </div>
   );
 };
+

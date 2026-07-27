@@ -100,19 +100,8 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
         )}
       </div>
 
-      {/* Badges & Actions Right Slot */}
+      {/* Actions Right Slot */}
       <div className="flex items-center gap-2 flex-wrap shrink-0">
-        {badges && badges.map((b, idx) => (
-          <span
-            key={idx}
-            className={`px-3 py-1 font-bold rounded-xl border font-mono text-[11px] ${
-              badgeVariantStyles[b.variant || 'sky']
-            }`}
-          >
-            {b.label}
-          </span>
-        ))}
-
         {actions}
         {children}
       </div>

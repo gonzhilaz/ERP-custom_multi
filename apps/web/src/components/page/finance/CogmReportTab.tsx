@@ -1,14 +1,16 @@
 'use client';
 
-import React from 'react';
-import { Factory, PieChart, Boxes } from 'lucide-react';
+import React, { useState } from 'react';
+import { Factory, PieChart, Boxes, Eye } from 'lucide-react';
 import { CogmBreakdownLine } from '@/lib/mock/financial-reports';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface Props {
   cogmBreakdown: CogmBreakdownLine[];
 }
 
 export const CogmReportTab = ({ cogmBreakdown }: Props) => {
+  const [selectedCogmLine, setSelectedCogmLine] = useState<CogmBreakdownLine | null>(null);
   const totalCogm = cogmBreakdown.reduce((acc, curr) => acc + curr.amount, 0);
 
   return (
@@ -41,6 +43,7 @@ export const CogmReportTab = ({ cogmBreakdown }: Props) => {
                 <th className="py-3 px-4">Deskripsi Rincian Biaya</th>
                 <th className="py-3 px-4 text-right">Nominal (Rp)</th>
                 <th className="py-3 px-4 text-center">Persentase (%) Total HPP</th>
+                <th className="py-3 px-4 text-center">Detail</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
@@ -58,12 +61,43 @@ export const CogmReportTab = ({ cogmBreakdown }: Props) => {
                   <td className="py-3 px-4 text-center font-mono font-bold text-sky-600">
                     {line.percentageOfTotal}%
                   </td>
+                  <td className="py-3 px-4 text-center">
+                    <button
+                      onClick={() => setSelectedCogmLine(line)}
+                      className="p-1.5 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg cursor-pointer transition-colors"
+                      title="Lihat Detail HPP"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedCogmLine !== null}
+        onClose={() => setSelectedCogmLine(null)}
+        title="Detail Komponen Harga Pokok Produksi (COGM)"
+        subtitle={selectedCogmLine?.costCategory}
+        badgeLabel={`${selectedCogmLine?.percentageOfTotal}% dari HPP`}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Nominal Biaya', value: selectedCogmLine ? `Rp ${selectedCogmLine.amount.toLocaleString('id-ID')}` : '0', color: 'text-amber-600' },
+          { label: 'Porsi dari Total COGM', value: `${selectedCogmLine?.percentageOfTotal}%` },
+          { label: 'Kategori Biaya', value: selectedCogmLine?.costCategory || '-' }
+        ]}
+        metadata={[
+          { label: 'Kategori Biaya Produksi', value: selectedCogmLine?.costCategory, highlight: true },
+          { label: 'Deskripsi Komponen', value: selectedCogmLine?.description },
+          { label: 'Nominal Rp', value: selectedCogmLine ? `Rp ${selectedCogmLine.amount.toLocaleString('id-ID')}` : 'Rp 0', mono: true }
+        ]}
+        footerNotes="Biaya produksi COGM dihitung dari pemakaian bahan baku, tenaga kerja langsung, & overhead pabrik."
+      />
     </div>
   );
 };
+

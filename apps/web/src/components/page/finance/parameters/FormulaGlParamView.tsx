@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Cpu, Plus, Trash2, CheckCircle2, Edit3 } from 'lucide-react';
+import { Cpu, Plus, Trash2, CheckCircle2, Edit3, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { SearchableSelect, SearchSelectOption } from '@/components/ui/dropdowns/SearchableSelect';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 import { COA_DATA } from '@/lib/mock/finance';
 
 interface FormulaGlParam {
@@ -30,6 +31,7 @@ export const FormulaGlParamView = () => {
   const [formulas, setFormulas] = useState<FormulaGlParam[]>(INITIAL_FORMULAS);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedDetailFormula, setSelectedDetailFormula] = useState<FormulaGlParam | null>(null);
 
   const [form, setForm] = useState({
     formulaCode: '',
@@ -127,10 +129,17 @@ export const FormulaGlParamView = () => {
       align: 'center',
       render: (i) => (
         <div className="flex justify-center items-center gap-1.5">
-          <button onClick={() => handleOpenEdit(i)} className="p-1.5 text-sky-600 hover:bg-sky-500/10 rounded-lg cursor-pointer">
+          <button
+            onClick={() => setSelectedDetailFormula(i)}
+            className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Formula GL"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button onClick={() => handleOpenEdit(i)} className="p-1.5 text-sky-600 hover:bg-sky-500/10 rounded-lg cursor-pointer" title="Edit Formula">
             <Edit3 className="w-3.5 h-3.5" />
           </button>
-          <button onClick={() => handleDelete(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer">
+          <button onClick={() => handleDelete(i.id)} className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg cursor-pointer" title="Hapus Formula">
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -176,6 +185,29 @@ export const FormulaGlParamView = () => {
         columns={columns}
         data={filteredFormulas}
         keyExtractor={(i) => i.id}
+      />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedDetailFormula !== null}
+        onClose={() => setSelectedDetailFormula(null)}
+        title="Detail Formula Otomatisasi Posting GL"
+        subtitle={selectedDetailFormula?.formulaCode}
+        badgeLabel={selectedDetailFormula?.autoPostStatus}
+        badgeType={selectedDetailFormula?.autoPostStatus === 'AUTOMATIC' ? 'ACTIVE' : 'ALERT'}
+        summaryCards={[
+          { label: 'Mode Auto-Post', value: selectedDetailFormula?.autoPostStatus === 'AUTOMATIC' ? 'AUTO-POST' : 'APPROVAL REQUIRED', color: selectedDetailFormula?.autoPostStatus === 'AUTOMATIC' ? 'text-emerald-600' : 'text-amber-600' },
+          { label: 'Modul Sumber', value: selectedDetailFormula?.moduleSource || '-' },
+          { label: 'Status Formula', value: 'Active Engine Formula' }
+        ]}
+        metadata={[
+          { label: 'Kode Formula GL', value: selectedDetailFormula?.formulaCode, mono: true, highlight: true },
+          { label: 'Modul Transaksi', value: selectedDetailFormula?.moduleSource },
+          { label: 'Event Pemicu Posting', value: selectedDetailFormula?.triggerEvent },
+          { label: 'Akun COA Debet', value: selectedDetailFormula?.debitCoaCode, mono: true },
+          { label: 'Akun COA Kredit', value: selectedDetailFormula?.creditCoaCode, mono: true }
+        ]}
+        footerNotes="Formula ini mengeksekusi pembuatan entri jurnal otomatis ke General Ledger secara real-time."
       />
 
       {/* Modal Add/Edit Formula */}

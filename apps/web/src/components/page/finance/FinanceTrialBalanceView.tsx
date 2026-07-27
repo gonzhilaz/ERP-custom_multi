@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Scale, Download, Printer } from 'lucide-react';
+import { Scale, Download, Printer, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { useFinance } from '@/hooks/finance/useFinance';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface TrialBalanceRow {
   accountCode: string;
@@ -20,6 +21,7 @@ interface TrialBalanceRow {
 export const FinanceTrialBalanceView = () => {
   const { coaList } = useFinance();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTbRow, setSelectedTbRow] = useState<TrialBalanceRow | null>(null);
 
   const tbData: TrialBalanceRow[] = coaList.map((c) => {
     const isDebitNormal = c.type === 'ASSET' || c.type === 'EXPENSE';
@@ -52,7 +54,21 @@ export const FinanceTrialBalanceView = () => {
     { key: 'unadjustedDebit', header: 'Sebelum Penyesuaian (Debet)', align: 'right', className: 'font-mono font-bold text-slate-600 dark:text-slate-400', render: (i) => i.unadjustedDebit ? `Rp ${i.unadjustedDebit.toLocaleString('id-ID')}` : '-' },
     { key: 'unadjustedCredit', header: 'Sebelum Penyesuaian (Kredit)', align: 'right', className: 'font-mono font-bold text-slate-600 dark:text-slate-400', render: (i) => i.unadjustedCredit ? `Rp ${i.unadjustedCredit.toLocaleString('id-ID')}` : '-' },
     { key: 'adjustedDebit', header: 'Neraca Saldo (Debet)', align: 'right', className: 'font-mono font-bold text-emerald-600 dark:text-emerald-400', render: (i) => i.adjustedDebit ? `Rp ${i.adjustedDebit.toLocaleString('id-ID')}` : '-' },
-    { key: 'adjustedCredit', header: 'Neraca Saldo (Kredit)', align: 'right', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (i) => i.adjustedCredit ? `Rp ${i.adjustedCredit.toLocaleString('id-ID')}` : '-' }
+    { key: 'adjustedCredit', header: 'Neraca Saldo (Kredit)', align: 'right', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (i) => i.adjustedCredit ? `Rp ${i.adjustedCredit.toLocaleString('id-ID')}` : '-' },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedTbRow(i)}
+          className="p-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Saldo Neraca"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -101,6 +117,29 @@ export const FinanceTrialBalanceView = () => {
         data={filteredTb}
         keyExtractor={(i) => i.accountCode}
       />
+
+      {/* Item Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedTbRow !== null}
+        onClose={() => setSelectedTbRow(null)}
+        title="Detail Pos Neraca Saldo (Trial Balance)"
+        subtitle={selectedTbRow ? `${selectedTbRow.accountCode} • ${selectedTbRow.accountName}` : ''}
+        badgeLabel="RECONCILED"
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Saldo Debet Akhir', value: selectedTbRow?.adjustedDebit ? `Rp ${selectedTbRow.adjustedDebit.toLocaleString('id-ID')}` : '-', color: 'text-emerald-600' },
+          { label: 'Saldo Kredit Akhir', value: selectedTbRow?.adjustedCredit ? `Rp ${selectedTbRow.adjustedCredit.toLocaleString('id-ID')}` : '-', color: 'text-sky-600' },
+          { label: 'Kategori Akun', value: selectedTbRow?.category || '-' }
+        ]}
+        metadata={[
+          { label: 'Kode Akun COA', value: selectedTbRow?.accountCode, mono: true, highlight: true },
+          { label: 'Nama Akun Utama', value: selectedTbRow?.accountName },
+          { label: 'Debet Sebelum Penyesuaian', value: selectedTbRow?.unadjustedDebit ? `Rp ${selectedTbRow.unadjustedDebit.toLocaleString('id-ID')}` : '-', mono: true },
+          { label: 'Kredit Sebelum Penyesuaian', value: selectedTbRow?.unadjustedCredit ? `Rp ${selectedTbRow.unadjustedCredit.toLocaleString('id-ID')}` : '-', mono: true }
+        ]}
+        footerNotes="Keseimbangan Neraca Saldo (Balanced Trial Balance) disyaratkan sebelum laporan keuangan disahkan."
+      />
     </div>
   );
 };
+

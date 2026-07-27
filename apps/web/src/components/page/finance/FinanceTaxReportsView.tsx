@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Receipt, FileText, Download, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Receipt, FileText, Download, CheckCircle2, ShieldCheck, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface PpnReconciliationRow {
   period: string;
@@ -29,6 +30,8 @@ interface TaxAuditRow {
 
 export const FinanceTaxReportsView = () => {
   const [activeTab, setActiveTab] = useState<'SUMMARY' | 'PPN_RECONCILE' | 'PPH_AUDIT'>('SUMMARY');
+  const [selectedPpn, setSelectedPpn] = useState<PpnReconciliationRow | null>(null);
+  const [selectedPph, setSelectedPph] = useState<TaxAuditRow | null>(null);
 
   const ppnData: PpnReconciliationRow[] = [
     { period: '2026-07 (Juli)', ppnMasukan: 114500000, ppnKeluaran: 168900000, netVatStatus: 'KURANG_BAYAR', netVatAmount: 54400000, status: 'AUDITED' },
@@ -64,7 +67,21 @@ export const FinanceTaxReportsView = () => {
       )
     },
     { key: 'netVatAmount', header: 'Nominal Selisih Kurang Bayar', align: 'right', className: 'font-mono font-extrabold text-rose-600', render: (i) => `Rp ${i.netVatAmount.toLocaleString('id-ID')}` },
-    { key: 'status', header: 'Status SPT Masa', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> }
+    { key: 'status', header: 'Status SPT Masa', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedPpn(i)}
+          className="p-1.5 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail SPT Masa PPN"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   const pphColumns: ColumnDef<TaxAuditRow>[] = [
@@ -75,7 +92,21 @@ export const FinanceTaxReportsView = () => {
     { key: 'grossAmount', header: 'DPP / Bruto (Rp)', align: 'right', className: 'font-mono font-bold text-slate-900 dark:text-white', render: (i) => `Rp ${i.grossAmount.toLocaleString('id-ID')}` },
     { key: 'taxRate', header: 'Tarif', align: 'center', className: 'font-mono font-bold text-amber-600', render: (i) => i.taxRate },
     { key: 'taxAmount', header: 'PPh Dipotong (Rp)', align: 'right', className: 'font-mono font-extrabold text-emerald-600', render: (i) => `Rp ${i.taxAmount.toLocaleString('id-ID')}` },
-    { key: 'status', header: 'Status e-Bupot', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> }
+    { key: 'status', header: 'Status e-Bupot', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedPph(i)}
+          className="p-1.5 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Bukti Potong PPh"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -158,6 +189,51 @@ export const FinanceTaxReportsView = () => {
           />
         </div>
       )}
+
+      {/* PPN Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedPpn !== null}
+        onClose={() => setSelectedPpn(null)}
+        title="Detail Audit SPT Masa PPN (e-Faktur)"
+        subtitle={selectedPpn?.period}
+        badgeLabel={selectedPpn?.netVatStatus}
+        badgeType={selectedPpn?.netVatStatus === 'KURANG_BAYAR' ? 'ALERT' : 'ACTIVE'}
+        summaryCards={[
+          { label: 'PPN Keluaran (Output)', value: selectedPpn ? `Rp ${selectedPpn.ppnKeluaran.toLocaleString('id-ID')}` : '0', color: 'text-sky-600' },
+          { label: 'PPN Masukan (Input)', value: selectedPpn ? `Rp ${selectedPpn.ppnMasukan.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Kurang Bayar Net', value: selectedPpn ? `Rp ${selectedPpn.netVatAmount.toLocaleString('id-ID')}` : '0', color: 'text-rose-600' }
+        ]}
+        metadata={[
+          { label: 'Masa Pajak', value: selectedPpn?.period, mono: true, highlight: true },
+          { label: 'Tarif PPN UU HPP', value: '12%' },
+          { label: 'Status Laporan SPT', value: selectedPpn?.status }
+        ]}
+        footerNotes="File e-Faktur diselaraskan dengan Server DJP Online secara real-time via API Web Services."
+      />
+
+      {/* PPH Detail Modal */}
+      <FinanceItemDetailModal
+        isOpen={selectedPph !== null}
+        onClose={() => setSelectedPph(null)}
+        title="Detail Warkat Bukti Pemotongan PPh Unifikasi"
+        subtitle={selectedPph ? `${selectedPph.bupotNumber} • ${selectedPph.taxPayerName}` : ''}
+        badgeLabel={selectedPph?.status}
+        badgeType="ACTIVE"
+        summaryCards={[
+          { label: 'Nominal Dipotong', value: selectedPph ? `Rp ${selectedPph.taxAmount.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: 'Tarif Pajak', value: selectedPph?.taxRate || '-' },
+          { label: 'DPP / Nilai Bruto', value: selectedPph ? `Rp ${selectedPph.grossAmount.toLocaleString('id-ID')}` : '0' }
+        ]}
+        metadata={[
+          { label: 'No. Bukti Potong', value: selectedPph?.bupotNumber, mono: true, highlight: true },
+          { label: 'Jenis Pajak PPh', value: selectedPph?.taxType },
+          { label: 'Kode Objek Pajak', value: selectedPph?.objectCode, mono: true },
+          { label: 'Nama Wajib Pajak', value: selectedPph?.taxPayerName },
+          { label: 'NPWP / NIK Terdaftar', value: selectedPph?.npwp, mono: true }
+        ]}
+        footerNotes="Bukti potong PPh Unifikasi diterbitkan resmi dan dapat diunduh dalam format PDF/XML DJP."
+      />
     </div>
   );
 };
+

@@ -2,14 +2,18 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bell, Search, Cpu, User, Building, Store } from 'lucide-react';
+import { Bell, Search, Cpu, User, Building, Store, Menu } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useTenantContext } from '@/context/TenantContext';
 import { ProfileEditModal } from '@/components/ui/modals/ProfileEditModal';
 
-export const Header = () => {
+interface HeaderProps {
+  onToggleMobileSidebar?: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
   const { user } = useAuth();
-  const { activeUnit, activeBranch, availableUnits, availableBranches, switchUnit, switchBranch } = useTenantContext();
+  const { activeUnit, activeBranch, availableUnits, availableBranches, canSwitchUnit, switchUnit, switchBranch } = useTenantContext();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -34,14 +38,24 @@ export const Header = () => {
     return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
   };
 
-  const isHOUser = activeUnit?.tenantId === 'holding' || !activeUnit;
-  const isMultiBranchUser = isHOUser || availableBranches.length > 1;
+  const canSwitchTenants = canSwitchUnit;
+
+  const isMultiBranchUser = canSwitchTenants || availableBranches.length > 1;
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
-    <header className="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between sticky top-0 z-30">
-      {/* Search Bar */}
-      <div className="flex items-center gap-3 w-96">
+    <header className="h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 flex items-center justify-between sticky top-0 z-30">
+      {/* Mobile Hamburger & Search Bar */}
+      <div className="flex items-center gap-2.5 w-full md:w-96">
+        {onToggleMobileSidebar && (
+          <button
+            onClick={onToggleMobileSidebar}
+            className="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer shrink-0"
+            title="Buka Navigasi Modul"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
         <div className="relative w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
@@ -143,7 +157,7 @@ export const Header = () => {
                 <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
                   <Building className="w-3.5 h-3.5 text-sky-500" /> Unit Usaha
                 </label>
-                {isHOUser ? (
+                {canSwitchTenants ? (
                   <select
                     value={activeUnit?.tenantId || 'holding'}
                     onChange={(e) => switchUnit(e.target.value)}

@@ -3,13 +3,17 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ChevronDown, ChevronRight, LogOut, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ChevronRight, LogOut, ShieldCheck, X } from 'lucide-react';
 import { getFilteredCategoriesForTenant } from '@/lib/constants/navigation';
 import { ThemeToggle } from '@/components/ui/toggles/ThemeToggle';
 import { useTenantContext } from '@/context/TenantContext';
 import { SystemRole } from '@/lib/auth/rbac-resolver';
 
-export const Sidebar = () => {
+interface SidebarProps {
+  onCloseMobile?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ onCloseMobile }) => {
   const pathname = usePathname();
   const router = useRouter();
   const { activeUnit } = useTenantContext();
@@ -22,7 +26,7 @@ export const Sidebar = () => {
     activeUnit?.type,
     activeRole
   );
-  
+
   // Track open accordion category IDs
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
     dashboard: true,
@@ -61,6 +65,12 @@ export const Sidebar = () => {
             <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Enterprise Holding ERP</span>
           </div>
         </div>
+
+        {onCloseMobile && (
+          <button onClick={onCloseMobile} className="md:hidden p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg cursor-pointer">
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Accordion Module Navigation (Overflow Y Scrolled) */}

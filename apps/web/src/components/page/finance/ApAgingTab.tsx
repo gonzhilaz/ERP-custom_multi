@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
-import { Clock, AlertTriangle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, AlertTriangle, Eye } from 'lucide-react';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
 
 interface ApAgingRow {
   supplierName: string;
@@ -14,6 +15,8 @@ interface ApAgingRow {
 }
 
 export const ApAgingTab = () => {
+  const [selectedRow, setSelectedRow] = useState<ApAgingRow | null>(null);
+
   const agingData: ApAgingRow[] = [
     { supplierName: 'PT Meat Prima Indonesia', totalAp: 94350000, current: 94350000, days31to60: 0, days61to90: 0, over90: 0 },
     { supplierName: 'PT Heavy Machinery Supply', totalAp: 180000000, current: 80000000, days31to60: 100000000, days61to90: 0, over90: 0 },
@@ -31,7 +34,21 @@ export const ApAgingTab = () => {
     { key: 'days31to60', header: '31-60 Hari', align: 'right', className: 'font-mono text-sky-600 dark:text-sky-400 font-bold', render: (i) => `Rp ${i.days31to60.toLocaleString('id-ID')}` },
     { key: 'days61to90', header: '61-90 Hari', align: 'right', className: 'font-mono text-amber-600 dark:text-amber-400 font-bold', render: (i) => `Rp ${i.days61to90.toLocaleString('id-ID')}` },
     { key: 'over90', header: '>90 Hari (Jatuh Tempo)', align: 'right', className: 'font-mono text-rose-600 dark:text-rose-400 font-bold', render: (i) => `Rp ${i.over90.toLocaleString('id-ID')}` },
-    { key: 'totalAp', header: 'Total Utang (Rp)', align: 'right', className: 'font-mono font-extrabold text-slate-900 dark:text-white', render: (i) => `Rp ${i.totalAp.toLocaleString('id-ID')}` }
+    { key: 'totalAp', header: 'Total Utang (Rp)', align: 'right', className: 'font-mono font-extrabold text-slate-900 dark:text-white', render: (i) => `Rp ${i.totalAp.toLocaleString('id-ID')}` },
+    {
+      key: 'actions',
+      header: 'Detail',
+      align: 'center',
+      render: (i) => (
+        <button
+          onClick={() => setSelectedRow(i)}
+          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+          title="Lihat Detail Umur Utang Vendor"
+        >
+          <Eye className="w-4 h-4" />
+        </button>
+      )
+    }
   ];
 
   return (
@@ -62,6 +79,40 @@ export const ApAgingTab = () => {
         data={agingData}
         keyExtractor={(i) => i.supplierName}
       />
+
+      <FinanceItemDetailModal
+        isOpen={selectedRow !== null}
+        onClose={() => setSelectedRow(null)}
+        title="Detail Analisis Umur Utang Vendor"
+        subtitle={selectedRow?.supplierName}
+        badgeLabel={selectedRow && selectedRow.over90 > 0 ? 'MEMPERHATIKAN' : 'NORMAL'}
+        badgeType={selectedRow && selectedRow.over90 > 0 ? 'ALERT' : 'ACTIVE'}
+        summaryCards={[
+          { label: 'Total Utang', value: selectedRow ? `Rp ${selectedRow.totalAp.toLocaleString('id-ID')}` : '0' },
+          { label: '0-30 Hari', value: selectedRow ? `Rp ${selectedRow.current.toLocaleString('id-ID')}` : '0', color: 'text-emerald-600' },
+          { label: '31-60 Hari', value: selectedRow ? `Rp ${selectedRow.days31to60.toLocaleString('id-ID')}` : '0', color: 'text-sky-600' },
+          { label: '>60 Hari', value: selectedRow ? `Rp ${(selectedRow.days61to90 + selectedRow.over90).toLocaleString('id-ID')}` : '0', color: 'text-rose-600' }
+        ]}
+        metadata={[
+          { label: 'Nama Pemasok', value: selectedRow?.supplierName, highlight: true },
+          { label: 'Status Kredit', value: 'Vendor Term NET 30/60' },
+          { label: 'Unit Usaha Utama', value: 'Holding & Sub-Enterprise' }
+        ]}
+        lineItemsHeader="Breakdown Invoice Tagihan Berjalan"
+        columns={[
+          { header: 'No. Invoice', accessor: 'invoiceNo', mono: true },
+          { header: 'Tanggal Release', accessor: 'releaseDate' },
+          { header: 'Jatuh Tempo', accessor: 'dueDate' },
+          { header: 'Kategori Aging', accessor: 'agingCategory' },
+          { header: 'Nominal Tagihan', accessor: 'amount', align: 'right', isCurrency: true }
+        ]}
+        lineItems={[
+          { invoiceNo: 'INV-SUP-2026-881', releaseDate: '2026-07-01', dueDate: '2026-08-05', agingCategory: '0-30 Hari (Lancar)', amount: selectedRow?.current || 0 },
+          { invoiceNo: 'INV-SUP-2026-902', releaseDate: '2026-06-15', dueDate: '2026-07-15', agingCategory: '31-60 Hari', amount: selectedRow?.days31to60 || 0 }
+        ].filter(item => item.amount > 0)}
+        footerNotes="Rincian umur utang dihitung otomatis berdasarkan tanggal jatuh tempo yang tercantum dalam PO / Invoice Vendor resmi."
+      />
     </div>
   );
 };
+
