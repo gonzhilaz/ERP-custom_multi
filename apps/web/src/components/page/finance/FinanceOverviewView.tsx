@@ -10,8 +10,8 @@ export const FinanceOverviewView = () => {
     <div className="space-y-4 text-xs">
       {/* Module Header */}
       <ModuleHeader
-        title="Ringkasan Analitik Keuangan & Kas (Finance Overview)"
-        icon={Wallet}
+        title="Keuangan & Kas"
+        icon={DollarSign}
         iconBgColor="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
         glossaryTitle="Glossary Finance Overview"
         glossaryItems={[
