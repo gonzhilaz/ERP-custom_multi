@@ -55,7 +55,7 @@ export const CrmActivitiesView = () => {
   return (
     <div className="space-y-4 text-xs">
       <ModuleHeader
-        title="Log Aktivitas & Follow-Up Sales (Sales Activity Register)"
+        title="Log Sales"
         icon={PhoneCall}
         iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
         glossaryTitle="Glossary Sales Activities Log"

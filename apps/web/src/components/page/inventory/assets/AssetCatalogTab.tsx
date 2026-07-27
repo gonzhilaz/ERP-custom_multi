@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Search, Filter, Trash2, CheckCircle2, Wrench } from 'lucide-react';
+import { Trash2, CheckCircle2, Wrench } from 'lucide-react';
 import { AssetCategory, AssetItem } from '@/lib/mock/inventory';
+import { DynamicSearchFilter } from '@/components/ui/forms/DynamicSearchFilter';
 
 interface Props {
   assets: AssetItem[];
@@ -32,46 +33,19 @@ export const AssetCatalogTab: React.FC<Props> = ({
 
   return (
     <div className="space-y-4">
-      {/* Search & Dynamic Category Filter */}
-      <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari kode asset, nama asset, cabang..."
-            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-        </div>
-
-        <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
-          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
-          <button
-            onClick={() => setSelectedCategory('ALL')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 ${
-              selectedCategory === 'ALL'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            Semua Kategori
-          </button>
-          {assetCategories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.name)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 ${
-                selectedCategory === cat.name
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Universal Search & Dynamic Category Filter */}
+      <DynamicSearchFilter
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Cari kode asset, nama asset, cabang..."
+        categoryValue={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        categoryOptions={[
+          { value: 'ALL', label: 'Semua Kategori Asset' },
+          ...assetCategories.map((c) => ({ value: c.name, label: c.name }))
+        ]}
+        categoryPlaceholder="Semua Kategori Asset"
+      />
 
       {/* Asset Table */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
