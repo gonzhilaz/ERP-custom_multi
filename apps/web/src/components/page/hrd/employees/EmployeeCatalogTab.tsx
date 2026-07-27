@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Filter, Trash2, Eye, X, User, Briefcase, Building2, CreditCard, ShieldCheck } from 'lucide-react';
+import { Trash2, Eye, X, User, Briefcase, Building2, CreditCard, ShieldCheck } from 'lucide-react';
 import { DepartmentCategory, EmployeeItem } from '@/lib/mock/hrd';
+import { DynamicSearchFilter } from '@/components/ui/forms/DynamicSearchFilter';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 interface Props {
   employees: EmployeeItem[];
@@ -28,124 +30,78 @@ export const EmployeeCatalogTab: React.FC<Props> = ({
     return matchesSearch && matchesDept;
   });
 
+  const columns: ColumnDef<EmployeeItem>[] = [
+    { key: 'nik', header: 'NIK Pegawai', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (e) => e.nik },
+    { key: 'fullName', header: 'Nama Lengkap', className: 'font-semibold text-slate-900 dark:text-white', render: (e) => e.fullName },
+    { key: 'department', header: 'Departemen', className: 'text-slate-500', render: (e) => e.department },
+    { key: 'role', header: 'Jabatan (Role)', className: 'text-slate-500', render: (e) => e.role },
+    {
+      key: 'workerTypeId',
+      header: 'Tipe Pekerja',
+      align: 'center',
+      render: (e) => (
+        <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-semibold text-[10px] text-slate-600 dark:text-slate-300">
+          {e.workerTypeId === 'wt-01' ? 'PKWTT Tetap' : e.workerTypeId === 'wt-02' ? 'Kontrak Proyek' : 'Expat Special'}
+        </span>
+      )
+    },
+    { key: 'baseSalary', header: 'Gaji Base', align: 'right', className: 'font-mono text-slate-900 dark:text-white font-bold', render: (e) => `Rp ${e.baseSalary.toLocaleString('id-ID')}` },
+    { key: 'takeHomePay', header: 'Take Home Pay', align: 'right', className: 'font-mono text-emerald-600 dark:text-emerald-400 font-bold', render: (e) => `Rp ${Math.round(e.baseSalary * 1.25).toLocaleString('id-ID')}` },
+    {
+      key: 'status',
+      header: 'Status',
+      align: 'center',
+      render: (e) => (
+        <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-full text-[10px] font-bold">
+          {e.status}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (e) => (
+        <div className="flex items-center justify-center gap-1">
+          <button
+            onClick={() => setSelectedEmployee(e)}
+            className="p-1 text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-950/40 rounded-lg transition-all cursor-pointer"
+            title="Lihat Profile"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteEmployee(e.id)}
+            className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-all cursor-pointer"
+            title="Hapus Pegawai"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="space-y-4">
-      {/* Search Input & Dynamic Department Filter */}
-      <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-        <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari NIK, nama karyawan, jabatan..."
-            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-          />
-        </div>
+      {/* Universal Search & Dynamic Category Filter */}
+      <DynamicSearchFilter
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Cari NIK, nama karyawan, jabatan..."
+        categoryValue={selectedDept}
+        onCategoryChange={setSelectedDept}
+        categoryOptions={departments.map((d) => ({ value: d.name, label: d.name }))}
+        categoryPlaceholder="Semua Departemen"
+      />
 
-        <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
-          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
-          <button
-            onClick={() => setSelectedDept('ALL')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
-              selectedDept === 'ALL'
-                ? 'bg-sky-600 text-white shadow-sm'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            Semua Departemen
-          </button>
-          {departments.map((dept) => (
-            <button
-              key={dept.id}
-              onClick={() => setSelectedDept(dept.name)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer ${
-                selectedDept === dept.name
-                  ? 'bg-sky-600 text-white shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-              }`}
-            >
-              {dept.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Employee Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
-          <span className="font-bold text-slate-700 dark:text-slate-300">
-            Direktori Pegawai Terdaftar ({filteredEmployees.length} Pegawai)
-          </span>
-          <span className="text-[11px] text-slate-400">Klik baris tabel untuk melihat detail profil</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">NIK Pegawai</th>
-                <th className="py-3.5 px-4">Nama Lengkap</th>
-                <th className="py-3.5 px-4">Departemen</th>
-                <th className="py-3.5 px-4">Jabatan (Role)</th>
-                <th className="py-3.5 px-4 text-center">Tipe Pekerja</th>
-                <th className="py-3.5 px-4 text-right">Gaji Base</th>
-                <th className="py-3.5 px-4 text-right">Take Home Pay</th>
-                <th className="py-3.5 px-4 text-center">Status</th>
-                <th className="py-3.5 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {filteredEmployees.map((emp) => (
-                <tr
-                  key={emp.id}
-                  onClick={() => setSelectedEmployee(emp)}
-                  className="hover:bg-sky-50/50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors"
-                >
-                  <td className="py-3.5 px-4 font-mono font-bold text-sky-600 dark:text-sky-400">{emp.nik}</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{emp.fullName}</td>
-                  <td className="py-3.5 px-4 text-slate-500">{emp.department}</td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-700 dark:text-slate-300">{emp.role}</td>
-                  <td className="py-3.5 px-4 text-center font-bold">
-                    <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[10px]">
-                      {emp.workerTypeName || emp.salaryType}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-right font-mono font-semibold">
-                    Rp {emp.baseSalary.toLocaleString('id-ID')}
-                  </td>
-                  <td className="py-3.5 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">
-                    Rp {emp.netSalary.toLocaleString('id-ID')}
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/30">
-                      Aktif
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-center" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex items-center justify-center gap-1">
-                      <button
-                        onClick={() => setSelectedEmployee(emp)}
-                        className="p-1.5 text-sky-600 hover:bg-sky-100 rounded-lg transition-all cursor-pointer"
-                        title="Lihat Detail Profil"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => deleteEmployee(emp.id)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-all cursor-pointer"
-                        title="Hapus Pegawai"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Direktori Pegawai Terdaftar (${filteredEmployees.length} Pegawai)`}
+        columns={columns}
+        data={filteredEmployees}
+        keyExtractor={(e) => e.id}
+      />
 
       {/* Modal Detail Karyawan (Setiap Klik Tabel Karyawan) */}
       {selectedEmployee && (

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Boxes, Plus, CheckCircle2, X, HardHat } from 'lucide-react';
 import { OreProductionLog } from '@/lib/mock/mining';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 interface Props {
   oreLogs: OreProductionLog[];
@@ -41,6 +42,42 @@ export const OreProductionTab = ({ oreLogs, addOreLog }: Props) => {
     setShowModal(false);
   };
 
+  const columns: ColumnDef<OreProductionLog>[] = [
+    { key: 'logCode', header: 'Kode Log', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (l) => l.logCode },
+    {
+      key: 'date',
+      header: 'Tanggal & Shift',
+      render: (l) => (
+        <div>
+          <div className="font-bold">{l.date}</div>
+          <div className="text-[10px] text-slate-400 font-mono">{l.shift}</div>
+        </div>
+      )
+    },
+    {
+      key: 'pitSite',
+      header: 'Lokasi Pit ➔ Stockpile',
+      render: (l) => (
+        <div>
+          <div className="font-bold text-slate-900 dark:text-white">{l.pitSite}</div>
+          <div className="text-[10px] text-emerald-600 font-semibold">➔ {l.targetStockpile}</div>
+        </div>
+      )
+    },
+    { key: 'tonnageExtracted', header: 'Tonase Galian (Ton)', align: 'right', className: 'font-mono font-bold text-base text-amber-600 dark:text-amber-400', render: (l) => `${l.tonnageExtracted.toLocaleString('id-ID')} Ton` },
+    { key: 'oreGradeGramsPerTon', header: 'Kadar Emas (g/t)', align: 'center', className: 'font-mono font-bold text-indigo-600 dark:text-indigo-400', render: (l) => `${l.oreGradeGramsPerTon} g/t` },
+    {
+      key: 'haulingTrucksCount',
+      header: 'Armada Truck & Supervisor',
+      render: (l) => (
+        <div>
+          <div className="font-semibold">{l.haulingTrucksCount} Units Hauling Dump Trucks</div>
+          <div className="text-[10px] text-slate-400">Supervised by: {l.supervisor}</div>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="space-y-4 text-xs">
       {/* Header Bar */}
@@ -61,48 +98,12 @@ export const OreProductionTab = ({ oreLogs, addOreLog }: Props) => {
         </button>
       </div>
 
-      {/* Main Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3 px-4">Kode Log</th>
-                <th className="py-3 px-4">Tanggal & Shift</th>
-                <th className="py-3 px-4">Lokasi Pit ➔ Stockpile</th>
-                <th className="py-3 px-4 text-right">Tonase Galian (Ton)</th>
-                <th className="py-3 px-4 text-center">Kadar Emas (g/t)</th>
-                <th className="py-3 px-4">Armada Truck & Supervisor</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {oreLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3 px-4 font-mono font-bold text-amber-600 dark:text-amber-400">{log.logCode}</td>
-                  <td className="py-3 px-4">
-                    <div className="font-bold">{log.date}</div>
-                    <div className="text-[10px] text-slate-400 font-mono">{log.shift}</div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="font-bold text-slate-900 dark:text-white">{log.pitSite}</div>
-                    <div className="text-[10px] text-emerald-600 font-semibold">➔ {log.targetStockpile}</div>
-                  </td>
-                  <td className="py-3 px-4 text-right font-mono font-bold text-lg text-amber-600 dark:text-amber-400">
-                    {log.tonnageExtracted.toLocaleString('id-ID')} Ton
-                  </td>
-                  <td className="py-3 px-4 text-center font-mono font-bold text-indigo-600 dark:text-indigo-400">
-                    {log.oreGradeGramsPerTon} g/t
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="font-semibold">{log.haulingTrucksCount} Units Hauling Dump Trucks</div>
-                    <div className="text-[10px] text-slate-400">Supervised by: {log.supervisor}</div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Hasil Galian Ore Tambang (${oreLogs.length} Records)`}
+        columns={columns}
+        data={oreLogs}
+        keyExtractor={(l) => l.id}
+      />
 
       {/* Modal Add Ore Log */}
       {showModal && (
