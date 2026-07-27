@@ -1,3 +1,19 @@
+export interface PosMenuItem {
+  id: string;
+  code: string;
+  name: string;
+  category: 'FOOD' | 'BEVERAGE' | 'DESSERT' | 'BAKERY' | 'PACKAGED_GOODS' | string;
+  categoryId?: string;
+  price: number;
+  costPrice?: number;
+  cogsHpp: number;
+  stock?: number;
+  stockQty?: number;
+  unitUom?: string;
+  imageUrl?: string;
+  isAvailable: boolean;
+}
+
 export interface MenuCategoryItem {
   id: string;
   code: string;
@@ -6,152 +22,129 @@ export interface MenuCategoryItem {
   description: string;
 }
 
-export interface PosMenuItem {
-  id: string;
-  code: string;
-  name: string;
-  categoryId: string;
-  category: string;
-  price: number;
-  cogsHpp: number;
-  stockQty?: number;
-  unitUom?: string;
-  image?: string;
-  isAvailable: boolean;
-}
-
 export interface PosOrderItem {
-  item: PosMenuItem;
+  id: string;
+  menuId: string;
+  name: string;
+  price: number;
   quantity: number;
-  notes?: string;
+  item: PosMenuItem;
 }
 
-export const MOCK_MENU_CATEGORIES: MenuCategoryItem[] = [
+export interface PosOrderTransaction {
+  id: string;
+  orderNumber: string;
+  orderType: 'DINE_IN' | 'TAKE_AWAY' | 'DELIVERY' | 'ROOM_CHARGE';
+  tableNumber?: string;
+  roomNumber?: string;
+  totalItems: number;
+  subtotal: number;
+  taxAmount: number; // PB1 10%
+  grandTotal: number;
+  paymentMethod: 'CASH' | 'EDC_MANDIRI' | 'QRIS' | 'ROOM_CHARGE';
+  cashierName: string;
+  timestamp: string;
+  status: 'COMPLETED' | 'CANCELLED';
+}
+
+export const MOCK_POS_MENU_ITEMS: PosMenuItem[] = [
   {
-    id: 'mcat-retail-01',
-    code: 'CAT-RTL-01',
-    name: 'Sembako & Pangan Retail',
-    itemCount: 3,
-    description: 'Beras super, gula pasir, minyak goreng kemasan 2L, & bahan kebutuhan pokok.'
+    id: 'menu-01',
+    code: 'FB-NG-WGY',
+    name: 'Nasi Goreng Wagyu Top Grade',
+    category: 'FOOD',
+    price: 65000,
+    costPrice: 28000,
+    cogsHpp: 28000,
+    stock: 45,
+    imageUrl: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=800&auto=format&fit=crop',
+    isAvailable: true
   },
   {
-    id: 'mcat-retail-02',
-    code: 'CAT-RTL-02',
-    name: 'Snack, Biscuit & Minuman',
-    itemCount: 3,
-    description: 'Minuman dingin botol, biskuit kaleng, makanan ringan, & snack kemasan.'
+    id: 'menu-02',
+    code: 'FB-SAPI-LADA',
+    name: 'Daging Sapi Lada Hitam Rice Bowl',
+    category: 'FOOD',
+    price: 55000,
+    costPrice: 24000,
+    cogsHpp: 24000,
+    stock: 60,
+    imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop',
+    isAvailable: true
   },
   {
-    id: 'mcat-retail-03',
-    code: 'CAT-RTL-03',
-    name: 'Elektronik & Perangkat',
-    itemCount: 2,
-    description: 'Kabel data fast charge, lampu LED hemat energi, & perlengkapan listrik.'
+    id: 'menu-03',
+    code: 'FB-ES-ESPRESSO',
+    name: 'Single Origin Iced Espresso Latte',
+    category: 'BEVERAGE',
+    price: 32000,
+    costPrice: 9500,
+    cogsHpp: 9500,
+    stock: 120,
+    imageUrl: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=800&auto=format&fit=crop',
+    isAvailable: true
   },
   {
-    id: 'mcat-01',
-    code: 'MCAT-MAIN',
-    name: 'Resto & Kuliner Saji',
-    itemCount: 2,
-    description: 'Nasi goreng wagyu, sate ribeye, & masakan saji kuliner.'
+    id: 'menu-04',
+    code: 'BK-ROTI-TAWAR',
+    name: 'Roti Tawar Gandum Premium Bakery',
+    category: 'BAKERY',
+    price: 25000,
+    costPrice: 11000,
+    cogsHpp: 11000,
+    stock: 35,
+    imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop',
+    isAvailable: true
+  },
+  {
+    id: 'menu-05',
+    code: 'BK-CROISSANT',
+    name: 'French Butter Croissant Fresh Baked',
+    category: 'BAKERY',
+    price: 22000,
+    costPrice: 8500,
+    cogsHpp: 8500,
+    stock: 50,
+    imageUrl: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=800&auto=format&fit=crop',
+    isAvailable: true
   }
 ];
 
-export const MOCK_POS_MENU: PosMenuItem[] = [
-  {
-    id: 'pos-rtl-01',
-    code: 'SKU-RTL-001',
-    name: 'Beras Premium Ramos Super (5 Kg)',
-    categoryId: 'mcat-retail-01',
-    category: 'Sembako & Pangan Retail',
-    price: 78000,
-    cogsHpp: 64000,
-    stockQty: 85,
-    unitUom: 'Pouch',
-    isAvailable: true
-  },
-  {
-    id: 'pos-rtl-02',
-    code: 'SKU-RTL-002',
-    name: 'Minyak Goreng Sawit Bimoli Refill (2 Liter)',
-    categoryId: 'mcat-retail-01',
-    category: 'Sembako & Pangan Retail',
-    price: 36500,
-    cogsHpp: 31000,
-    stockQty: 120,
-    unitUom: 'Pouch',
-    isAvailable: true
-  },
-  {
-    id: 'pos-rtl-03',
-    code: 'SKU-RTL-003',
-    name: 'Gula Pasir Industri Gulaku Premium (1 Kg)',
-    categoryId: 'mcat-retail-01',
-    category: 'Sembako & Pangan Retail',
-    price: 17500,
-    cogsHpp: 14200,
-    stockQty: 240,
-    unitUom: 'Bungkus',
-    isAvailable: true
-  },
-  {
-    id: 'pos-rtl-04',
-    code: 'SKU-RTL-004',
-    name: 'Air Mineral Coca-Cola / Aqua Botol (600ml)',
-    categoryId: 'mcat-retail-02',
-    category: 'Snack, Biscuit & Minuman',
-    price: 5000,
-    cogsHpp: 3200,
-    stockQty: 350,
-    unitUom: 'Botol',
-    isAvailable: true
-  },
-  {
-    id: 'pos-rtl-05',
-    code: 'SKU-RTL-005',
-    name: 'Biskuit Khong Guan Assorted Kaleng (1600g)',
-    categoryId: 'mcat-retail-02',
-    category: 'Snack, Biscuit & Minuman',
-    price: 112000,
-    cogsHpp: 95000,
-    stockQty: 45,
-    unitUom: 'Kaleng',
-    isAvailable: true
-  },
-  {
-    id: 'pos-rtl-06',
-    code: 'SKU-RTL-006',
-    name: 'Lampu LED Philips MyCare 12W White',
-    categoryId: 'mcat-retail-03',
-    category: 'Elektronik & Perangkat',
-    price: 49500,
-    cogsHpp: 38000,
-    stockQty: 60,
-    unitUom: 'Unit',
-    isAvailable: true
-  },
+export const MOCK_POS_MENU = MOCK_POS_MENU_ITEMS;
+
+export const MOCK_MENU_CATEGORIES: MenuCategoryItem[] = [
+  { id: 'mc-01', code: 'FOOD', name: 'Makanan Utama Restoran', itemCount: 24, description: 'Nasi goreng, sapi lada hitam, & olahan dapur utama' },
+  { id: 'mc-02', code: 'BEVERAGE', name: 'Minuman Espresso & Cold Drinks', itemCount: 18, description: 'Single origin espresso, latte, & es cendol durian' },
+  { id: 'mc-03', code: 'BAKERY', name: 'Roti & Pastry Fresh Baked', itemCount: 15, description: 'Croissant, roti gandum, & pastry mentega' }
+];
+
+export const MOCK_POS_TRANSACTIONS: PosOrderTransaction[] = [
   {
     id: 'pos-01',
-    code: 'MENU-FNB-01',
-    name: 'Nasi Goreng Wagyu Spesial Nusantara',
-    categoryId: 'mcat-01',
-    category: 'Resto & Kuliner Saji',
-    price: 65000,
-    cogsHpp: 22000,
-    stockQty: 30,
-    unitUom: 'Porsi',
-    isAvailable: true
+    orderNumber: 'POS-202607-0098',
+    orderType: 'DINE_IN',
+    tableNumber: 'Meja 04',
+    totalItems: 3,
+    subtotal: 152000,
+    taxAmount: 15200, // PB1 10%
+    grandTotal: 167200,
+    paymentMethod: 'QRIS',
+    cashierName: 'Siti Resto Cashier',
+    timestamp: '2026-07-26 12:45',
+    status: 'COMPLETED'
   },
   {
     id: 'pos-02',
-    code: 'MENU-FNB-02',
-    name: 'Sate Sapi Ribeye Bumbu Kacang (10 Tusuk)',
-    categoryId: 'mcat-01',
-    category: 'Resto & Kuliner Saji',
-    price: 95000,
-    cogsHpp: 34000,
-    stockQty: 25,
-    unitUom: 'Porsi',
-    isAvailable: true
+    orderNumber: 'POS-202607-0099',
+    orderType: 'ROOM_CHARGE',
+    roomNumber: 'Kamar 101 (Deluxe Suite)',
+    totalItems: 2,
+    subtotal: 120000,
+    taxAmount: 12000,
+    grandTotal: 132000,
+    paymentMethod: 'ROOM_CHARGE',
+    cashierName: 'Siti Resto Cashier',
+    timestamp: '2026-07-26 13:10',
+    status: 'COMPLETED'
   }
 ];

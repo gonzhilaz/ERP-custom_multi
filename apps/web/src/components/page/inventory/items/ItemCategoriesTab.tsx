@@ -70,8 +70,8 @@ export const ItemCategoriesTab: React.FC<Props> = ({
     setFormData({
       code: cat.code,
       name: cat.name,
-      coaAccountCode: cat.coaAccountCode,
-      coaAccountName: cat.coaAccountName,
+      coaAccountCode: cat.coaAccountCode || '1-10400',
+      coaAccountName: cat.coaAccountName || 'Persediaan Barang',
       description: cat.description
     });
   };

@@ -72,7 +72,7 @@ export function usePos() {
           i.item.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
-      return [...prev, { item, quantity: 1 }];
+      return [...prev, { id: item.id, menuId: item.id, name: item.name, price: item.price, item, quantity: 1 }];
     });
   };
 

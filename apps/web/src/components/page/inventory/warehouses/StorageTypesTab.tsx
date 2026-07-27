@@ -87,10 +87,10 @@ export const StorageTypesTab: React.FC<Props> = ({
       name: st.name,
       type: st.type,
       ownershipStatus: st.ownershipStatus,
-      coaAccountCode: st.coaAccountCode,
-      coaAccountName: st.coaAccountName,
+      coaAccountCode: st.coaAccountCode || '1-10400',
+      coaAccountName: st.coaAccountName || 'Persediaan Storage',
       linkedAssetId: st.linkedAssetId || '',
-      tempControl: st.tempControl,
+      tempControl: st.tempControl || false,
       targetTempCelsius: st.targetTempCelsius || 24,
       description: st.description
     });

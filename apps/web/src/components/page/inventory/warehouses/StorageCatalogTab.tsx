@@ -24,8 +24,8 @@ export const StorageCatalogTab: React.FC<Props> = ({
     const matchesSearch =
       str.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
       str.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      str.branchName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = selectedType === 'ALL' || str.type === selectedType || str.typeName.includes(selectedType);
+      (str.branchName || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesType = selectedType === 'ALL' || str.type === selectedType || (str.typeName || '').includes(selectedType);
     return matchesSearch && matchesType;
   });
 

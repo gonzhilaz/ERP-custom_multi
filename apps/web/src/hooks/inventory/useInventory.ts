@@ -40,10 +40,10 @@ export function useInventory() {
   // Filtered inventory items
   const filteredItems = items.filter((item) => {
     if (showAlertsOnly && !item.isAlert) return false;
-    if (filterWarehouse !== 'ALL' && !item.warehouse.includes(filterWarehouse)) return false;
+    if (filterWarehouse !== 'ALL' && !(item.warehouse || item.warehouseLocation || '').includes(filterWarehouse)) return false;
 
     const matchesSearch =
-      item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.code || item.sku || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.category.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'ALL' || item.category.includes(selectedCategory);
@@ -146,7 +146,7 @@ export function useInventory() {
 
   // CRUD Handlers for Assets
   const addAssetItem = (newAsset: Omit<AssetItem, 'id' | 'accumulatedDepreciation' | 'bookValue' | 'monthlyDepreciation'>) => {
-    const monthlyDep = Math.round((newAsset.purchaseCost - newAsset.salvageValue) / (newAsset.usefulLifeYears * 12));
+    const monthlyDep = Math.round((newAsset.purchaseCost - (newAsset.salvageValue || 0)) / ((newAsset.usefulLifeYears || 5) * 12));
     const created: AssetItem = {
       ...newAsset,
       id: `ast-${Date.now()}`,
