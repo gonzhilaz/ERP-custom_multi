@@ -1,6 +1,6 @@
 export interface DeepSeekTrainingItem {
   id: string;
-  category: 'FINANCE_TAX' | 'INVENTORY_SUPPLY' | 'HRD_PAYROLL' | 'MINING_FLEET' | 'HOTEL_RESTO' | 'GOVERNANCE_SECURITY';
+  category: 'FINANCE_TAX' | 'INVENTORY_SUPPLY' | 'HRD_PAYROLL' | 'MINING_FLEET' | 'HOTEL_RESTO' | 'PLANTATION_AGRI' | 'GOVERNANCE_SECURITY';
   promptInstruction: string;
   expectedThoughtReasoning: string;
   expectedOutputResponse: string;
@@ -31,6 +31,22 @@ export const DEEPSEEK_ERP_TRAINING_CORPUS: DeepSeekTrainingItem[] = [
     expectedThoughtReasoning: 'Menghitung rasio BBM per Ritase Hauling. Total Solar dikonsumsi / Total Jarak Km & Ritase Cargo Tonase.',
     expectedOutputResponse: 'Analisis Fleet Mining: Unit DT-104 (Volvo FMX) mencatatkan konsumsi solar 28.5 Liter/Jam (Efisiensi 94% vs Target 30L/Jam). Total Cargo Terangkut: 701.5 Ton Ore Kadar Tinggi (Au 4.8 g/t). Rekomendasi: Unit aman untuk rotasi shift 2 malam ini.',
     datasetVersion: 'v2.4-Enterprise'
+  },
+  {
+    id: 'dt-007',
+    category: 'PLANTATION_AGRI',
+    promptInstruction: 'Analisis hasil panen Tandan Buah Segar (TBS) Kelapa Sawit Blok A2 & estimasi Rendemen CPO Pabrik Kelapa Sawit (PKS) minggu ini.',
+    expectedThoughtReasoning: 'Menganalisis hasil timbangan TBS Tonase, Berat Jenjang Rata-rata (BJR), & estimasi Rendemen CPO (Target 21.5%).',
+    expectedOutputResponse: 'Analisis Perkebunan Kelapa Sawit: Panen TBS Blok A2 (Luas 150 Ha): 245.8 Ton TBS (BJR Rata-rata: 18.4 kg/jenjang). Estimasi Rendemen CPO PKS: 22.1% (Hasil CPO: 54.3 Ton). Estimasi Pendapatan Penjualan CPO: Rp 651.600.000 (Harga CPO Rp 12.000/kg). Jadwal Pemupukan NPK berikutnya: 10 Agustus 2026.',
+    datasetVersion: 'v2.5-Plantation'
+  },
+  {
+    id: 'dt-008',
+    category: 'PLANTATION_AGRI',
+    promptInstruction: 'Berikan panduan perawatan, penyerbukan, dan estimasi hasil panen Kebun Durian Musang King & Black Thorn 5 Hektar.',
+    expectedThoughtReasoning: 'Menganalisis kebutuhan nutrisi pupuk Kalsium/Kalium tinggi saat fase pembuahan, sistem pengairan drip, & proyeksi kg/pohon.',
+    expectedOutputResponse: 'Analisis Perkebunan Durian Premium: Populas 750 Pohon Durian (Musang King 60%, Black Thorn 40%). Proyeksi Hasil Panen: 4.5 Ton Durian Grade A (Rata-rata 60 kg/pohon produktif). Estimasi Omset Panen: Rp 900.000.000 (Harga Musang King Rp 200.000/kg). Tindakan Presisi: Lakukan pengocoran Pupuk KNO3 Merah & Pembungkusan Buah untuk mencegah serangga penggerek.',
+    datasetVersion: 'v2.5-Plantation'
   },
   {
     id: 'dt-004',

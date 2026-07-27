@@ -89,6 +89,14 @@ export const DeepSeekGuardrailsTab = () => {
     },
     {
       id: 'sk-10',
+      domainName: '🌱 Perkebunan & Agribisnis (Sawit, Durian & Holtikultura)',
+      iconName: 'Sprout',
+      scopeCapabilities: 'Panen TBS Kelapa Sawit, Rendemen CPO PKS %, BJR Rata-rata, Budidaya Durian Musang King/Black Thorn, & Drip Irrigation.',
+      status: 'ACTIVE_GUARDED',
+      sampleQueries: 'Berapa estimasi tonase panen TBS sawit dan rendemen CPO minggu ini?'
+    },
+    {
+      id: 'sk-11',
       domainName: '🛡️ ERP Governance & Compliance Audit',
       iconName: 'ShieldCheck',
       scopeCapabilities: 'Aturan Gembok Backdate 🔒, Soft-Delete Governance, Matrix Otorisasi RBAC, & Audit Trail Permanent.',

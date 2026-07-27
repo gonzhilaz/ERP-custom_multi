@@ -64,6 +64,13 @@ export function useAi() {
 - Konsumsi BBM Solar Volvo FMX: 28.5 L/Jam (Di Bawah Batas Maksimum 30L/Jam). Unit aman untuk shift malam.`;
     }
 
+    // Domain 6: Perkebunan (Sawit, Durian & Holtikultura)
+    if (text.includes('sawit') || text.includes('durian') || text.includes('kebun') || text.includes('perkebunan') || text.includes('tbs') || text.includes('cpo')) {
+      return `[DeepSeek-R1 Plantation & Agri Specialist]: Analisis Perkebunan & Produksi Hasil Panen:
+1. Kelapa Sawit (TBS & CPO): Panen Minggu Ini 245.8 Ton TBS (BJR 18.4kg). Rendemen CPO PKS: 22.1% (Hasil CPO 54.3 Ton). Estimasi Omset CPO Rp 651.600.000.
+2. Perkebunan Durian (Musang King & Black Thorn): Proyeksi Panen 4.5 Ton Grade A (60kg/pohon). Jadwal pengocoran pupuk KNO3 Merah & kalsium cair akhir minggu ini.`;
+    }
+
     // Domain 6: Sales, Marketing & SEO
     if (text.includes('sales') || text.includes('marketing') || text.includes('seo') || text.includes('promosi')) {
       return `[DeepSeek-R1 Growth & SEO Strategist]: Strategi Marketing & SEO Enterprise:
