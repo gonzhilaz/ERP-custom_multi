@@ -20,10 +20,30 @@ export function useAi() {
   const evaluateGuardrailResponse = (promptText: string): string => {
     const text = promptText.toLowerCase();
 
-    // Check if query is out of ERP scope (e.g. sports, entertainment, random non-business)
-    const outOfScopeKeywords = ['piala dunia', 'sepak bola', 'game', 'bermain', 'resep kue basah buatan rumah', 'cerita fiksi', 'film', 'lagu'];
+    // Check for typos in hotel/kamar
+    const isHotelQuery = text.includes('hotel') || text.includes('kamar') || text.includes('kmaar') || text.includes('kmr');
+    const isTotalQuery = text.includes('total') || text.includes('totlal') || text.includes('jumlah') || text.includes('jml');
+
+    // Specific Intent 1: Total Kamar Hotel
+    if (isHotelQuery && isTotalQuery) {
+      return `[DeepSeek-R1 Hotel PMS Engine]: Total Kapasitas Kamar Hotel Grand Royal = 120 Kamar.
+- Kamar Terisi (Occupied): 101 Kamar (Occupancy Rate: 84.2%)
+- Kamar Siap Huni (Available Clean): 16 Kamar
+- Kamar Butuh Turnover (Checkout Dirty): 3 Kamar (Kamar 304, 308, 412).`;
+    }
+
+    // Specific Intent 2: General Hotel/Wisata
+    if (isHotelQuery || text.includes('wisata') || text.includes('occupancy')) {
+      return `[DeepSeek-R1 Hotelier & Tourism Specialist]: Ringkasan Kinerja PMS Hotel:
+- Total Kapasitas: 120 Kamar (101 Terisi / 84.2% Occupancy).
+- ADR: Rp 850.000 / Malam. RevPAR: Rp 715.700.
+- Rekomendasi Bundling Wisata: Paket 'Weekend Staycation' mendongkrak RevPAR +18.5%.`;
+    }
+
+    // Out of scope check
+    const outOfScopeKeywords = ['piala dunia', 'sepak bola', 'game', 'bermain', 'cerita fiksi', 'film', 'lagu'];
     if (outOfScopeKeywords.some((k) => text.includes(k))) {
-      return `[DeepSeek ERP Guardrail System]: Mohon maaf, saya adalah DeepSeek ERP Enterprise Assistant yang dirancang khusus untuk membantu analisis keuangan, budgeting, operasional (Retail, Resto, Catering, Hotel, Tambang, Manufaktur), korespondensi resmi, dan strategi Sales/Marketing. Silakan tanyakan seputar operasional ERP Anda.`;
+      return `[DeepSeek ERP Guardrail System]: Mohon maaf, saya adalah DeepSeek ERP Enterprise Assistant yang dirancang khusus untuk membantu analisis keuangan, budgeting, operasional (Retail, Resto, Catering, Hotel, Tambang, Perkebunan), korespondensi resmi, dan strategi Sales/Marketing. Silakan tanyakan seputar operasional ERP Anda.`;
     }
 
     // Domain 1: Budgeting & Finance
@@ -50,13 +70,6 @@ export function useAi() {
 - HPP Per Porsi (BOM Costing): Rp 18.500 / Pax (Gross Margin 48% vs Harga Jual Rp 35.000).`;
     }
 
-    // Domain 4: Hotel, Wisata & Room PMS
-    if (text.includes('hotel') || text.includes('kamar') || text.includes('wisata') || text.includes('occupancy')) {
-      return `[DeepSeek-R1 Hotelier & Tourism Specialist]: Analisis Kinerja PMS Hotel & Paket Wisata:
-- Occupancy Rate: 84.2% (101 Dari 120 Kamar Terisi). ADR: Rp 850.000. RevPAR: Rp 715.700.
-- Rekomendasi Bundling Wisata: Paket 'Weekend Stay & Tour Resto Alam Rindu' mendongkrak RevPAR sebesar +18.5% di akhir pekan.`;
-    }
-
     // Domain 5: Mining & Hauling Fleet
     if (text.includes('tambang') || text.includes('mining') || text.includes('hauling') || text.includes('solar')) {
       return `[DeepSeek-R1 Mining Site Specialist]: Analisis Ritase & Fleet Efficiency Tambang Emas:
@@ -69,13 +82,6 @@ export function useAi() {
       return `[DeepSeek-R1 Plantation & Agri Specialist]: Analisis Perkebunan & Produksi Hasil Panen:
 1. Kelapa Sawit (TBS & CPO): Panen Minggu Ini 245.8 Ton TBS (BJR 18.4kg). Rendemen CPO PKS: 22.1% (Hasil CPO 54.3 Ton). Estimasi Omset CPO Rp 651.600.000.
 2. Perkebunan Durian (Musang King & Black Thorn): Proyeksi Panen 4.5 Ton Grade A (60kg/pohon). Jadwal pengocoran pupuk KNO3 Merah & kalsium cair akhir minggu ini.`;
-    }
-
-    // Domain 6: Sales, Marketing & SEO
-    if (text.includes('sales') || text.includes('marketing') || text.includes('seo') || text.includes('promosi')) {
-      return `[DeepSeek-R1 Growth & SEO Strategist]: Strategi Marketing & SEO Enterprise:
-1. SEO Intent Keyword: Optimasikan kata kunci 'Hotel Resort Terbaik Bogor' & 'Catering Massal Pabrik' untuk mendongkrak organic leads +34%.
-2. Sales CRM Conversion: Tingkatkan Conversion Rate SPH Penawaran dengan garansi Response Time < 15 Menit.`;
     }
 
     // Domain 7: Tech Stack, Full-Stack & DevOps Infrastructure
