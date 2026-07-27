@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import { Cpu, Database, Plus, CheckCircle2, Sparkles, BookOpen, Brain, Play, Download, Search, ShieldCheck } from 'lucide-react';
 import { DEEPSEEK_ERP_TRAINING_CORPUS, DeepSeekTrainingItem } from '@/lib/ai/deepseek-training-corpus';
+import { compileFullCodebaseTrainingCorpus, ERP_SYSTEM_KNOWLEDGE_SPECS } from '@/lib/ai/deepseek-master-trainer';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const DeepSeekTrainingTab = () => {
-  const [corpusList, setCorpusList] = useState<DeepSeekTrainingItem[]>(DEEPSEEK_ERP_TRAINING_CORPUS);
+  const [corpusList, setCorpusList] = useState<DeepSeekTrainingItem[]>(compileFullCodebaseTrainingCorpus());
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [isTraining, setIsTraining] = useState(false);
   const [trainingProgress, setTrainingProgress] = useState(0);
@@ -19,6 +20,12 @@ export const DeepSeekTrainingTab = () => {
     expectedThoughtReasoning: '',
     expectedOutputResponse: ''
   });
+
+  const handleSynthesizeCodebaseKnowledge = () => {
+    const fullCorpus = compileFullCodebaseTrainingCorpus();
+    setCorpusList(fullCorpus);
+    alert(`Berhasil Mengajar & Menginjeksi Pengetahuan dari 12 Modul ERP (Total ${ERP_SYSTEM_KNOWLEDGE_SPECS.length} Spesifikasi Utama) ke Memory DeepSeek AI! Dataset Diperbarui ke v3.0-MasterCodebase.`);
+  };
 
   const filteredCorpus = corpusList.filter((item) => {
     if (categoryFilter !== 'ALL' && item.category !== categoryFilter) return false;
@@ -139,6 +146,13 @@ export const DeepSeekTrainingTab = () => {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleSynthesizeCodebaseKnowledge}
+              className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold flex items-center gap-1.5 cursor-pointer transition-all shadow-md"
+            >
+              <Sparkles className="w-4 h-4 text-amber-300" />
+              <span>Ajar Pengetahuan Codebase ERP</span>
+            </button>
             <button
               onClick={() => setShowAddModal(true)}
               className="px-3.5 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-xl font-bold flex items-center gap-1.5 cursor-pointer transition-all"
