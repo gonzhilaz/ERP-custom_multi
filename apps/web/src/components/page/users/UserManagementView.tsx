@@ -10,6 +10,7 @@ import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { RoleTemplatesTab } from './RoleTemplatesTab';
 import { CreateUserModal } from './CreateUserModal';
 import { ActiveSessionsTab } from './ActiveSessionsTab';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const UserManagementView = () => {
   const { users, loading, filterRole, setFilterRole, toggleUserStatus } = useUserManagement();
@@ -66,17 +67,18 @@ export const UserManagementView = () => {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-xs">
-                  <span className="text-slate-400 font-semibold">Filter Peran System:</span>
-                  <select
+                <div className="flex items-center gap-2 text-xs w-64">
+                  <span className="text-slate-400 font-semibold shrink-0">Filter Peran:</span>
+                  <SearchableSelect
+                    options={[
+                      { id: 'ALL', label: 'Semua Peran System' },
+                      { id: 'HOLDING_EXECUTIVE', label: 'Holding Executive' },
+                      { id: 'TENANT_USER', label: 'Tenant Unit User' }
+                    ]}
                     value={filterRole}
-                    onChange={(e) => setFilterRole(e.target.value)}
-                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1 text-xs font-bold focus:outline-none"
-                  >
-                    <option value="ALL">Semua Peran System</option>
-                    <option value="HOLDING_EXECUTIVE">Holding Executive</option>
-                    <option value="TENANT_USER">Tenant Unit User</option>
-                  </select>
+                    onChange={(val) => setFilterRole(val)}
+                    placeholder="Pilih Peran System..."
+                  />
                 </div>
               </div>
 

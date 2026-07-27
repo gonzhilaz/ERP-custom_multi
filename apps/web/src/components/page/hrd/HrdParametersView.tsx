@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sliders, CalendarDays, Clock, DollarSign, Users, HelpCircle, X } from 'lucide-react';
+import { Sliders, CalendarDays, Clock, DollarSign, Users, HelpCircle, X, MapPin } from 'lucide-react';
+import { GeofenceQrSettingsTab } from './GeofenceQrSettingsTab';
 
 export const HrdParametersView = () => {
-  const [activeTab, setActiveTab] = useState<'LEAVE' | 'SHIFT' | 'OVERTIME' | 'COMPONENTS' | 'WORKER'>('LEAVE');
+  const [activeTab, setActiveTab] = useState<'LEAVE' | 'SHIFT' | 'OVERTIME' | 'COMPONENTS' | 'WORKER' | 'GEOFENCE_QR'>('LEAVE');
   const [showGlossary, setShowGlossary] = useState(false);
 
   return (
@@ -30,7 +31,7 @@ export const HrdParametersView = () => {
                   <button onClick={() => setShowGlossary(false)} className="text-slate-400 hover:text-white"><X className="w-3.5 h-3.5" /></button>
                 </div>
                 <p className="text-[11px] text-slate-300">
-                  Pusat konfigurasi parameter kebijakan Cuti, Roster Shift, Ketentuan Lembur, Komponen Gaji, dan Aturan Tipe Pekerja dalam 1 modul terpadu.
+                  Pusat konfigurasi parameter kebijakan Cuti, Roster Shift, Ketentuan Lembur, Geofencing GPS 5m, Dynamic QR 15s, dan Tracking.
                 </p>
               </div>
             )}
@@ -84,18 +85,26 @@ export const HrdParametersView = () => {
             <Users className="w-3.5 h-3.5" />
             <span>Status Pekerja</span>
           </button>
+          <button
+            onClick={() => setActiveTab('GEOFENCE_QR')}
+            className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1 cursor-pointer shrink-0 ${
+              activeTab === 'GEOFENCE_QR' ? 'bg-sky-600 text-white shadow-sm' : 'text-slate-500'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            <span>Geofencing & QR 15s</span>
+          </button>
         </div>
       </div>
 
       {/* Tab Panels */}
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-        <h3 className="font-bold text-sm text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">
-          Konfigurasi Parameter: {activeTab}
-        </h3>
-        <p className="text-slate-500 text-xs">
-          Seluruh parameter di atas dikonsolidasi secara terpusat untuk mempermudah tata kelola aturan HRD perusahaan.
-        </p>
-      </div>
+      {activeTab === 'GEOFENCE_QR' ? (
+        <GeofenceQrSettingsTab />
+      ) : (
+        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-500">
+          Parameter Kebijakan Operasional {activeTab} Aktif.
+        </div>
+      )}
     </div>
   );
 };
