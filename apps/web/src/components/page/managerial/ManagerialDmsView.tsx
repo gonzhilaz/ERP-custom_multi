@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { FileText, Plus, ShieldCheck, HelpCircle, X, AlertTriangle, Truck, ShieldAlert } from 'lucide-react';
 import { MOCK_LEGAL_DOCUMENTS, LegalDocumentItem } from '@/lib/mock/managerial';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const ManagerialDmsView = () => {
   const [documents, setDocuments] = useState<LegalDocumentItem[]>(MOCK_LEGAL_DOCUMENTS);
@@ -97,15 +98,18 @@ export const ManagerialDmsView = () => {
 
         <div className="flex items-center gap-2">
           {/* Category Filter */}
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold focus:outline-none"
-          >
-            <option value="ALL">Semua Perizinan</option>
-            <option value="FLEET">🚚 Armada & Logistik (KIR/STNK/B3)</option>
-            <option value="CORPORATE">🏢 Perizinan Usaha (IUP/Halal)</option>
-          </select>
+          <div className="w-64">
+            <SearchableSelect
+              options={[
+                { id: 'ALL', label: 'Semua Perizinan' },
+                { id: 'FLEET', label: '🚚 Armada & Logistik (KIR/STNK/B3)' },
+                { id: 'CORPORATE', label: '🏢 Perizinan Usaha (IUP/Halal)' }
+              ]}
+              value={filterCategory}
+              onChange={(val) => setFilterCategory(val)}
+              placeholder="Pilih Category Perizinan..."
+            />
+          </div>
 
           <button
             onClick={() => setShowModal(true)}

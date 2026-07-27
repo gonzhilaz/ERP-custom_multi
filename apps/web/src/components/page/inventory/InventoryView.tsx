@@ -5,6 +5,7 @@ import { Boxes, AlertTriangle, Plus, Warehouse, HelpCircle, X } from 'lucide-rea
 import { useInventory } from '@/hooks/inventory/useInventory';
 import { SkeletonTable } from '@/components/ui/loader/skeleton/SkeletonTable';
 import { StatusBadge } from '@/components/ui/badge/StatusBadge';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const InventoryView = () => {
   const {
@@ -101,19 +102,20 @@ export const InventoryView = () => {
               <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Persediaan Gudang</span>
             </div>
 
-            <div className="flex items-center gap-2 text-xs">
-              <span className="text-slate-400">Filter Gudang:</span>
-              <select
+            <div className="flex items-center gap-2 text-xs w-64">
+              <span className="text-slate-400 font-semibold shrink-0">Filter Gudang:</span>
+              <SearchableSelect
+                options={[
+                  { id: 'ALL', label: 'Semua Gudang & Site' },
+                  { id: 'Resto', label: 'Gudang Resto' },
+                  { id: 'Tambang', label: 'Gudang Site Tambang' },
+                  { id: 'Hotel', label: 'Gudang Hotel' },
+                  { id: 'Retail', label: 'Gudang Retail' }
+                ]}
                 value={filterWarehouse}
-                onChange={(e) => setFilterWarehouse(e.target.value)}
-                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs focus:outline-none"
-              >
-                <option value="ALL">Semua Gudang & Site</option>
-                <option value="Resto">Gudang Resto</option>
-                <option value="Tambang">Gudang Site Tambang</option>
-                <option value="Hotel">Gudang Hotel</option>
-                <option value="Retail">Gudang Retail</option>
-              </select>
+                onChange={(val) => setFilterWarehouse(val)}
+                placeholder="Pilih Gudang..."
+              />
             </div>
           </div>
 

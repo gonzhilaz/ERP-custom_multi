@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Plus, Trash2, HelpCircle, X, ShieldAlert } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const HrdWarningLettersView = () => {
   const { user } = useAuth();
@@ -139,11 +140,16 @@ export const HrdWarningLettersView = () => {
               </div>
               <div>
                 <label className="block font-semibold mb-1">Tipe Surat Peringatan</label>
-                <select value={formData.spType} onChange={(e) => setFormData({ ...formData, spType: e.target.value })} className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border font-bold text-amber-600">
-                  <option value="SP_1">SP 1 (Peringatan Pertama - 6 Bulan)</option>
-                  <option value="SP_2">SP 2 (Peringatan Kedua - 6 Bulan)</option>
-                  <option value="SP_3">SP 3 (Peringatan Ketiga / Terakhir)</option>
-                </select>
+                <SearchableSelect
+                  options={[
+                    { id: 'SP_1', label: 'SP 1 (Peringatan Pertama - 6 Bulan)' },
+                    { id: 'SP_2', label: 'SP 2 (Peringatan Kedua - 6 Bulan)' },
+                    { id: 'SP_3', label: 'SP 3 (Peringatan Ketiga / Terakhir)' }
+                  ]}
+                  value={formData.spType}
+                  onChange={(val) => setFormData({ ...formData, spType: val })}
+                  placeholder="Pilih Tipe SP..."
+                />
               </div>
               <div>
                 <label className="block font-semibold mb-1">Alasan Pelanggaran Disiplin</label>

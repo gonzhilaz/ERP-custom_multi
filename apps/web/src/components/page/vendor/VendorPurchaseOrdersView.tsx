@@ -6,6 +6,7 @@ import { useVendor } from '@/hooks/vendor/useVendor';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { StatusBadge } from '@/components/ui/badge/StatusBadge';
 import { PurchaseOrder } from '@/lib/mock/vendor';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const VendorPurchaseOrdersView = () => {
   const { purchaseOrders, approvePO, rejectPO, vendors } = useVendor();
@@ -175,31 +176,27 @@ export const VendorPurchaseOrdersView = () => {
             <form onSubmit={handleCreatePO} className="space-y-3">
               <div>
                 <label className="block font-semibold mb-1">Pilih Vendor Supplier</label>
-                <select
+                <SearchableSelect
+                  options={vendors.map((v) => ({ id: v.name, label: `${v.name} (${v.category})` }))}
                   value={formData.vendorName}
-                  onChange={(e) => setFormData({ ...formData, vendorName: e.target.value })}
-                  className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                >
-                  {vendors.map((v) => (
-                    <option key={v.id} value={v.name}>
-                      {v.name} ({v.category})
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setFormData({ ...formData, vendorName: val })}
+                  placeholder="Pilih Vendor Supplier..."
+                />
               </div>
 
               <div>
                 <label className="block font-semibold mb-1">Unit Usaha Pemohon</label>
-                <select
+                <SearchableSelect
+                  options={[
+                    { id: 'Restoran Alam Rindu (FnB)', label: 'Restoran Alam Rindu (FnB)' },
+                    { id: 'PT Braxit Mining (Tambang Emas)', label: 'PT Braxit Mining (Tambang Emas)' },
+                    { id: 'Hotel Alam Pakuan (Hospitality)', label: 'Hotel Alam Pakuan (Hospitality)' },
+                    { id: 'Toko Roti Surya (Retail)', label: 'Toko Roti Surya (Retail)' }
+                  ]}
                   value={formData.unitUsaha}
-                  onChange={(e) => setFormData({ ...formData, unitUsaha: e.target.value })}
-                  className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700"
-                >
-                  <option value="Restoran Alam Rindu (FnB)">Restoran Alam Rindu (FnB)</option>
-                  <option value="PT Braxit Mining (Tambang Emas)">PT Braxit Mining (Tambang Emas)</option>
-                  <option value="Hotel Alam Pakuan (Hospitality)">Hotel Alam Pakuan (Hospitality)</option>
-                  <option value="Toko Roti Surya (Retail)">Toko Roti Surya (Retail)</option>
-                </select>
+                  onChange={(val) => setFormData({ ...formData, unitUsaha: val })}
+                  placeholder="Pilih Unit Usaha..."
+                />
               </div>
 
               <div>

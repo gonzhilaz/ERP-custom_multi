@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, ShieldCheck, CreditCard, Key, AlertTriangle, Clock, UserCheck } from 'lucide-react';
 import { HotelReservationItem } from './HotelierReservationsView';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   reservation: HotelReservationItem | null;
@@ -99,11 +100,16 @@ export const HotelCheckInModal: React.FC<Props> = ({ reservation, onClose, onCon
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Alokasi Unit Kamar</label>
-              <select value={assignedRoomNo} onChange={(e) => setAssignedRoomNo(e.target.value)} className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-mono font-bold text-slate-900 dark:text-white">
-                <option value="RM-101">RM-101 (Deluxe King - VC Clean)</option>
-                <option value="RM-102">RM-102 (Executive Suite - VC Clean)</option>
-                <option value="RM-201">RM-201 (Grand Deluxe - VC Clean)</option>
-              </select>
+              <SearchableSelect
+                options={[
+                  { id: 'RM-101', label: 'RM-101 (Deluxe King - VC Clean)' },
+                  { id: 'RM-102', label: 'RM-102 (Executive Suite - VC Clean)' },
+                  { id: 'RM-201', label: 'RM-201 (Grand Deluxe - VC Clean)' }
+                ]}
+                value={assignedRoomNo}
+                onChange={(val) => setAssignedRoomNo(val)}
+                placeholder="Pilih Unit Kamar..."
+              />
             </div>
             <div>
               <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Durasi Menginap</label>
@@ -127,11 +133,16 @@ export const HotelCheckInModal: React.FC<Props> = ({ reservation, onClose, onCon
               </div>
               <div>
                 <label className="block text-[10px] text-slate-500 mb-1">Metode Bayar Deposit</label>
-                <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value as any)} className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg font-bold text-xs">
-                  <option value="CASH">Tunai (Cash Desk)</option>
-                  <option value="DEBIT_CARD">Kartu Debit EDC</option>
-                  <option value="CREDIT_CARD_PREAUTH">Pre-Auth Kartu Kredit</option>
-                </select>
+                <SearchableSelect
+                  options={[
+                    { id: 'CASH', label: 'Tunai (Cash Desk)' },
+                    { id: 'DEBIT_CARD', label: 'Kartu Debit EDC' },
+                    { id: 'CREDIT_CARD_PREAUTH', label: 'Pre-Auth Kartu Kredit' }
+                  ]}
+                  value={paymentMethod}
+                  onChange={(val) => setPaymentMethod(val as any)}
+                  placeholder="Metode Bayar..."
+                />
               </div>
             </div>
           </div>
