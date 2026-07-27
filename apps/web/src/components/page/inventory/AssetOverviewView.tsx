@@ -1,8 +1,21 @@
 'use client';
 
 import React from 'react';
-import { Building, CheckCircle2, Wrench, DollarSign, History } from 'lucide-react';
+import { Building, CheckCircle2, Wrench, DollarSign, History, AlertTriangle, BarChart3, PieChart } from 'lucide-react';
+import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
+import { KpiCard } from '@/components/ui/cards/KpiCard';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { useInventory } from '@/hooks/inventory/useInventory';
+
+interface MaintenanceLog {
+  id: string;
+  date: string;
+  assetCode: string;
+  assetName: string;
+  technician: string;
+  actionCost: number;
+  description: string;
+}
 
 export const AssetOverviewView = () => {
   const { allAssets } = useInventory();
@@ -12,7 +25,7 @@ export const AssetOverviewView = () => {
   const operationalCount = allAssets.filter((a) => a.status === 'OPERATIONAL').length;
   const maintenanceCount = allAssets.filter((a) => a.status !== 'OPERATIONAL').length;
 
-  const mockMaintenanceLogs = [
+  const mockMaintenanceLogs: MaintenanceLog[] = [
     {
       id: 'log-01',
       date: '2026-07-20',
@@ -33,99 +46,91 @@ export const AssetOverviewView = () => {
     }
   ];
 
+  const columns: ColumnDef<MaintenanceLog>[] = [
+    { key: 'date', header: 'Tanggal Servis', className: 'font-mono text-slate-500', render: (i) => i.date },
+    { key: 'assetCode', header: 'Kode Aset', className: 'font-mono font-bold text-sky-600', render: (i) => i.assetCode },
+    { key: 'assetName', header: 'Nama Aset Tetap', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.assetName },
+    { key: 'technician', header: 'Teknisi / Vendor Servis', className: 'text-slate-500', render: (i) => i.technician },
+    { key: 'actionCost', header: 'Biaya Servis (Rp)', align: 'right', className: 'font-mono font-bold text-rose-600', render: (i) => `Rp ${i.actionCost.toLocaleString('id-ID')}` },
+    { key: 'description', header: 'Rincian Perbaikan', render: (i) => i.description }
+  ];
+
   return (
-    <div className="space-y-4">
-      {/* Header Bar */}
-      <div>
-        <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <Building className="w-5 h-5 text-indigo-500" />
-          <span>Asset Overview</span>
-        </h1>
-      </div>
+    <div className="space-y-4 text-xs">
+      {/* Module Header */}
+      <ModuleHeader
+        title="Ringkasan Analitik Aset Tetap & Depresiasi (Asset Overview)"
+        icon={Building}
+        iconBgColor="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+        glossaryTitle="Glossary Fixed Asset Management"
+        glossaryItems={[
+          { term: 'Nilai Buku (Book Value)', description: 'Harga perolehan aset dikurangi akumulasi penyusutan fiskal & komersial.' },
+          { term: 'Aset BEP / Fully Depreciated', description: 'Aset yang telah lunas masa manfaatnya namun masih produktif secara fisik.' }
+        ]}
+        badges={[
+          { label: 'PMK 72/2023 Compliant', variant: 'emerald' },
+          { label: 'Asset Barcode Tracking Active', variant: 'sky' }
+        ]}
+      />
 
-      {/* KPI Cards Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
+      {/* Warning Banner */}
+      <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
+        <div className="flex items-center gap-2.5">
+          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
           <div>
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Asset Lunas BEP</div>
-            <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mt-0.5">{bepAssets.length} Item BEP</div>
-          </div>
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
-            <DollarSign className="w-5 h-5" />
-          </div>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
-          <div>
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Asset Operasional Aktif</div>
-            <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{operationalCount} Active</div>
-          </div>
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-            <CheckCircle2 className="w-5 h-5" />
-          </div>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
-          <div>
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Asset Dalam Perbaikan</div>
-            <div className="text-xl font-bold text-amber-600 dark:text-amber-400 mt-0.5">{maintenanceCount} Service</div>
-          </div>
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
-            <Wrench className="w-5 h-5" />
-          </div>
-        </div>
-
-        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between">
-          <div>
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Akumulasi Depresiasi</div>
-            <div className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">
-              Rp {totalDepreciation.toLocaleString('id-ID')}
+            <div className="font-bold text-xs">Peringatan Maintenance Aset & Garansi Overdue</div>
+            <div className="text-[11px] text-amber-700 dark:text-amber-300">
+              Excavator CAT 777D memerlukan perbaikan berkala 500 jam kerja dan 1 unit Oven Resto membutuhkan servis garansi.
             </div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-slate-500/10 text-slate-500 flex items-center justify-center">
-            <History className="w-5 h-5" />
-          </div>
+        </div>
+        <div className="flex items-center gap-2 font-mono text-[11px] font-bold shrink-0">
+          <span className="px-2 py-1 bg-amber-500/20 rounded-lg">2 Service Due</span>
         </div>
       </div>
 
-      {/* Maintenance History Log Section */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-            <History className="w-4 h-4 text-indigo-500" />
-            <span>Maintenance Log</span>
-          </span>
+      {/* Top 4 KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <KpiCard title="Aset BEP / Lunas" value={`${bepAssets.length} Item BEP`} subtitle="Masa Manfaat Maksimal" icon={DollarSign} iconBgColor="bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50" />
+        <KpiCard title="Operasional Aktif" value={`${operationalCount} Aset`} subtitle="Ready for Production" icon={CheckCircle2} iconBgColor="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50" />
+        <KpiCard title="Aset dlm Perbaikan" value={`${maintenanceCount} Unit`} subtitle="Servis & Maintenance" icon={Wrench} iconBgColor="bg-amber-50 text-amber-600 dark:bg-amber-950/50" />
+        <KpiCard title="Akumulasi Penyusutan" value={`Rp ${(totalDepreciation / 1000000).toLocaleString('id-ID')} Jt`} subtitle="Penyusutan GL Posted" icon={Building} iconBgColor="bg-purple-50 text-purple-600 dark:bg-purple-950/50" />
+      </div>
+
+      {/* Analytics Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Asset Value vs Accumulated Depreciation */}
+        <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-indigo-500" />
+              <span>Komposisi Nilai Perolehan vs Nilai Buku Aset</span>
+            </h3>
+            <span className="font-mono text-[10px] text-indigo-600 font-bold bg-indigo-50 dark:bg-indigo-950/40 px-2 py-0.5 rounded-md">4 Sektor Usaha</span>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            {[
+              { name: 'Kategori Alat Berat & Armada Tambang', cost: 'Rp 4.20 M', pct: 65, color: 'bg-indigo-500' },
+              { name: 'Bangunan & Gedung Hotel Resort', cost: 'Rp 1.80 M', pct: 45, color: 'bg-sky-500' },
+              { name: 'Mesin Kitchen & Kitchen Utensils', cost: 'Rp 450 Jt', pct: 80, color: 'bg-emerald-500' },
+              { name: 'Perangkat IT, Server & POS Terminal', cost: 'Rp 280 Jt', pct: 90, color: 'bg-amber-500' }
+            ].map((item, idx) => (
+              <div key={idx} className="space-y-1">
+                <div className="flex justify-between text-[11px]">
+                  <span className="font-medium text-slate-700 dark:text-slate-300">{item.name}</span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white">{item.cost} (Ter-penyusutan: {item.pct}%)</span>
+                </div>
+                <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div className={`h-full ${item.color} rounded-full transition-all duration-500`} style={{ width: `${item.pct}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Tanggal Service</th>
-                <th className="py-3.5 px-4">Kode & Nama Asset</th>
-                <th className="py-3.5 px-4">Teknisi PJ</th>
-                <th className="py-3.5 px-4">Deskripsi Perbaikan</th>
-                <th className="py-3.5 px-4 text-right">Biaya Service</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {mockMaintenanceLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-slate-500">{log.date}</td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono block text-[11px]">{log.assetCode}</span>
-                    <span>{log.assetName}</span>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500 font-semibold">{log.technician}</td>
-                  <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{log.description}</td>
-                  <td className="py-3.5 px-4 text-right font-bold text-indigo-600 dark:text-indigo-400 font-mono">
-                    Rp {log.actionCost.toLocaleString('id-ID')}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* Maintenance Log Table */}
+        <DataTable headerTitle="Riwayat Servis & Pemeliharaan Aset" columns={columns} data={mockMaintenanceLogs} keyExtractor={(i) => i.id} />
       </div>
     </div>
   );

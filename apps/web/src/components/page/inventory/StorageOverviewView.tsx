@@ -1,13 +1,27 @@
 'use client';
 
 import React from 'react';
-import { Warehouse, ArrowLeftRight, Thermometer, ShieldAlert } from 'lucide-react';
+import { Warehouse, ArrowLeftRight, Thermometer, ShieldAlert, AlertTriangle, Boxes, Layers } from 'lucide-react';
+import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
+import { KpiCard } from '@/components/ui/cards/KpiCard';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { useInventory } from '@/hooks/inventory/useInventory';
+
+interface StockTransferLog {
+  id: string;
+  date: string;
+  itemName: string;
+  qty: number;
+  uom: string;
+  source: string;
+  destination: string;
+  operator: string;
+}
 
 export const StorageOverviewView = () => {
   const { allStorages } = useInventory();
 
-  const mockStockTransferLogs = [
+  const mockStockTransferLogs: StockTransferLog[] = [
     {
       id: 'tf-01',
       date: '2026-07-23 14:30',
@@ -30,14 +44,55 @@ export const StorageOverviewView = () => {
     }
   ];
 
+  const columns: ColumnDef<StockTransferLog>[] = [
+    { key: 'date', header: 'Waktu Mutasi', className: 'font-mono text-slate-500', render: (i) => i.date },
+    { key: 'itemName', header: 'Nama Barang', className: 'font-bold text-slate-900 dark:text-white', render: (i) => i.itemName },
+    { key: 'qty', header: 'Jumlah Transfer', align: 'center', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (i) => `${i.qty} ${i.uom}` },
+    { key: 'source', header: 'Storage Asal', className: 'text-slate-500', render: (i) => i.source },
+    { key: 'destination', header: 'Storage Tujuan', className: 'text-slate-500', render: (i) => i.destination },
+    { key: 'operator', header: 'Operator', align: 'center', className: 'font-semibold', render: (i) => i.operator }
+  ];
+
   return (
-    <div className="space-y-4">
-      {/* Header Bar */}
-      <div>
-        <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <Warehouse className="w-5 h-5 text-amber-500" />
-          <span>Storage Overview</span>
-        </h1>
+    <div className="space-y-4 text-xs">
+      {/* Module Header */}
+      <ModuleHeader
+        title="Ringkasan Analitik Kapasitas & Lokasi Storage (Storage Overview)"
+        icon={Warehouse}
+        iconBgColor="bg-amber-500/10 text-amber-600 dark:text-amber-400"
+        glossaryTitle="Glossary Storage Management"
+        glossaryItems={[
+          { term: 'Storage Capacity %', description: 'Persentase rasio volume fisik barang terpakai vs kapasitas maksimum gudang.' },
+          { term: 'Cold Chain Monitoring', description: 'Pengawasan sensor suhu freezer real-time untuk bahan pangan perishable.' }
+        ]}
+        badges={[
+          { label: 'IoT Temperature Sensor Online', variant: 'emerald' },
+          { label: 'Multi-Warehouse Location', variant: 'sky' }
+        ]}
+      />
+
+      {/* Warning Banner */}
+      <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
+        <div className="flex items-center gap-2.5">
+          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+          <div>
+            <div className="font-bold text-xs">Peringatan Kapasitas Gudang & Sensor Suhu Cold Storage</div>
+            <div className="text-[11px] text-amber-700 dark:text-amber-300">
+              Gudang Utama Sudirman mendekati batas kritis (88% Okupansi) dan Cold Storage Resto memerlukan inspeksi filter pendingin.
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 font-mono text-[11px] font-bold shrink-0">
+          <span className="px-2 py-1 bg-amber-500/20 rounded-lg">88% Capacity Limit</span>
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <KpiCard title="Total Lokasi Storage" value={`${allStorages.length} Gudang`} subtitle="Holding & Cabang" icon={Warehouse} iconBgColor="bg-amber-50 text-amber-600 dark:bg-amber-950/50" />
+        <KpiCard title="Rata-rata Okupansi" value="76.4%" subtitle="Kapasitas Fisik" icon={Layers} iconBgColor="bg-sky-50 text-sky-600 dark:bg-sky-950/50" />
+        <KpiCard title="Cold Storage Active" value="2 Freezer Unit" subtitle="Suhu Normal (-18.5°C)" icon={Thermometer} iconBgColor="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50" />
+        <KpiCard title="Mutasi Stok Hari Ini" value="14 Transfer" subtitle="Surat Jalan Terbit" icon={ArrowLeftRight} iconBgColor="bg-purple-50 text-purple-600 dark:bg-purple-950/50" />
       </div>
 
       {/* Storage Environmental & Capacity Status Grid */}
@@ -97,43 +152,8 @@ export const StorageOverviewView = () => {
       </div>
 
       {/* Stock Transfer Log Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-            <ArrowLeftRight className="w-4 h-4 text-amber-500" />
-            <span>Stock Transfer Log</span>
-          </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Waktu Mutasi</th>
-                <th className="py-3.5 px-4">Nama Barang</th>
-                <th className="py-3.5 px-4 text-center">Jumlah Transfer</th>
-                <th className="py-3.5 px-4">Storage Asal</th>
-                <th className="py-3.5 px-4">Storage Tujuan</th>
-                <th className="py-3.5 px-4 text-center">Operator</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {mockStockTransferLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-slate-500">{log.date}</td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">{log.itemName}</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-amber-600 dark:text-amber-400">
-                    {log.qty} {log.uom}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500">{log.source}</td>
-                  <td className="py-3.5 px-4 text-slate-500">{log.destination}</td>
-                  <td className="py-3.5 px-4 text-center font-semibold text-slate-700 dark:text-slate-300">{log.operator}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable headerTitle="Riwayat Transfer & Mutasi Antar Gudang" columns={columns} data={mockStockTransferLogs} keyExtractor={(i) => i.id} />
     </div>
   );
 };
+

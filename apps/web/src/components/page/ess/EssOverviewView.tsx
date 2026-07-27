@@ -1,52 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
-import { UserCheck, Calendar, Clock, DollarSign, FileText, ShieldCheck, MapPin, ArrowRight, HelpCircle, X, Camera, BarChart2, AlertTriangle, Award, Activity } from 'lucide-react';
+import React from 'react';
+import { UserCheck, Calendar, Clock, DollarSign, FileText, ShieldCheck, MapPin, ArrowRight, Camera, BarChart2, AlertTriangle, Award, Activity } from 'lucide-react';
 import Link from 'next/link';
+import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 
 export const EssOverviewView = () => {
-  const [showGlossary, setShowGlossary] = useState(false);
-
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <UserCheck className="w-5 h-5 text-sky-500" />
-            <span>ESS Overview</span>
-          </h1>
+    <div className="space-y-4 text-xs">
+      {/* Module Header */}
+      <ModuleHeader
+        title="Pusat Portal Mandiri Karyawan (ESS Overview)"
+        icon={UserCheck}
+        iconBgColor="bg-sky-500/10 text-sky-600 dark:text-sky-400"
+        glossaryTitle="Glossary Employee Self-Service"
+        glossaryItems={[
+          { term: 'ESS Portal', description: 'Layanan mandiri karyawan untuk presensi GPS, pengajuan cuti, lembur, & klaim medis.' },
+          { term: 'Shift Roster', description: 'Jadwal kerja giliran shift operasional yang disetujui supervisor.' }
+        ]}
+        badges={[
+          { label: 'GPS Geofencing Active', variant: 'emerald' },
+          { label: 'Clean Disciplinary Record (SP 0)', variant: 'sky' }
+        ]}
+      />
 
-          {/* Glossary Popup Trigger */}
-          <div className="relative">
-            <button
-              onClick={() => setShowGlossary(!showGlossary)}
-              className="text-slate-400 hover:text-sky-500 transition-colors p-1 cursor-pointer"
-              title="Informasi & Glossary ESS Overview"
-            >
-              <HelpCircle className="w-4 h-4" />
-            </button>
-
-            {showGlossary && (
-              <div className="absolute left-0 top-7 z-30 w-80 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl text-xs space-y-2 border border-slate-700">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold text-sky-400">
-                  <span>Glossary ESS Overview & Analisis</span>
-                  <button onClick={() => setShowGlossary(false)} className="text-slate-400 hover:text-white cursor-pointer">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                <p className="text-[11px] text-slate-300">
-                  - <strong>Metrik Produktivitas Karyawan</strong>: Persentase efisiensi jam kerja & pencapaian KPI individu (96.5%).
-                </p>
-                <p className="text-[11px] text-slate-300">
-                  - <strong>Catatan Disiplin SP (Surat Peringatan)</strong>: Rekam jejak kedisiplinan (SP 0 - Clean Record).
-                </p>
-                <p className="text-[11px] text-slate-300">
-                  - <strong>Persentase Kehadiran Bulanan</strong>: Persentase kehadiran tepat waktu (98.2%).
-                </p>
-              </div>
-            )}
+      {/* Warning Banner */}
+      <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
+        <div className="flex items-center gap-2.5">
+          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+          <div>
+            <div className="font-bold text-xs">Pengajuan Cuti & Klaim Medis Membutuhkan Persetujuan</div>
+            <div className="text-[11px] text-amber-700 dark:text-amber-300">
+              1 Pengajuan Cuti Tahunan (12-14 Ags) dan 1 Klaim Reimbursement Medis Rp 450.000 menunggu persetujuan HRD.
+            </div>
           </div>
+        </div>
+        <div className="flex items-center gap-2 font-mono text-[11px] font-bold shrink-0">
+          <span className="px-2 py-1 bg-amber-500/20 rounded-lg">2 Pending Approvals</span>
         </div>
       </div>
 

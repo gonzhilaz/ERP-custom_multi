@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Users, DollarSign, Briefcase, TrendingUp, Plus, Settings, Sparkles } from 'lucide-react';
+import { Users, DollarSign, Briefcase, TrendingUp, Plus, Settings, Sparkles, AlertTriangle } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { KpiCard } from '@/components/ui/cards/KpiCard';
 import { CrmOverviewWidget } from '@/components/widgets/CrmOverviewWidget';
@@ -43,6 +43,22 @@ export const CrmOverviewView = () => {
             <Settings className="w-4 h-4" />
             <span>{isEditMode ? 'Selesai' : 'Kustomisasi Layout'}</span>
           </button>
+        </div>
+      </div>
+
+      {/* Warning Banner */}
+      <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200">
+        <div className="flex items-center gap-2.5">
+          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+          <div>
+            <div className="font-bold text-xs">Peringatan CRM: Stale Opportunity Leads & Proposal Review</div>
+            <div className="text-[11px] text-amber-700 dark:text-amber-300">
+              Terdapat 3 prospek senilai Rp 850.000.000 belum di-follow up dalam 7 hari (PT Borneo Mining & PT Mahkota Culinary).
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 font-mono text-[11px] font-bold shrink-0">
+          <span className="px-2 py-1 bg-amber-500/20 rounded-lg">3 Stale Deals</span>
         </div>
       </div>
 
