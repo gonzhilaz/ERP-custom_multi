@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, Download, Printer } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, Download, Printer, Search } from 'lucide-react';
 
 export interface ColumnDef<T> {
   key: string;
@@ -29,6 +29,9 @@ export interface DataTableProps<T> {
   defaultPageSize?: number;
   enableExport?: boolean;
   isLoading?: boolean;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  filterComponent?: React.ReactNode;
 }
 
 export function DataTable<T>({
@@ -45,9 +48,13 @@ export function DataTable<T>({
   enablePagination = true,
   defaultPageSize = 10,
   enableExport = true,
-  isLoading = false
+  isLoading = false,
+  searchable = true,
+  searchPlaceholder = 'Cari data dalam tabel...',
+  filterComponent
 }: DataTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const [sortConfig, setSortConfig] = useState<{ key: string | null; direction: 'asc' | 'desc' }>({
     key: null,
@@ -63,12 +70,28 @@ export function DataTable<T>({
     });
   };
 
+  // Filter Data by Search Query
+  const filteredData = useMemo(() => {
+    if (!searchQuery.trim()) return data;
+    const q = searchQuery.toLowerCase().trim();
+
+    return data.filter((item) => {
+      return Object.values(item as any).some((val) => {
+        if (val === null || val === undefined) return false;
+        if (typeof val === 'string' || typeof val === 'number') {
+          return String(val).toLowerCase().includes(q);
+        }
+        return false;
+      });
+    });
+  }, [data, searchQuery]);
+
   // Sort Data
   const sortedData = useMemo(() => {
-    if (!sortConfig.key) return data;
+    if (!sortConfig.key) return filteredData;
     const col = columns.find((c) => c.key === sortConfig.key);
 
-    return [...data].sort((a, b) => {
+    return [...filteredData].sort((a, b) => {
       let aVal = col?.sortValue ? col.sortValue(a) : (a as any)[sortConfig.key!];
       let bVal = col?.sortValue ? col.sortValue(b) : (b as any)[sortConfig.key!];
 
@@ -86,7 +109,7 @@ export function DataTable<T>({
 
       return 0;
     });
-  }, [data, sortConfig, columns]);
+  }, [filteredData, sortConfig, columns]);
 
   const totalItems = sortedData.length;
   const totalPages = Math.ceil(totalItems / pageSize) || 1;
@@ -126,32 +149,55 @@ export function DataTable<T>({
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm text-xs space-y-0">
-      {(headerTitle || headerRightContent || enableExport) && (
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
-          {headerTitle && <span className="font-bold text-slate-900 dark:text-white text-xs">{headerTitle}</span>}
-          <div className="flex items-center gap-2">
-            {headerRightContent && <div>{headerRightContent}</div>}
-            {enableExport && (
-              <div className="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-700 pl-2">
-                <button
-                  onClick={handleExportCSV}
-                  title="Ekspor Data CSV"
-                  className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
-                >
-                  <Download className="w-3.5 h-3.5 text-sky-500" />
-                  <span>CSV</span>
-                </button>
-                <button
-                  onClick={handlePrint}
-                  title="Cetak Halaman"
-                  className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
-                >
-                  <Printer className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Cetak</span>
-                </button>
-              </div>
-            )}
+      {(headerTitle || headerRightContent || enableExport || searchable || filterComponent) && (
+        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 space-y-3">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            {headerTitle && <span className="font-bold text-slate-900 dark:text-white text-xs">{headerTitle}</span>}
+            <div className="flex items-center gap-2">
+              {headerRightContent && <div>{headerRightContent}</div>}
+              {enableExport && (
+                <div className="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-700 pl-2">
+                  <button
+                    onClick={handleExportCSV}
+                    title="Ekspor Data CSV"
+                    className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
+                  >
+                    <Download className="w-3.5 h-3.5 text-sky-500" />
+                    <span>CSV</span>
+                  </button>
+                  <button
+                    onClick={handlePrint}
+                    title="Cetak Halaman"
+                    className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
+                  >
+                    <Printer className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Cetak</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
+
+          {(searchable || filterComponent) && (
+            <div className="flex items-center gap-2.5 flex-wrap pt-1">
+              {searchable && (
+                <div className="relative flex-1 min-w-[200px]">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    placeholder={searchPlaceholder}
+                    className="w-full bg-white dark:bg-slate-800 text-xs pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-sky-500 shadow-none"
+                  />
+                </div>
+              )}
+              {filterComponent && <div className="flex items-center gap-2">{filterComponent}</div>}
+            </div>
+          )}
         </div>
       )}
 
