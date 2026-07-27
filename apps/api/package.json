@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc"
+    "build": "cd ../.. && npx prisma generate --schema=packages/database/prisma/master.prisma && npx prisma generate --schema=packages/database/prisma/tenant.prisma && npm run build --workspace=packages/shared-types && npm run build --workspace=packages/database && cd apps/api && tsc"
   },
   "dependencies": {
     "@erp/database": "*",

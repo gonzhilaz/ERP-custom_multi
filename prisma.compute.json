@@ -16,7 +16,7 @@
       "framework": "custom",
       "httpPort": 3000,
       "build": {
-        "command": "npx prisma generate --schema=../../packages/database/prisma/master.prisma && npx prisma generate --schema=../../packages/database/prisma/tenant.prisma && tsc",
+        "command": "npm run build",
         "outputDirectory": ".",
         "entrypoint": "dist/index.js"
       }
