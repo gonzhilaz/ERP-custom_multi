@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Wallet, Plus, ArrowDownLeft, ArrowUpRight, CheckCircle2, FileText, Eye } from 'lucide-react';
+import { Wallet, Plus, ArrowDownLeft, ArrowUpRight, CheckCircle2, FileText, Eye, Edit3, Trash2 } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
@@ -9,6 +9,9 @@ import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { CreateCashVoucherModal } from '@/components/ui/modals/CreateCashVoucherModal';
 import { CreateGiroModal } from '@/components/ui/modals/CreateGiroModal';
 import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { useBackdateGovernance } from '@/hooks/auth/useBackdateGovernance';
+import { isBackdateRoleAuthorized } from '@/lib/auth/backdate-governance';
 
 interface CashVoucherRow {
   voucherNumber: string;
@@ -21,6 +24,7 @@ interface CashVoucherRow {
   contraAccountCode: string;
   contraAccountName: string;
   status: string;
+  isDeleted?: boolean;
 }
 
 interface GiroRow {
@@ -32,10 +36,13 @@ interface GiroRow {
   issuerOrPayee: string;
   amount: number;
   description: string;
-  status: 'DITERIMA' | 'DIENDAPKAN' | 'CAIR' | 'DITOLAK';
+  status: 'DITERIMA' | 'DIENDAPKAN' | 'CAIR' | 'DITOLAK' | 'ARCHIVED';
+  isDeleted?: boolean;
 }
 
 export const FinanceCashView = () => {
+  const { user } = useAuth();
+  const { validateDate } = useBackdateGovernance();
   const [activeTab, setActiveTab] = useState<'VKM' | 'VKK' | 'GIRO'>('VKM');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCashModalOpen, setIsCashModalOpen] = useState(false);
@@ -53,18 +60,53 @@ export const FinanceCashView = () => {
     { giroNumber: 'GK-441092', type: 'GIRO_KELUAR', bankName: 'Bank Mandiri', issueDate: '2026-07-10', dueDate: '2026-07-24', issuerOrPayee: 'PT Heavy Machinery Supply', amount: 180000000, description: 'Giro Keluar Pembayaran Sparepart Alat Berat', status: 'CAIR' }
   ]);
 
+  const canMutate = isBackdateRoleAuthorized(user?.systemRole);
+
   const subTabs: SubTabItem[] = [
-    { id: 'VKM', label: 'Kas Masuk (VKM)', icon: ArrowDownLeft, count: cashVouchers.filter(c => c.voucherType === 'VKM').length },
-    { id: 'VKK', label: 'Kas Keluar (VKK)', icon: ArrowUpRight, count: cashVouchers.filter(c => c.voucherType === 'VKK').length },
-    { id: 'GIRO', label: 'Manajemen Giro (Clearing)', icon: FileText, count: giros.filter(g => g.status === 'DIENDAPKAN').length }
+    { id: 'VKM', label: 'Kas Masuk (VKM)', icon: ArrowDownLeft, count: cashVouchers.filter(c => c.voucherType === 'VKM' && !c.isDeleted).length },
+    { id: 'VKK', label: 'Kas Keluar (VKK)', icon: ArrowUpRight, count: cashVouchers.filter(c => c.voucherType === 'VKK' && !c.isDeleted).length },
+    { id: 'GIRO', label: 'Manajemen Giro (Clearing)', icon: FileText, count: giros.filter(g => g.status === 'DIENDAPKAN' && !g.isDeleted).length }
   ];
 
   const handleAddCashVoucher = (newVoucher: CashVoucherRow) => {
+    // Validate backdate requirement
+    const dateVal = validateDate(newVoucher.date);
+    if (!dateVal.allowed) {
+      alert(dateVal.reason);
+      return;
+    }
     setCashVouchers([newVoucher, ...cashVouchers]);
   };
 
   const handleAddGiro = (newGiro: GiroRow) => {
+    const dateVal = validateDate(newGiro.issueDate);
+    if (!dateVal.allowed) {
+      alert(dateVal.reason);
+      return;
+    }
     setGiros([newGiro, ...giros]);
+  };
+
+  const handleSoftDeleteCash = (vNumber: string) => {
+    if (!canMutate) {
+      alert('Akses Ditolak! Hanya Admin dan Super-Admin yang diizinkan mengarsip/soft delete voucher kas.');
+      return;
+    }
+    if (confirm(`Apakah Anda yakin ingin mengarsip (Soft Delete) voucher kas [${vNumber}]?`)) {
+      setCashVouchers(cashVouchers.map(c => c.voucherNumber === vNumber ? { ...c, isDeleted: true, status: 'ARCHIVED' } : c));
+      alert(`Voucher [${vNumber}] berhasil di-soft delete (diarsipkan) tanpa menghapus jejak audit.`);
+    }
+  };
+
+  const handleSoftDeleteGiro = (gNumber: string) => {
+    if (!canMutate) {
+      alert('Akses Ditolak! Hanya Admin dan Super-Admin yang diizinkan mengarsip/soft delete giro.');
+      return;
+    }
+    if (confirm(`Apakah Anda yakin ingin mengarsip (Soft Delete) giro [${gNumber}]?`)) {
+      setGiros(giros.map(g => g.giroNumber === gNumber ? { ...g, isDeleted: true, status: 'ARCHIVED' } : g));
+      alert(`Giro [${gNumber}] berhasil di-soft delete (diarsipkan) tanpa menghapus jejak audit.`);
+    }
   };
 
   const handleClearGiro = (giroNumber: string) => {
@@ -73,6 +115,7 @@ export const FinanceCashView = () => {
 
   const filteredCash = cashVouchers.filter(
     (c) =>
+      !c.isDeleted &&
       c.voucherType === activeTab &&
       (c.voucherNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         c.payeeOrPayer.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -81,9 +124,10 @@ export const FinanceCashView = () => {
 
   const filteredGiros = giros.filter(
     (g) =>
-      g.giroNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      g.issuerOrPayee.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      g.bankName.toLowerCase().includes(searchQuery.toLowerCase())
+      !g.isDeleted &&
+      (g.giroNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        g.issuerOrPayee.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        g.bankName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const cashColumns: ColumnDef<CashVoucherRow>[] = [
@@ -96,16 +140,38 @@ export const FinanceCashView = () => {
     { key: 'status', header: 'Status', align: 'center', render: (i) => <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-600 font-bold font-mono text-[10px] rounded">{i.status}</span> },
     {
       key: 'actions',
-      header: 'Detail',
+      header: 'Detail & Aksi',
       align: 'center',
       render: (i) => (
-        <button
-          onClick={() => setSelectedCash(i)}
-          className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
-          title="Lihat Detail Voucher Kas"
-        >
-          <Eye className="w-4 h-4" />
-        </button>
+        <div className="flex items-center justify-center gap-1">
+          <button
+            onClick={() => setSelectedCash(i)}
+            className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
+            title="Lihat Detail Voucher Kas"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => {
+              if (!canMutate) {
+                alert('Akses Ditolak! Hanya Admin dan Super-Admin yang dapat mengedit voucher kas.');
+                return;
+              }
+              alert(`Edit Voucher Kas [${i.voucherNumber}] - Role Admin Verified.`);
+            }}
+            className="p-1.5 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg cursor-pointer transition-colors"
+            title="Edit Voucher Kas"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleSoftDeleteCash(i.voucherNumber)}
+            className="p-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-lg cursor-pointer transition-colors"
+            title="Soft Delete / Arsip Voucher"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       )
     }
   ];
@@ -152,6 +218,13 @@ export const FinanceCashView = () => {
             title="Lihat Detail Warkat Giro"
           >
             <Eye className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => handleSoftDeleteGiro(i.giroNumber)}
+            className="p-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-lg cursor-pointer transition-colors"
+            title="Soft Delete / Arsip Giro"
+          >
+            <Trash2 className="w-4 h-4" />
           </button>
           {i.status === 'DIENDAPKAN' && (
             <button onClick={() => handleClearGiro(i.giroNumber)} className="px-2 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 font-bold rounded-lg flex items-center gap-1 cursor-pointer text-[10px]">

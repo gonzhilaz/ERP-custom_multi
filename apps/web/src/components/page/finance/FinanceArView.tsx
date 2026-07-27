@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TrendingUp, FileText, Clock, Eye } from 'lucide-react';
+import { TrendingUp, FileText, Clock, Eye, Edit3, Trash2 } from 'lucide-react';
 import { StatusBadge } from '@/components/ui/badge/StatusBadge';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { useBackdateGovernance } from '@/hooks/auth/useBackdateGovernance';
+import { isBackdateRoleAuthorized } from '@/lib/auth/backdate-governance';
 import { ArAgingTab } from './ArAgingTab';
 
 interface ArItem {
@@ -17,10 +20,11 @@ interface ArItem {
   dueDate: string;
   amount: number;
   agingDays: number;
-  status: 'UNPAID' | 'WAITING_APPROVAL' | 'PAID';
+  status: 'UNPAID' | 'WAITING_APPROVAL' | 'PAID' | 'ARCHIVED';
   receiptRef?: string;
   proofFile?: string;
   approvedBy?: string;
+  isDeleted?: boolean;
 }
 
 const INITIAL_AR_ITEMS: ArItem[] = [
@@ -47,28 +51,54 @@ const INITIAL_AR_ITEMS: ArItem[] = [
 ];
 
 export const FinanceArView = () => {
+  const { user } = useAuth();
+  const { validateDate } = useBackdateGovernance();
   const [activeTab, setActiveTab] = useState<'DAFTAR_AR' | 'AGING_AR'>('DAFTAR_AR');
   const [arItems, setArItems] = useState<ArItem[]>(INITIAL_AR_ITEMS);
   const [selectedAr, setSelectedAr] = useState<ArItem | null>(null);
   const [detailArItem, setDetailArItem] = useState<ArItem | null>(null);
+  const [editingAr, setEditingAr] = useState<ArItem | null>(null);
   const [showCollectionModal, setShowCollectionModal] = useState(false);
 
   const [collectionForm, setCollectionForm] = useState({
     paymentMethod: 'BANK_TRANSFER',
     bankAccount: '1-10101 - Kas Bank Mandiri Utama Holding',
     receiptRefNo: 'RCV-BCA-889102',
+    receiptDate: new Date().toISOString().split('T')[0],
     proofFileName: 'Kwitansi_Resmi_Penerimaan_140M.pdf',
     notes: 'Pelunasan invoice catering massal event VIP'
   });
+
+  const canMutate = isBackdateRoleAuthorized(user?.systemRole);
 
   const handleOpenCollection = (item: ArItem) => {
     setSelectedAr(item);
     setShowCollectionModal(true);
   };
 
+  const handleSoftDelete = (item: ArItem) => {
+    if (!canMutate) {
+      alert('Akses Ditolak! Hanya Admin dan Super-Admin yang diizinkan mengarsip/soft delete data piutang.');
+      return;
+    }
+    if (confirm(`Apakah Anda yakin ingin mengarsip (Soft Delete) invoice piutang [${item.invoiceNumber}]?`)) {
+      setArItems((prev) =>
+        prev.map((a) => (a.id === item.id ? { ...a, isDeleted: true, status: 'ARCHIVED' } : a))
+      );
+      alert(`Invoice Piutang [${item.invoiceNumber}] berhasil di-soft delete (diarsipkan) tanpa menghapus jejak audit.`);
+    }
+  };
+
   const handleConfirmCollection = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedAr) return;
+
+    // Validate backdate policy
+    const dateVal = validateDate(collectionForm.receiptDate);
+    if (!dateVal.allowed) {
+      alert(dateVal.reason);
+      return;
+    }
 
     setArItems((prev) =>
       prev.map((item) =>
@@ -78,7 +108,7 @@ export const FinanceArView = () => {
               status: 'PAID',
               receiptRef: collectionForm.receiptRefNo,
               proofFile: collectionForm.proofFileName,
-              approvedBy: 'Senior Accounting HO'
+              approvedBy: user?.fullName || 'Senior Accounting HO'
             }
           : item
       )
@@ -88,8 +118,10 @@ export const FinanceArView = () => {
     setSelectedAr(null);
   };
 
+  const visibleArItems = arItems.filter((i) => !i.isDeleted);
+
   const subTabs: SubTabItem[] = [
-    { id: 'DAFTAR_AR', label: 'Daftar Tagihan Piutang', icon: FileText, count: arItems.filter(a => a.status !== 'PAID').length },
+    { id: 'DAFTAR_AR', label: 'Daftar Tagihan Piutang', icon: FileText, count: visibleArItems.filter(a => a.status !== 'PAID').length },
     { id: 'AGING_AR', label: 'Analisis Umur Piutang (AR Aging)', icon: Clock }
   ];
 
@@ -103,14 +135,15 @@ export const FinanceArView = () => {
       key: 'status',
       header: 'Status',
       align: 'center',
-      render: (i) => <StatusBadge type={i.status === 'PAID' ? 'ACTIVE' : 'ALERT'} label={i.status} />
+      render: (i) => <StatusBadge type={i.status === 'PAID' ? 'ACTIVE' : i.status === 'ARCHIVED' ? 'NEUTRAL' : 'ALERT'} label={i.status} />
     },
     {
       key: 'actions',
       header: 'Aksi Penerimaan',
       align: 'center',
       render: (i) => (
-        <div className="flex items-center justify-center gap-1.5">
+        <div className="flex items-center justify-center gap-1">
+          {/* View Action */}
           <button
             onClick={() => setDetailArItem(i)}
             className="p-1.5 hover:bg-sky-50 dark:hover:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-lg cursor-pointer transition-colors"
@@ -118,12 +151,37 @@ export const FinanceArView = () => {
           >
             <Eye className="w-4 h-4" />
           </button>
+
+          {/* Edit Action (Role-Restricted) */}
+          <button
+            onClick={() => {
+              if (!canMutate) {
+                alert('Akses Ditolak! Hanya Admin dan Super-Admin yang diizinkan mengedit invoice piutang.');
+                return;
+              }
+              setEditingAr(i);
+            }}
+            className="p-1.5 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-lg cursor-pointer transition-colors"
+            title="Edit Tagihan Piutang"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+
+          {/* Soft Delete Action (Role-Restricted) */}
+          <button
+            onClick={() => handleSoftDelete(i)}
+            className="p-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-lg cursor-pointer transition-colors"
+            title="Soft Delete / Arsip Piutang"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+
           {i.status === 'PAID' ? (
-            <span className="font-mono text-emerald-600 font-bold text-[11px]">{i.receiptRef}</span>
+            <span className="font-mono text-emerald-600 font-bold text-[11px] ml-1">{i.receiptRef}</span>
           ) : (
             <button
               onClick={() => handleOpenCollection(i)}
-              className="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-lg font-bold shadow-sm cursor-pointer text-[11px]"
+              className="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-lg font-bold shadow-sm cursor-pointer text-[11px] ml-1"
             >
               Konfirmasi Penerimaan
             </button>

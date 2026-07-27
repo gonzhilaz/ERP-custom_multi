@@ -6,6 +6,7 @@ import { Bell, Search, Cpu, User, Building, Store, Menu } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useTenantContext } from '@/context/TenantContext';
 import { ProfileEditModal } from '@/components/ui/modals/ProfileEditModal';
+import { BackdateUnblockToggle } from '@/components/ui/toggles/BackdateUnblockToggle';
 
 interface HeaderProps {
   onToggleMobileSidebar?: () => void;
@@ -68,6 +69,9 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
 
       {/* Right Controls */}
       <div className="flex items-center gap-3">
+        {/* Backdate Unblock Toggle (Super-Admin & Admin Only) */}
+        <BackdateUnblockToggle />
+
         {/* OpenClaw AI Active Compact Icon */}
         <div className="relative group">
           <div className="p-2 bg-slate-100 dark:bg-slate-800 text-violet-600 dark:text-violet-400 rounded-xl border border-violet-500/20 flex items-center gap-1.5 cursor-pointer">
