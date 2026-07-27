@@ -33,10 +33,7 @@ export const ItemCatalogTab: React.FC<Props> = ({
         searchPlaceholder="Cari SKU, nama barang, atau kategori..."
         categoryValue={selectedCategory}
         onCategoryChange={setSelectedCategory}
-        categoryOptions={[
-          { value: 'ALL', label: 'Semua Kategori' },
-          ...categories.map((c) => ({ value: c.name, label: c.name }))
-        ]}
+        categoryOptions={categories.map((c) => ({ value: c.name, label: c.name }))}
         categoryPlaceholder="Semua Kategori"
       />
 

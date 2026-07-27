@@ -8,6 +8,7 @@ import { JournalDetailModal } from '@/components/ui/modals/JournalDetailModal';
 import { CreateManualJournalModal } from '@/components/ui/modals/CreateManualJournalModal';
 import { UniversalSearchBar } from '@/components/ui/forms/UniversalSearchBar';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface JournalEntry {
   jvNumber: string;
@@ -24,6 +25,9 @@ interface JournalEntry {
 export const FinanceJournalsView = () => {
   const [activeTab, setActiveTab] = useState<'GENERAL' | 'SPECIAL' | 'ADJUSTING' | 'CLOSING' | 'REVERSING'>('GENERAL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState<string>('ALL');
+  const [selectedYear, setSelectedYear] = useState<string>('2026');
+  const [sortField, setSortField] = useState<'date_desc' | 'date_asc' | 'amount_desc' | 'jv_asc'>('date_desc');
   const [selectedJournal, setSelectedJournal] = useState<JournalEntry | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -109,13 +113,30 @@ export const FinanceJournalsView = () => {
     { id: 'REVERSING', label: 'Jurnal Pembalik (RJE)', icon: RotateCcw }
   ];
 
-  const filteredJournals = journals.filter(
-    (j) =>
-      j.type === activeTab &&
-      (j.jvNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const filteredJournals = journals
+    .filter((j) => {
+      const matchType = j.type === activeTab;
+      const matchSearch =
+        j.jvNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         j.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        j.postedBy.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+        j.postedBy.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const jDate = new Date(j.date);
+      const jMonth = (jDate.getMonth() + 1).toString().padStart(2, '0');
+      const jYear = jDate.getFullYear().toString();
+
+      const matchMonth = selectedMonth === 'ALL' || jMonth === selectedMonth;
+      const matchYear = selectedYear === 'ALL' || jYear === selectedYear;
+
+      return matchType && matchSearch && matchMonth && matchYear;
+    })
+    .sort((a, b) => {
+      if (sortField === 'date_desc') return b.date.localeCompare(a.date);
+      if (sortField === 'date_asc') return a.date.localeCompare(b.date);
+      if (sortField === 'amount_desc') return b.debitAmount - a.debitAmount;
+      if (sortField === 'jv_asc') return a.jvNumber.localeCompare(b.jvNumber);
+      return 0;
+    });
 
   const handleAddJournal = (newEntry: any) => {
     setJournals([newEntry, ...journals]);
@@ -175,14 +196,70 @@ export const FinanceJournalsView = () => {
         colorScheme="sky"
       />
 
-      {/* Universal SearchBar Toolbar */}
-      <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between gap-4">
-        <div className="w-full md:w-96">
+      {/* Interactive Month/Year Periode & Field Sorting Filter Bar */}
+      <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="w-full md:w-80">
           <UniversalSearchBar
             value={searchQuery}
             onChange={setSearchQuery}
             placeholder={`Cari voucher pada ${activeTab}...`}
           />
+        </div>
+
+        <div className="flex items-center gap-2 w-full md:w-auto flex-wrap">
+          {/* Month Filter */}
+          <div className="w-36">
+            <SearchableSelect
+              options={[
+                { id: 'ALL', label: 'Semua Bulan' },
+                { id: '01', label: 'Januari' },
+                { id: '02', label: 'Februari' },
+                { id: '03', label: 'Maret' },
+                { id: '04', label: 'April' },
+                { id: '05', label: 'Mei' },
+                { id: '06', label: 'Juni' },
+                { id: '07', label: 'Juli' },
+                { id: '08', label: 'Agustus' },
+                { id: '09', label: 'September' },
+                { id: '10', label: 'Oktober' },
+                { id: '11', label: 'November' },
+                { id: '12', label: 'Desember' }
+              ]}
+              value={selectedMonth}
+              onChange={(val) => setSelectedMonth(val)}
+              placeholder="Bulan Periode..."
+            />
+          </div>
+
+          {/* Year Filter */}
+          <div className="w-28">
+            <SearchableSelect
+              options={[
+                { id: 'ALL', label: 'Semua Thn' },
+                { id: '2025', label: '2025' },
+                { id: '2026', label: '2026' },
+                { id: '2027', label: '2027' }
+              ]}
+              value={selectedYear}
+              onChange={(val) => setSelectedYear(val)}
+              placeholder="Tahun..."
+            />
+          </div>
+
+          {/* Sort By Field */}
+          <div className="w-44">
+            <SearchableSelect
+              options={[
+                { id: 'date_desc', label: 'Urut: Tanggal Terbaru' },
+                { id: 'date_asc', label: 'Urut: Tanggal Terlama' },
+                { id: 'amount_desc', label: 'Urut: Nominal Terbesar' },
+                { id: 'jv_asc', label: 'Urut: No. Voucher (A-Z)' }
+              ]}
+              value={sortField}
+              onChange={(val) => setSortField(val as any)}
+              placeholder="Sort Field..."
+            />
+          </div>
         </div>
       </div>
 
