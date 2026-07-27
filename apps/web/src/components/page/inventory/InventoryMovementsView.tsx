@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import { ArrowDownLeft, History, CheckCircle2, ArrowRightLeft, X, HelpCircle } from 'lucide-react';
 import { useInventory } from '@/hooks/inventory/useInventory';
+import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const InventoryMovementsView = () => {
   const { allItems } = useInventory();
+  const [movementTypeFilter, setMovementTypeFilter] = useState<string>('ALL');
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [isOpnameModalOpen, setIsOpnameModalOpen] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
@@ -113,69 +115,61 @@ export const InventoryMovementsView = () => {
     setIsOpnameModalOpen(false);
   };
 
+  const filteredMovements = mockMovements.filter((mov) => {
+    if (movementTypeFilter !== 'ALL' && mov.type !== movementTypeFilter) return false;
+    return true;
+  });
+
   return (
     <div className="space-y-4">
-      {/* Header Bar & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <History className="w-5 h-5 text-sky-500" />
-            <span>Stock Movement & Opname</span>
-          </h1>
-
-          {/* Glossary Popup Trigger */}
-          <div className="relative">
+      {/* Universal Module Header */}
+      <ModuleHeader
+        title="Stock Movements & Mutasi Barang"
+        icon={History}
+        iconBgColor="bg-purple-500/10 text-purple-600 dark:text-purple-400"
+        glossaryTitle="Glossary Mutasi & Audit Stok"
+        glossaryItems={[
+          { term: 'Goods Receipt', description: 'Penerimaan barang dari Vendor/Supplier ke Gudang Utama.' },
+          { term: 'Stock Transfer', description: 'Perpindahan stok antar gudang cabang atau departemen.' },
+          { term: 'Opname Adjustment', description: 'Penyesuaian selisih stok pisik hasil stock opname berkala.' }
+        ]}
+        actions={
+          <div className="flex items-center gap-2">
             <button
-              onClick={() => setShowGlossary(!showGlossary)}
-              className="text-slate-400 hover:text-sky-500 transition-colors p-1"
-              title="Informasi & Glossary Mutasi"
+              onClick={() => setIsTransferModalOpen(true)}
+              className="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5 cursor-pointer"
             >
-              <HelpCircle className="w-4 h-4" />
+              <ArrowRightLeft className="w-4 h-4" />
+              <span>Mutasi Transfer</span>
             </button>
-
-            {showGlossary && (
-              <div className="absolute left-0 top-7 z-30 w-80 p-3.5 bg-slate-900 text-white rounded-2xl shadow-xl text-xs space-y-2 border border-slate-700">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 font-bold text-sky-400">
-                  <span>Glossary Mutasi & Opname</span>
-                  <button onClick={() => setShowGlossary(false)} className="text-slate-400 hover:text-white">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                <p className="text-[11px] text-slate-300">
-                  - <strong>Goods Receipt (GRN)</strong>: Mutasi penerimaan barang dari hasil PO supplier.
-                </p>
-                <p className="text-[11px] text-slate-300">
-                  - <strong>Stock Transfer</strong>: Perpindahan persediaan stok antar gudang / cabang.
-                </p>
-                <p className="text-[11px] text-slate-300">
-                  - <strong>Stock Opname Audit</strong>: Penyesuaian fisik persediaan dengan buku ledger.
-                </p>
-              </div>
-            )}
+            <button
+              onClick={() => setIsOpnameModalOpen(true)}
+              className="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5 cursor-pointer"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Audit Opname</span>
+            </button>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setIsTransferModalOpen(true)}
-            className="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5 cursor-pointer"
-          >
-            <ArrowRightLeft className="w-4 h-4" />
-            <span>Mutasi Transfer</span>
-          </button>
-          <button
-            onClick={() => setIsOpnameModalOpen(true)}
-            className="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5 cursor-pointer"
-          >
-            <CheckCircle2 className="w-4 h-4" />
-            <span>Audit Opname</span>
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Movements Log Table */}
       <DataTable
-        headerTitle={`Log Mutasi Stock & Goods Receipt (${mockMovements.length})`}
+        headerTitle={`Log Mutasi Stock & Goods Receipt (${filteredMovements.length})`}
+        data={filteredMovements}
+        filterComponent={
+          <SearchableSelect
+            value={movementTypeFilter}
+            onChange={(val) => setMovementTypeFilter(val)}
+            options={[
+              { id: 'ALL', label: 'Semua Tipe Mutasi' },
+              { id: 'GOODS_IN', label: 'Barang Masuk (Goods Receipt)' },
+              { id: 'TRANSFER_STOCK', label: 'Mutasi Transfer Antar Gudang' },
+              { id: 'OPNAME_ADJUSTMENT', label: 'Penyesuaian Stock Opname' }
+            ]}
+            className="w-56"
+          />
+        }
         columns={[
           { key: 'timestamp', header: 'Waktu', className: 'font-mono font-bold text-slate-500', render: (mov) => mov.timestamp },
           {
@@ -224,7 +218,6 @@ export const InventoryMovementsView = () => {
           { key: 'reference', header: 'Referensi', className: 'text-slate-600 dark:text-slate-300', render: (mov) => mov.reference },
           { key: 'operator', header: 'Petugas', align: 'center', className: 'font-semibold', render: (mov) => mov.operator }
         ]}
-        data={mockMovements}
         keyExtractor={(mov) => mov.id}
       />
 

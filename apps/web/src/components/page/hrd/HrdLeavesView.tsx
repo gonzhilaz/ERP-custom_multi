@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { CalendarDays, Plus, Trash2, HelpCircle, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface LeaveItem {
   id: string;
@@ -16,6 +17,7 @@ interface LeaveItem {
 
 export const HrdLeavesView = () => {
   const { user } = useAuth();
+  const [typeFilter, setTypeFilter] = useState<'ALL' | 'PAID' | 'UNPAID'>('ALL');
   const [leaves, setLeaves] = useState<LeaveItem[]>([
     { id: 'lv-01', code: 'CUTI-TAHUNAN', name: 'Cuti Tahunan Karyawan (12 Hari)', defaultQuota: 12, isPaid: true, requiresDoctorNote: false },
     { id: 'lv-02', code: 'IZIN-SAKIT', name: 'Izin Sakit Dengan Surat Dokter', defaultQuota: 30, isPaid: true, requiresDoctorNote: true },
@@ -72,6 +74,12 @@ export const HrdLeavesView = () => {
     }
   ];
 
+  const filteredLeaves = leaves.filter((lv) => {
+    if (typeFilter === 'PAID' && !lv.isPaid) return false;
+    if (typeFilter === 'UNPAID' && lv.isPaid) return false;
+    return true;
+  });
+
   return (
     <div className="space-y-4 text-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -107,10 +115,24 @@ export const HrdLeavesView = () => {
         </button>
       </div>
 
+
+
       <DataTable
-        headerTitle={`Master Kategori Cuti & Izin Perusahaan (${leaves.length})`}
+        headerTitle={`Master Kategori Cuti & Izin Perusahaan (${filteredLeaves.length})`}
         columns={columns}
-        data={leaves}
+        data={filteredLeaves}
+        filterComponent={
+          <SearchableSelect
+            value={typeFilter}
+            onChange={(val) => setTypeFilter(val as any)}
+            options={[
+              { id: 'ALL', label: 'Semua Status Gaji' },
+              { id: 'PAID', label: 'Paid Leave (Bergaji)' },
+              { id: 'UNPAID', label: 'Unpaid Leave (Tanpa Gaji)' }
+            ]}
+            className="w-48"
+          />
+        }
         keyExtractor={(lv) => lv.id}
       />
 

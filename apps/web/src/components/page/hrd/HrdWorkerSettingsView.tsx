@@ -6,9 +6,11 @@ import { MOCK_WORKER_TYPES, WorkerTypeItem } from '@/lib/mock/hrd';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const HrdWorkerSettingsView = () => {
   const { user } = useAuth();
+  const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [activeTab, setActiveTab] = useState<'TYPES' | 'BPJS' | 'PPH' | 'OVERTIME_RULE'>('TYPES');
   const [workerTypes, setWorkerTypes] = useState<WorkerTypeItem[]>(MOCK_WORKER_TYPES);
   const [showGlossary, setShowGlossary] = useState(false);
@@ -113,9 +115,29 @@ export const HrdWorkerSettingsView = () => {
       />
 
       {/* SubTab 1: Tipe Pekerja */}
-      {activeTab === 'TYPES' && (
-        <DataTable
-          headerTitle={`Master Tipe Pekerja & Formula Gaji (${workerTypes.length})`}
+      {activeTab === 'TYPES' && (() => {
+        const filteredWorkerTypes = workerTypes.filter((wt) => {
+          if (categoryFilter !== 'ALL' && wt.category !== categoryFilter) return false;
+          return true;
+        });
+
+        return (
+          <DataTable
+            headerTitle={`Master Tipe Pekerja & Formula Gaji (${filteredWorkerTypes.length})`}
+            data={filteredWorkerTypes}
+            filterComponent={
+              <SearchableSelect
+                value={categoryFilter}
+                onChange={(val) => setCategoryFilter(val)}
+                options={[
+                  { id: 'ALL', label: 'Semua Kategori Pekerja' },
+                  { id: 'TETAP', label: 'Karyawan Tetap (PKWTT)' },
+                  { id: 'KONTRAK', label: 'Karyawan Kontrak (PKWT)' },
+                  { id: 'OUTSOURCING', label: 'Tenaga Outsourcing' }
+                ]}
+                className="w-56"
+              />
+            }
           columns={[
             {
               key: 'name',
@@ -158,10 +180,10 @@ export const HrdWorkerSettingsView = () => {
               )
             }
           ]}
-          data={workerTypes}
           keyExtractor={(wt) => wt.id}
         />
-      )}
+      );
+    })()}
 
       {/* SubTab 2: Persentase BPJS */}
       {activeTab === 'BPJS' && (

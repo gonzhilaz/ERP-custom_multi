@@ -57,6 +57,13 @@ export const VendorPurchaseOrdersView = () => {
     rejectPO(id);
   };
 
+  const [statusFilter, setStatusFilter] = useState<string>('ALL');
+
+  const filteredPoList = poList.filter((po) => {
+    if (statusFilter !== 'ALL' && po.status !== statusFilter) return false;
+    return true;
+  });
+
   return (
     <div className="space-y-4">
       {/* Universal Module Header */}
@@ -82,7 +89,21 @@ export const VendorPurchaseOrdersView = () => {
 
       {/* PO List Table */}
       <DataTable
-        headerTitle={`Daftar Purchase Order (${poList.length})`}
+        headerTitle={`Daftar Purchase Order (${filteredPoList.length})`}
+        data={filteredPoList}
+        filterComponent={
+          <SearchableSelect
+            value={statusFilter}
+            onChange={(val) => setStatusFilter(val)}
+            options={[
+              { id: 'ALL', label: 'Semua Status PO' },
+              { id: 'WAITING_APPROVAL_DIREKTUR', label: 'Menunggu ACC Direktur' },
+              { id: 'APPROVED', label: 'Approved (Disetujui)' },
+              { id: 'REJECTED', label: 'Rejected (Ditolak)' }
+            ]}
+            className="w-48"
+          />
+        }
         columns={[
           { key: 'poNumber', header: 'No. PO', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (po) => po.poNumber },
           { key: 'vendorName', header: 'Vendor Supplier', className: 'font-semibold text-slate-900 dark:text-white', render: (po) => po.vendorName },
@@ -150,7 +171,6 @@ export const VendorPurchaseOrdersView = () => {
             )
           }
         ]}
-        data={poList}
         keyExtractor={(po) => po.id}
       />
 

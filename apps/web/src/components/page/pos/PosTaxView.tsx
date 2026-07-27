@@ -5,6 +5,7 @@ import { Percent, Plus, Edit2, Trash2, ShieldCheck, HelpCircle, X, CheckCircle2,
 import { useTaxMaster } from '@/hooks/pos/useTaxMaster';
 import { MasterTaxItem } from '@/lib/mock/tax';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const PosTaxView = () => {
   const [showGlossary, setShowGlossary] = useState(false);
@@ -12,6 +13,12 @@ export const PosTaxView = () => {
   const [editingTax, setEditingTax] = useState<MasterTaxItem | null>(null);
 
   const { taxes, auditLogs, userRole, createTax, updateTax, softDeleteTax } = useTaxMaster();
+  const [taxFilter, setTaxFilter] = useState<string>('ALL');
+
+  const filteredTaxes = taxes.filter((t) => {
+    if (taxFilter !== 'ALL' && !t.code.includes(taxFilter)) return false;
+    return true;
+  });
 
   const [formData, setFormData] = useState({
     code: '',
@@ -125,10 +132,24 @@ export const PosTaxView = () => {
           <span>Aturan Pajak Baru</span>
         </button>
       </div>
-
       {/* Main Tax Master Table */}
       <DataTable
-        headerTitle={`Daftar Skema Pajak Terdaftar (${taxes.length})`}
+        headerTitle={`Daftar Skema Pajak Terdaftar (${filteredTaxes.length})`}
+        data={filteredTaxes}
+        filterComponent={
+          <SearchableSelect
+            value={taxFilter}
+            onChange={(val) => setTaxFilter(val)}
+            options={[
+              { id: 'ALL', label: 'Semua Skema Pajak' },
+              { id: 'PPN', label: 'PPN (Pajak Pertambahan Nilai)' },
+              { id: 'PB1', label: 'PB1 (Pajak Restoran)' },
+              { id: 'PPH', label: 'PPh (Pajak Penghasilan)' },
+              { id: 'SERVICE', label: 'Service Charge' }
+            ]}
+            className="w-52"
+          />
+        }
         columns={[
           { key: 'code', header: 'Kode Pajak', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (t) => t.code },
           { key: 'name', header: 'Nama Skema Pajak', className: 'font-bold text-slate-900 dark:text-white', render: (t) => t.name },
@@ -186,7 +207,6 @@ export const PosTaxView = () => {
             )
           }
         ]}
-        data={taxes}
         keyExtractor={(t) => t.id}
       />
 

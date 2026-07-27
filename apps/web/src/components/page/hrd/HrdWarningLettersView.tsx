@@ -93,6 +93,13 @@ export const HrdWarningLettersView = () => {
     }
   ];
 
+  const [spTypeFilter, setSpTypeFilter] = useState<string>('ALL');
+
+  const filteredSpList = warningLetters.filter((sp) => {
+    if (spTypeFilter !== 'ALL' && sp.spType !== spTypeFilter) return false;
+    return true;
+  });
+
   return (
     <div className="space-y-4 text-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -129,9 +136,23 @@ export const HrdWarningLettersView = () => {
       </div>
 
       <DataTable
-        headerTitle={`Daftar Surat Peringatan Aktif (${warningLetters.length})`}
+        headerTitle={`Katalog Surat Peringatan Disiplin Karyawan (${filteredSpList.length})`}
         columns={columns}
-        data={warningLetters}
+        data={filteredSpList}
+        filterComponent={
+          <SearchableSelect
+            value={spTypeFilter}
+            onChange={(val) => setSpTypeFilter(val)}
+            options={[
+              { id: 'ALL', label: 'Semua Tipe SP' },
+              { id: 'SP_1', label: 'SP 1 (Peringatan 1)' },
+              { id: 'SP_2', label: 'SP 2 (Peringatan 2)' },
+              { id: 'SP_3', label: 'SP 3 (Peringatan 3)' },
+              { id: 'PHK_OFFBOARDING', label: 'PHK Offboarding' }
+            ]}
+            className="w-48"
+          />
+        }
         keyExtractor={(sp) => sp.id}
       />
 
