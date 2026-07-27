@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
 import { isBackdateRoleAuthorized, validateTransactionDate, BackdateValidationResult } from '@/lib/auth/backdate-governance';
+import { logAuditEvent } from '@/lib/audit/audit-logger';
 
 const LOCAL_STORAGE_BACKDATE_KEY = 'erp_backdate_unblocked';
 
@@ -44,8 +45,17 @@ export function useBackdateGovernance() {
       ? 'Akses Backdate Berhasil DIBUKA oleh Super-Admin / Admin.'
       : 'Akses Backdate DIBLOKIR Kembali secara aman.';
 
+    // Log explicit audit trail
+    logAuditEvent({
+      userName: user?.fullName || 'Super Admin',
+      userRole: user?.systemRole || 'HOLDING_EXECUTIVE',
+      actionType: nextState ? 'BACKDATE_UNBLOCK' : 'BACKDATE_LOCK',
+      targetEntity: 'SYSTEM_SETTINGS_BACKDATE',
+      details: `Status Penguncian Backdate diubah menjadi ${nextState ? 'UNBLOCKED' : 'LOCKED'} oleh ${user?.fullName || 'Admin'}.`
+    });
+
     return { success: true, message: msg };
-  }, [isUserAuthorized, isBackdateUnblocked]);
+  }, [isUserAuthorized, isBackdateUnblocked, user]);
 
   // Validate a specific date
   const validateDate = useCallback(

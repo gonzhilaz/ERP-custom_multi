@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Eye } from 'lucide-react';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetailModal';
+import { getStoredAuditLogs, AuditLogEntry } from '@/lib/audit/audit-logger';
 
 interface FinanceAuditLogItem {
   id: string;
@@ -22,6 +23,14 @@ const MOCK_FINANCE_AUDIT: FinanceAuditLogItem[] = [
 
 export const FinanceAuditLogView = () => {
   const [selectedAudit, setSelectedAudit] = useState<FinanceAuditLogItem | null>(null);
+  const [logs, setLogs] = useState<FinanceAuditLogItem[]>(MOCK_FINANCE_AUDIT);
+
+  useEffect(() => {
+    const stored = getStoredAuditLogs();
+    if (stored.length > 0) {
+      setLogs([...stored, ...MOCK_FINANCE_AUDIT]);
+    }
+  }, []);
 
   const columns: ColumnDef<FinanceAuditLogItem>[] = [
     { key: 'timestamp', header: 'Waktu Transaksi', className: 'font-mono text-slate-500', render: (i) => i.timestamp },
@@ -55,7 +64,7 @@ export const FinanceAuditLogView = () => {
         glossaryTitle="Glossary Audit Log Finance"
         glossaryItems={[{ term: 'Immutable Audit Trail', description: 'Catatan permanen riwayat persetujuan, jurnal otomatis, & pelunasan kas bank.' }]}
       />
-      <DataTable headerTitle="Catatan Jejak Audit Permanent Mutasi Keuangan & Settlement" columns={columns} data={MOCK_FINANCE_AUDIT} keyExtractor={(i) => i.id} />
+      <DataTable headerTitle="Catatan Jejak Audit Permanent Mutasi Keuangan & Settlement" columns={columns} data={logs} keyExtractor={(i) => i.id} />
 
       {/* Item Detail Modal */}
       <FinanceItemDetailModal

@@ -10,6 +10,7 @@ import { FinanceItemDetailModal } from '@/components/ui/modals/FinanceItemDetail
 import { useAuth } from '@/hooks/auth/useAuth';
 import { useBackdateGovernance } from '@/hooks/auth/useBackdateGovernance';
 import { isBackdateRoleAuthorized } from '@/lib/auth/backdate-governance';
+import { logAuditEvent } from '@/lib/audit/audit-logger';
 import { ApAgingTab } from './ApAgingTab';
 
 interface ApItem {
@@ -81,6 +82,13 @@ export const FinanceApView = () => {
       setApItems((prev) =>
         prev.map((a) => (a.id === item.id ? { ...a, isDeleted: true, status: 'ARCHIVED' } : a))
       );
+      logAuditEvent({
+        userName: user?.fullName || 'Admin',
+        userRole: user?.systemRole || 'COMPANY_ADMIN',
+        actionType: 'SOFT_DELETE',
+        targetEntity: item.invoiceNumber,
+        details: `Invoice Utang ${item.invoiceNumber} (${item.supplierName}) senilai Rp ${item.amount.toLocaleString('id-ID')} di-soft delete / diarsipkan.`
+      });
       alert(`Invoice [${item.invoiceNumber}] berhasil di-soft delete (diarsipkan) tanpa menghapus jejak audit.`);
     }
   };
@@ -108,6 +116,14 @@ export const FinanceApView = () => {
           : item
       )
     );
+
+    logAuditEvent({
+      userName: user?.fullName || 'Senior Accounting HO',
+      userRole: user?.systemRole || 'COMPANY_ADMIN',
+      actionType: 'PAYMENT_SETTLEMENT',
+      targetEntity: selectedAp.invoiceNumber,
+      details: `Pelunasan Utang AP ${selectedAp.invoiceNumber} sebesar Rp ${selectedAp.amount.toLocaleString('id-ID')} via ${paymentForm.paymentRefNo}.`
+    });
 
     setShowPaymentModal(false);
     setSelectedAp(null);
