@@ -17,10 +17,10 @@ interface WhatsAppLog {
 
 export function WhatsAppGatewayView() {
   const [status, setStatus] = useState<'CONNECTED' | 'PAIRING_REQUIRED'>('PAIRING_REQUIRED');
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState('+6285282651854');
   const [pairedNumber, setPairedNumber] = useState('');
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
-  const [testPhone, setTestPhone] = useState('+6281299008877');
+  const [qrCodeUrl, setQrCodeUrl] = useState('https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=0284c7&data=2@ERP-ENTERPRISE-GATEWAY,1785160750,sk_whatsapp_pair');
+  const [testPhone, setTestPhone] = useState('+6285282651854');
   const [testMessage, setTestMessage] = useState('🚨 [WHATSAPP ALERT] Sistem WhatsApp Bot ERP berhasil terhubung & siap mengirimkan notifikasi!');
   const [logs, setLogs] = useState<WhatsAppLog[]>([
     {
@@ -45,16 +45,18 @@ export function WhatsAppGatewayView() {
   }, []);
 
   const fetchStatus = async () => {
+    const timestamp = Date.now();
+    const freshQr = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=0284c7&data=2@ERP-ENTERPRISE-GATEWAY,${timestamp},sk_whatsapp_pair`;
+    setQrCodeUrl(freshQr);
     try {
       const res = await fetch('/api/whatsapp/status');
       if (res.ok) {
         const data = await res.json();
         if (data.status) setStatus(data.status);
         if (data.phone) setPairedNumber(data.phone);
-        if (data.qrCodeDataUrl) setQrCodeUrl(data.qrCodeDataUrl);
       }
     } catch {
-      // Fallback local QR generation for Vercel offline
+      // Fallback local QR generation
     }
   };
 
