@@ -4,6 +4,7 @@ import React from 'react';
 import { Calendar, RefreshCw, CheckCircle2, Sliders } from 'lucide-react';
 import { EmployeeItem } from '@/lib/mock/hrd';
 import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   selectedPeriod: string;
@@ -86,16 +87,19 @@ export const HrdPayrollTableTab = ({
             <Calendar className="w-4 h-4 text-sky-500" />
             <span className="font-semibold text-slate-700 dark:text-slate-300">Riwayat Periode Payroll:</span>
           </div>
-          <select
-            value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-bold text-slate-900 dark:text-white"
-          >
-            <option value="JULI_2026">Juli 2026 (Periode Aktif)</option>
-            <option value="JUNI_2026">Juni 2026 (Historical - Closed)</option>
-            <option value="MEI_2026">Mei 2026 (Historical - Closed)</option>
-            <option value="APRIL_2026">April 2026 (Historical - Closed)</option>
-          </select>
+          <div className="w-64">
+            <SearchableSelect
+              options={[
+                { id: 'JULI_2026', label: 'Juli 2026 (Periode Aktif)' },
+                { id: 'JUNI_2026', label: 'Juni 2026 (Historical - Closed)' },
+                { id: 'MEI_2026', label: 'Mei 2026 (Historical - Closed)' },
+                { id: 'APRIL_2026', label: 'April 2026 (Historical - Closed)' }
+              ]}
+              value={selectedPeriod}
+              onChange={(val) => setSelectedPeriod(val)}
+              placeholder="Pilih Periode..."
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800">
