@@ -64,13 +64,13 @@ export function validateTransactionDate({
     return {
       allowed: false,
       isBackdate: true,
-      reason: 'Transaksi Backdate Diblokir! Hanya Super-Admin dan Admin yang memiliki wewenang untuk membuka blokir backdate.'
+      reason: 'Transaksi Tanggal Lampau (Backdate) memerlukan wewenang Admin.'
     };
   }
 
   return {
     allowed: false,
     isBackdate: true,
-    reason: 'Transaksi Backdate Diblokir! Silakan aktifkan Buka Blokir Backdate di Header Navigasi sebelum menyimpan.'
+    reason: 'Transaksi Tanggal Lampau (Backdate) terkunci. Buka otorisasi Backdate di menu atas sebelum menyimpan.'
   };
 }

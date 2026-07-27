@@ -29,28 +29,28 @@ export const BackdateUnblockToggle: React.FC = () => {
       <button
         type="button"
         onClick={handleToggleClick}
-        className={`px-3 py-1.5 rounded-xl font-bold font-mono text-[11px] flex items-center gap-1.5 transition-all cursor-pointer shadow-sm border ${
+        className={`px-2.5 py-1.5 rounded-xl font-medium text-xs flex items-center gap-1.5 transition-all cursor-pointer border ${
           isBackdateUnblocked
-            ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20'
-            : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20'
+            ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 font-bold shadow-sm'
+            : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
         }`}
         title={
           isUserAuthorized
             ? isBackdateUnblocked
-              ? 'Backdate Diizinkan (Klik untuk Mengunci kembali)'
-              : 'Backdate Diblokir (Klik untuk Buka Blokir - Admin Only)'
-            : 'Backdate Diblokir (Hanya Super-Admin & Admin yang dapat membuka)'
+              ? 'Status Backdate: Diizinkan (Klik untuk Mengunci)'
+              : 'Status Backdate: Terkunci (Klik untuk Pengaturan Admin)'
+            : 'Status Backdate: Terkunci (Akses Admin)'
         }
       >
         {isBackdateUnblocked ? (
           <>
-            <Unlock className="w-3.5 h-3.5 text-amber-500" />
-            <span>Backdate Unblocked</span>
+            <Unlock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+            <span className="font-mono text-[11px]">Backdate Open</span>
           </>
         ) : (
           <>
-            <Lock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Backdate Diblokir</span>
+            <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="text-[11px]">Backdate</span>
           </>
         )}
       </button>
