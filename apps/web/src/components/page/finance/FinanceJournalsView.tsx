@@ -245,21 +245,6 @@ export const FinanceJournalsView = () => {
               placeholder="Tahun..."
             />
           </div>
-
-          {/* Sort By Field */}
-          <div className="w-44">
-            <SearchableSelect
-              options={[
-                { id: 'date_desc', label: 'Urut: Tanggal Terbaru' },
-                { id: 'date_asc', label: 'Urut: Tanggal Terlama' },
-                { id: 'amount_desc', label: 'Urut: Nominal Terbesar' },
-                { id: 'jv_asc', label: 'Urut: No. Voucher (A-Z)' }
-              ]}
-              value={sortField}
-              onChange={(val) => setSortField(val as any)}
-              placeholder="Sort Field..."
-            />
-          </div>
         </div>
       </div>
 
