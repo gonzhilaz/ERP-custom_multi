@@ -1,17 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Cpu, Send, Sparkles, Brain, MessageSquare } from 'lucide-react';
+import { Cpu, Send, Sparkles, Brain, MessageSquare, FileSpreadsheet, FileScan, ShieldCheck } from 'lucide-react';
 import { useAi } from '@/hooks/ai/useAi';
 import { SkeletonTable } from '@/components/ui/loader/skeleton/SkeletonTable';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { DeepSeekProviderSelector } from './DeepSeekProviderSelector';
 import { DeepSeekTrainingTab } from './DeepSeekTrainingTab';
+import { ExcelMigrationModal } from './ExcelMigrationModal';
+import { PdfDocumentScannerModal } from './PdfDocumentScannerModal';
 
 export const AiView = () => {
   const { logs, loading, queryInput, setQueryInput, isProcessing, sendAiQuery } = useAi();
   const [activeTab, setActiveTab] = useState<'QUERY' | 'TRAINING'>('QUERY');
+  const [showExcelModal, setShowExcelModal] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
   const subTabs: SubTabItem[] = [
     { id: 'QUERY', label: 'Interaktif AI Chat', icon: MessageSquare },
@@ -27,6 +31,11 @@ export const AiView = () => {
     setQueryInput(promptText);
   };
 
+  const handleAccountingAuditScan = () => {
+    setQueryInput('DeepSeek: Lakukan audit otomatis menyeluruh pada Jurnal Keuangan & Neraca Saldo minggu ini. Deteksi anomali debit-kredit & potensi jurnal transaksi mencurigakan.');
+    sendAiQuery();
+  };
+
   return (
     <div className="space-y-4 text-xs">
       {/* Universal Module Header */}
@@ -39,6 +48,31 @@ export const AiView = () => {
           { term: 'DeepSeek-R1', description: 'Engine AI penalaran finansial, Text-to-SQL, & analisis rasio bisnis.' },
           { term: 'Fine-Tuning', description: 'Pelatihan model AI berbasis data spesifik aturan bisnis ERP internal.' }
         ]}
+        actions={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowExcelModal(true)}
+              className="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer text-xs"
+            >
+              <FileSpreadsheet className="w-4 h-4" />
+              <span>Migrasi Excel / CSV</span>
+            </button>
+            <button
+              onClick={() => setShowPdfModal(true)}
+              className="px-3 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer text-xs"
+            >
+              <FileScan className="w-4 h-4" />
+              <span>Scan & Read PDF</span>
+            </button>
+            <button
+              onClick={handleAccountingAuditScan}
+              className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer text-xs"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>Audit Akuntansi AI</span>
+            </button>
+          </div>
+        }
       />
 
       {/* SubTab Navigation */}
@@ -119,6 +153,10 @@ export const AiView = () => {
 
       {/* Tab 2: DeepSeek Model Training & Knowledge Manager */}
       {activeTab === 'TRAINING' && <DeepSeekTrainingTab />}
+
+      {/* Modal Actions */}
+      <ExcelMigrationModal isOpen={showExcelModal} onClose={() => setShowExcelModal(false)} />
+      <PdfDocumentScannerModal isOpen={showPdfModal} onClose={() => setShowPdfModal(false)} />
     </div>
   );
 };
