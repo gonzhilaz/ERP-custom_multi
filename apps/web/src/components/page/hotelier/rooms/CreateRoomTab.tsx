@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Plus, CheckCircle2, Tag, Image as ImageIcon } from 'lucide-react';
 import { HotelRoom, RoomTypeCategory } from '@/lib/mock/hotelier';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   roomTypes: RoomTypeCategory[];
@@ -90,17 +91,15 @@ export const CreateRoomTab: React.FC<Props> = ({ roomTypes, addRoom, onSuccess }
               <Tag className="w-3.5 h-3.5" /> Pilih Master Tipe Kamar Terdaftar
             </span>
           </label>
-          <select
+          <SearchableSelect
+            options={roomTypes.map((t) => ({
+              id: t.id,
+              label: `${t.name} (${t.code} — Rp ${t.defaultRatePerNight.toLocaleString('id-ID')})`
+            }))}
             value={formData.typeId}
-            onChange={(e) => handleTypeChange(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-          >
-            {roomTypes.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name} ({t.code} — Rp {t.defaultRatePerNight.toLocaleString('id-ID')})
-              </option>
-            ))}
-          </select>
+            onChange={(val) => handleTypeChange(val)}
+            placeholder="Pilih Tipe Kamar..."
+          />
         </div>
 
         {/* Photo URL & Image Upload Section */}

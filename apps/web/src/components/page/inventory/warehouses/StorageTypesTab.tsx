@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Tag, Plus, Trash2, Edit3, Building, FileSpreadsheet, Key } from 'lucide-react';
 import { StorageTypeItem, MOCK_ASSETS } from '@/lib/mock/inventory';
 import { COA_DATA } from '@/lib/mock/finance';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   storageTypes: StorageTypeItem[];
@@ -278,16 +279,17 @@ export const StorageTypesTab: React.FC<Props> = ({
                   </span>
                   <span className="text-[10px] text-slate-400">Strict HO COA Binding</span>
                 </label>
-                <select
+                <SearchableSelect
+                  options={[
+                    { id: '150-100', label: '150-100 - Aset Tetap Gedung & Bangunan Gudang (ASSET)' },
+                    { id: '150-200', label: '150-200 - Aset Tetap Tangki & Heavy Equipment (ASSET)' },
+                    { id: '150-300', label: '150-300 - Aset Tetap Mesin & Instalasi Cold Storage (ASSET)' },
+                    { id: '505-100', label: '505-100 - Beban Sewa Gudang & Logistik Ops (EXPENSE)' }
+                  ]}
                   value={formData.coaAccountCode}
-                  onChange={(e) => handleCoaChange(e.target.value)}
-                  className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                >
-                  <option value="150-100">150-100 - Aset Tetap Gedung & Bangunan Gudang (ASSET)</option>
-                  <option value="150-200">150-200 - Aset Tetap Tangki & Heavy Equipment (ASSET)</option>
-                  <option value="150-300">150-300 - Aset Tetap Mesin & Instalasi Cold Storage (ASSET)</option>
-                  <option value="505-100">505-100 - Beban Sewa Gudang & Logistik Ops (EXPENSE)</option>
-                </select>
+                  onChange={(val) => handleCoaChange(val)}
+                  placeholder="Pilih Akun COA..."
+                />
               </div>
 
               {/* Link to Fixed Assets Directory if Owned */}
@@ -296,18 +298,18 @@ export const StorageTypesTab: React.FC<Props> = ({
                   <label className="block font-semibold mb-1 flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400">
                     <Building className="w-3.5 h-3.5" /> Link ke Master Asset Tetap Terdaftar
                   </label>
-                  <select
+                  <SearchableSelect
+                    options={[
+                      { id: '', label: '-- Bebas / Tidak Dihubungkan ke Asset Spesifik --' },
+                      ...MOCK_ASSETS.map((ast) => ({
+                        id: ast.id,
+                        label: `${ast.code} - ${ast.name} (Perolehan: Rp ${ast.purchaseCost.toLocaleString('id-ID')})`
+                      }))
+                    ]}
                     value={formData.linkedAssetId}
-                    onChange={(e) => setFormData({ ...formData, linkedAssetId: e.target.value })}
-                    className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                  >
-                    <option value="">-- Bebas / Tidak Dihubungkan ke Asset Spesifik --</option>
-                    {MOCK_ASSETS.map((ast) => (
-                      <option key={ast.id} value={ast.id}>
-                        {ast.code} - {ast.name} (Perolehan: Rp {ast.purchaseCost.toLocaleString('id-ID')})
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, linkedAssetId: val })}
+                    placeholder="Pilih Master Asset..."
+                  />
                 </div>
               )}
 

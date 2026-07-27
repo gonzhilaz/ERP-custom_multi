@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Plus, CheckCircle2, Tag } from 'lucide-react';
 import { StorageLocation, StorageTypeItem } from '@/lib/mock/inventory';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   storageTypes: StorageTypeItem[];
@@ -89,17 +90,15 @@ export const CreateStorageTab: React.FC<Props> = ({ storageTypes, addStorageLoca
               <Tag className="w-3.5 h-3.5" /> Pilih Master Tipe Storage Terdaftar
             </span>
           </label>
-          <select
+          <SearchableSelect
+            options={storageTypes.map((t) => ({
+              id: t.id,
+              label: `${t.name} (${t.code} — ${t.ownershipStatus === 'OWNED' ? 'Milik Sendiri' : 'Sewa'})`
+            }))}
             value={formData.typeId}
-            onChange={(e) => handleTypeChange(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-          >
-            {storageTypes.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name} ({t.code} — {t.ownershipStatus === 'OWNED' ? 'Milik Sendiri' : 'Sewa'})
-              </option>
-            ))}
-          </select>
+            onChange={(val) => handleTypeChange(val)}
+            placeholder="Pilih Master Tipe Storage..."
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

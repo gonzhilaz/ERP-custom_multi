@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Briefcase, Plus, Edit2, Trash2, ShieldAlert, CheckCircle2, X } from 'lucide-react';
 import { WorkerTypeItem, MOCK_WORKER_TYPES } from '@/lib/mock/hrd';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const WorkerTypesTab = () => {
   const { user } = useAuth();
@@ -207,16 +208,17 @@ export const WorkerTypesTab = () => {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block font-semibold mb-1">Kategori Hubungan Kerja</label>
-                  <select
+                  <SearchableSelect
+                    options={[
+                      { id: 'TETAP', label: 'TETAP (PKWTT)' },
+                      { id: 'KONTRAK', label: 'KONTRAK (PKWT)' },
+                      { id: 'HARIAN_LEPAS', label: 'HARIAN LEPAS (< 21 Hari)' },
+                      { id: 'OUTSOURCING', label: 'OUTSOURCING (Pihak 3)' }
+                    ]}
                     value={formData.category}
-                    onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
-                    className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                  >
-                    <option value="TETAP">TETAP (PKWTT)</option>
-                    <option value="KONTRAK">KONTRAK (PKWT)</option>
-                    <option value="HARIAN_LEPAS">HARIAN LEPAS (&lt; 21 Hari)</option>
-                    <option value="OUTSOURCING">OUTSOURCING (Pihak 3)</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, category: val as any })}
+                    placeholder="Pilih Kategori..."
+                  />
                 </div>
 
                 <div>

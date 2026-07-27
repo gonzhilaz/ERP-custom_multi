@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Clock, CheckCircle2, Clock3, XCircle, HelpCircle, X, Filter } from 'lucide-react';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const HrdOvertimeView = () => {
   const [filterStatus, setFilterStatus] = useState<'ALL' | 'APPROVED' | 'PENDING' | 'REJECTED'>('APPROVED');
@@ -54,18 +55,18 @@ export const HrdOvertimeView = () => {
         </div>
 
         {/* Filter Controls */}
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-400" />
-          <select
+        <div className="flex items-center gap-2 w-64">
+          <SearchableSelect
+            options={[
+              { id: 'ALL', label: 'Semua Status Lembur' },
+              { id: 'APPROVED', label: 'Disetujui (Approved)' },
+              { id: 'PENDING', label: 'Menunggu (Pending)' },
+              { id: 'REJECTED', label: 'Ditolak (Rejected)' }
+            ]}
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl border font-bold text-slate-900 dark:text-white"
-          >
-            <option value="ALL">Semua Status Lembur</option>
-            <option value="APPROVED">Disetujui (Approved)</option>
-            <option value="PENDING">Menunggu (Pending)</option>
-            <option value="REJECTED">Ditolak (Rejected)</option>
-          </select>
+            onChange={(val) => setFilterStatus(val as any)}
+            placeholder="Filter Status Lembur..."
+          />
         </div>
       </div>
 

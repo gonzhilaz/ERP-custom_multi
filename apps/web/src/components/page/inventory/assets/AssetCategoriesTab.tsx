@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Tag, Plus, Trash2, Edit3, FileSpreadsheet } from 'lucide-react';
 import { AssetCategory } from '@/lib/mock/inventory';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   assetCategories: AssetCategory[];
@@ -215,16 +216,17 @@ export const AssetCategoriesTab: React.FC<Props> = ({
                   </span>
                   <span className="text-[10px] text-slate-400 font-normal">Strict HO COA Binding</span>
                 </label>
-                <select
+                <SearchableSelect
+                  options={[
+                    { id: '150-100', label: '150-100 - Aset Tetap Gedung & Bangunan' },
+                    { id: '150-200', label: '150-200 - Aset Tetap Kendaraan & Heavy Equipment Fleet' },
+                    { id: '150-300', label: '150-300 - Aset Tetap Mesin & Peralatan Produksi' },
+                    { id: '150-400', label: '150-400 - Aset Tetap Inventaris & IT Hardware' }
+                  ]}
                   value={formData.assetCoaCode}
-                  onChange={(e) => handleAssetCoaChange(e.target.value)}
-                  className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                >
-                  <option value="150-100">150-100 - Aset Tetap Gedung & Bangunan</option>
-                  <option value="150-200">150-200 - Aset Tetap Kendaraan & Heavy Equipment Fleet</option>
-                  <option value="150-300">150-300 - Aset Tetap Mesin & Peralatan Produksi</option>
-                  <option value="150-400">150-400 - Aset Tetap Inventaris & IT Hardware</option>
-                </select>
+                  onChange={(val) => handleAssetCoaChange(val)}
+                  placeholder="Pilih Akun COA Asset..."
+                />
               </div>
 
               <div>

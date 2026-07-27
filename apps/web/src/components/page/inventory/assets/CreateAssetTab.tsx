@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Plus, CheckCircle2, Tag } from 'lucide-react';
 import { AssetCategory, AssetItem } from '@/lib/mock/inventory';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   assetCategories: AssetCategory[];
@@ -87,17 +88,15 @@ export const CreateAssetTab: React.FC<Props> = ({ assetCategories, addAssetItem,
               <Tag className="w-3.5 h-3.5" /> Pilih Master Kategori Asset Terdaftar
             </span>
           </label>
-          <select
+          <SearchableSelect
+            options={assetCategories.map((c) => ({
+              id: c.id,
+              label: `${c.name} (${c.code} — COA Asset: ${c.assetCoaCode})`
+            }))}
             value={formData.categoryId}
-            onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-          >
-            {assetCategories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name} ({c.code} — COA Asset: {c.assetCoaCode})
-              </option>
-            ))}
-          </select>
+            onChange={(val) => handleCategoryChange(val)}
+            placeholder="Pilih Master Kategori Asset..."
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

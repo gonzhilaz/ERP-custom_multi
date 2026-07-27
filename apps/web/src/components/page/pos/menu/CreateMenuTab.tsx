@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Plus, CheckCircle2, Tag } from 'lucide-react';
 import { MenuCategoryItem, PosMenuItem } from '@/lib/mock/pos';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   menuCategories: MenuCategoryItem[];
@@ -83,17 +84,15 @@ export const CreateMenuTab: React.FC<Props> = ({ menuCategories, addMenuItem, on
               <Tag className="w-3.5 h-3.5" /> Pilih Master Kategori Menu Terdaftar
             </span>
           </label>
-          <select
+          <SearchableSelect
+            options={menuCategories.map((c) => ({
+              id: c.id,
+              label: `${c.name} (${c.code})`
+            }))}
             value={formData.categoryId}
-            onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-          >
-            {menuCategories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name} ({c.code})
-              </option>
-            ))}
-          </select>
+            onChange={(val) => handleCategoryChange(val)}
+            placeholder="Pilih Master Kategori Menu..."
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">

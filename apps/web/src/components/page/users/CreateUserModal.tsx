@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { UserPlus, ShieldCheck, CheckCircle2, X, Sparkles } from 'lucide-react';
 import { useRoleTemplates } from '@/hooks/users/useRoleTemplates';
 import { RolePermissionTemplate } from '@/lib/mock/roles';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   isOpen: boolean;
@@ -66,17 +67,15 @@ export const CreateUserModal = ({ isOpen, onClose, onUserCreated }: Props) => {
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="block font-semibold mb-1">Pilih Template Role Akses</label>
-            <select
+            <SearchableSelect
+              options={templates.map((t) => ({
+                id: t.id,
+                label: `[${t.isSystemPreset ? 'Preset Dev' : 'Custom Parent'}] ${t.name}`
+              }))}
               value={selectedTemplateId}
-              onChange={(e) => setSelectedTemplateId(e.target.value)}
-              className="w-full p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-bold text-sky-600 dark:text-sky-400"
-            >
-              {templates.map((t) => (
-                <option key={t.id} value={t.id}>
-                  [{t.isSystemPreset ? 'Preset Dev' : 'Custom Parent'}] {t.name}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setSelectedTemplateId(val)}
+              placeholder="Pilih Template Role Akses..."
+            />
           </div>
 
           {/* Auto-populated Modules Badge Display */}

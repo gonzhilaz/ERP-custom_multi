@@ -111,14 +111,15 @@ export const CreateCoaTab: React.FC<Props> = ({ coaCategories, addCoaItem, onSuc
 
           <div>
             <label className="block font-semibold mb-1">Mata Uang (Currency)</label>
-            <select
+            <SearchableSelect
+              options={[
+                { id: 'IDR', label: 'IDR (Rupiah Indonesia)' },
+                { id: 'USD', label: 'USD (US Dollar)' }
+              ]}
               value={formData.currency}
-              onChange={(e) => setFormData({ ...formData, currency: e.target.value as any })}
-              className="w-full p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-300 dark:border-slate-700 font-bold"
-            >
-              <option value="IDR">IDR (Rupiah Indonesia)</option>
-              <option value="USD">USD (US Dollar)</option>
-            </select>
+              onChange={(val) => setFormData({ ...formData, currency: val as any })}
+              placeholder="Pilih Mata Uang..."
+            />
           </div>
         </div>
 

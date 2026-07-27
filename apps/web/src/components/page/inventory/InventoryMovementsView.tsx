@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ArrowDownLeft, History, CheckCircle2, ArrowRightLeft, X, HelpCircle } from 'lucide-react';
 import { useInventory } from '@/hooks/inventory/useInventory';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const InventoryMovementsView = () => {
   const { allItems } = useInventory();
@@ -241,9 +242,12 @@ export const InventoryMovementsView = () => {
             <form onSubmit={handleCreateTransfer} className="space-y-3">
               <div>
                 <label className="block font-semibold mb-1">Pilih Barang SKU</label>
-                <select value={transferForm.itemId} onChange={(e) => setTransferForm({ ...transferForm, itemId: e.target.value })} className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold">
-                  {allItems.map((item) => (<option key={item.id} value={item.id}>{item.code} - {item.name}</option>))}
-                </select>
+                <SearchableSelect
+                  options={allItems.map((item) => ({ id: item.id, label: `${item.code} - ${item.name}` }))}
+                  value={transferForm.itemId}
+                  onChange={(val) => setTransferForm({ ...transferForm, itemId: val })}
+                  placeholder="Pilih SKU Barang..."
+                />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -285,9 +289,12 @@ export const InventoryMovementsView = () => {
             <form onSubmit={handleCreateOpname} className="space-y-3">
               <div>
                 <label className="block font-semibold mb-1">Pilih Barang SKU</label>
-                <select value={opnameForm.itemId} onChange={(e) => setOpnameForm({ ...opnameForm, itemId: e.target.value })} className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold">
-                  {allItems.map((item) => (<option key={item.id} value={item.id}>{item.code} - {item.name}</option>))}
-                </select>
+                <SearchableSelect
+                  options={allItems.map((item) => ({ id: item.id, label: `${item.code} - ${item.name}` }))}
+                  value={opnameForm.itemId}
+                  onChange={(val) => setOpnameForm({ ...opnameForm, itemId: val })}
+                  placeholder="Pilih SKU Barang..."
+                />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -301,12 +308,17 @@ export const InventoryMovementsView = () => {
               </div>
               <div>
                 <label className="block font-semibold mb-1">Alasan Penyesuaian</label>
-                <select value={opnameForm.reason} onChange={(e) => setOpnameForm({ ...opnameForm, reason: e.target.value })} className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700">
-                  <option value="Rusak / Kadaluarsa (Spoilage)">Rusak / Kadaluarsa (Spoilage)</option>
-                  <option value="Selisih Hitung Fisik Gudang">Selisih Hitung Fisik Gudang</option>
-                  <option value="Sampel / Promosi Marketing">Sampel / Promosi Marketing</option>
-                  <option value="Penyusutan Alami (Shrinkage)">Penyusutan Alami (Shrinkage)</option>
-                </select>
+                <SearchableSelect
+                  options={[
+                    { id: 'Rusak / Kadaluarsa (Spoilage)', label: 'Rusak / Kadaluarsa (Spoilage)' },
+                    { id: 'Selisih Hitung Fisik Gudang', label: 'Selisih Hitung Fisik Gudang' },
+                    { id: 'Sampel / Promosi Marketing', label: 'Sampel / Promosi Marketing' },
+                    { id: 'Penyusutan Alami (Shrinkage)', label: 'Penyusutan Alami (Shrinkage)' }
+                  ]}
+                  value={opnameForm.reason}
+                  onChange={(val) => setOpnameForm({ ...opnameForm, reason: val })}
+                  placeholder="Pilih Alasan..."
+                />
               </div>
               <div>
                 <label className="block font-semibold mb-1">Auditor / Finance Supervisor</label>

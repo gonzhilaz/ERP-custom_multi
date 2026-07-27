@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Tag, Plus, Trash2, Edit3, FileSpreadsheet } from 'lucide-react';
 import { InventoryCategory } from '@/lib/mock/inventory';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   categories: InventoryCategory[];
@@ -207,16 +208,17 @@ export const ItemCategoriesTab: React.FC<Props> = ({
                   </span>
                   <span className="text-[10px] text-slate-400 font-normal">Strict HO COA Binding</span>
                 </label>
-                <select
+                <SearchableSelect
+                  options={[
+                    { id: '102-100', label: '102-100 - Persediaan Bahan Baku & Dapur Resto' },
+                    { id: '102-200', label: '102-200 - Persediaan Barang Jadi & Retail Product' },
+                    { id: '102-300', label: '102-300 - Persediaan Kemasan & Packaging Store' },
+                    { id: '102-400', label: '102-400 - Persediaan Sparepart & Heavy Equipment Fleet' }
+                  ]}
                   value={formData.coaAccountCode}
-                  onChange={(e) => handleCoaChange(e.target.value)}
-                  className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                >
-                  <option value="102-100">102-100 - Persediaan Bahan Baku & Dapur Resto</option>
-                  <option value="102-200">102-200 - Persediaan Barang Jadi & Retail Product</option>
-                  <option value="102-300">102-300 - Persediaan Kemasan & Packaging Store</option>
-                  <option value="102-400">102-400 - Persediaan Sparepart & Heavy Equipment Fleet</option>
-                </select>
+                  onChange={(val) => handleCoaChange(val)}
+                  placeholder="Pilih Akun COA..."
+                />
               </div>
 
               <div>

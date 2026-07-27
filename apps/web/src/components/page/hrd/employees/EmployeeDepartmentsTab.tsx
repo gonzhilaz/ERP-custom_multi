@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Tag, Plus, Trash2, Edit3, FileSpreadsheet } from 'lucide-react';
 import { DepartmentCategory } from '@/lib/mock/hrd';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 interface Props {
   departments: DepartmentCategory[];
@@ -199,16 +200,17 @@ export const EmployeeDepartmentsTab: React.FC<Props> = ({
                   </span>
                   <span className="text-[10px] text-slate-400 font-normal">Strict HO COA Binding</span>
                 </label>
-                <select
+                <SearchableSelect
+                  options={[
+                    { id: '501-100', label: '501-100 - Beban Gaji Direksi & Executive' },
+                    { id: '501-200', label: '501-200 - Beban Gaji Operator & Technicians Mining' },
+                    { id: '501-300', label: '501-300 - Beban Gaji Chef & Staf Resto' },
+                    { id: '501-400', label: '501-400 - Beban Gaji Staf Operasional & Front Office' }
+                  ]}
                   value={formData.salaryCoaCode}
-                  onChange={(e) => handleSalaryCoaChange(e.target.value)}
-                  className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-300 dark:border-slate-700 font-semibold"
-                >
-                  <option value="501-100">501-100 - Beban Gaji Direksi & Executive</option>
-                  <option value="501-200">501-200 - Beban Gaji Operator & Technicians Mining</option>
-                  <option value="501-300">501-300 - Beban Gaji Chef & Staf Resto</option>
-                  <option value="501-400">501-400 - Beban Gaji Staf Operasional & Front Office</option>
-                </select>
+                  onChange={(val) => handleSalaryCoaChange(val)}
+                  placeholder="Pilih Akun COA Gaji..."
+                />
               </div>
 
               <div>
