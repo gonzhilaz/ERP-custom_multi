@@ -1,4 +1,5 @@
 export type SystemRole =
+  | 'SUPER_ADMIN'
   | 'HOLDING_EXECUTIVE'
   | 'COMPANY_ADMIN'
   | 'RESTO_MANAGER'
@@ -20,6 +21,12 @@ export interface UserRoleProfile {
 }
 
 export const USER_ROLE_PROFILES: Record<SystemRole, UserRoleProfile> = {
+  SUPER_ADMIN: {
+    role: 'SUPER_ADMIN',
+    label: 'Super Admin Enterprise',
+    department: 'Holding & IT Enterprise Security',
+    allowedSubMenuHrefs: ['*'] // Full access everywhere
+  },
   HOLDING_EXECUTIVE: {
     role: 'HOLDING_EXECUTIVE',
     label: 'Holding Executive Board',

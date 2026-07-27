@@ -114,7 +114,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let mockUnitId = 'tenant-toko-roti';
       let mockName = 'Maya Indah (Manager Toko Roti)';
 
-      if (email.includes('admin') || email.includes('holding')) {
+      if (email.toLowerCase() === 'gonzhilaz@gmail.com' || email.includes('gonzhilaz') || email.includes('bayu')) {
+        mockRole = 'SUPER_ADMIN';
+        mockUnitId = 'holding';
+        mockName = 'Bayu Yanuar (Super Admin Enterprise)';
+      } else if (email.includes('admin') || email.includes('holding')) {
         mockRole = 'HOLDING_EXECUTIVE';
         mockUnitId = 'holding';
         mockName = 'Budi Santoso (Holding Executive)';

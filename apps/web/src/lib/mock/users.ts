@@ -16,6 +16,22 @@ export interface SystemUserItem {
 
 export const MOCK_USERS_LIST: SystemUserItem[] = [
   {
+    id: 'user-bayu-001',
+    fullName: 'Bayu Yanuar',
+    email: 'gonzhilaz@gmail.com',
+    systemRole: 'SUPER_ADMIN',
+    assignedTenants: [
+      { tenantId: 'holding', code: 'HOLDING-HQ', name: 'Holding Enterprise Headquarter', roleInTenant: 'SUPER_ADMIN' },
+      { tenantId: 'tenant-resto-01', code: 'RESTO-01', name: 'Nusantara Culinary & Catering', roleInTenant: 'SUPER_ADMIN' },
+      { tenantId: 'tenant-gold-01', code: 'GOLD-MINE-01', name: 'PT Borneo Mining Emas', roleInTenant: 'SUPER_ADMIN' },
+      { tenantId: 'tenant-hotel-01', code: 'HOTEL-01', name: 'Grand Royal Hotel & Resort', roleInTenant: 'SUPER_ADMIN' },
+      { tenantId: 'tenant-retail-01', code: 'RETAIL-01', name: 'Nusa Mart Retail Chain', roleInTenant: 'SUPER_ADMIN' }
+    ],
+    grantedPermissions: ['*'],
+    status: 'ACTIVE',
+    lastLogin: '2026-07-27 18:00:00'
+  },
+  {
     id: 'user-001',
     fullName: 'Budi Santoso',
     email: 'admin@holding.com',
