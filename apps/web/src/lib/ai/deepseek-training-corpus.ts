@@ -1,0 +1,59 @@
+export interface DeepSeekTrainingItem {
+  id: string;
+  category: 'FINANCE_TAX' | 'INVENTORY_SUPPLY' | 'HRD_PAYROLL' | 'MINING_FLEET' | 'HOTEL_RESTO' | 'GOVERNANCE_SECURITY';
+  promptInstruction: string;
+  expectedThoughtReasoning: string;
+  expectedOutputResponse: string;
+  datasetVersion: string;
+}
+
+export const DEEPSEEK_ERP_TRAINING_CORPUS: DeepSeekTrainingItem[] = [
+  {
+    id: 'dt-001',
+    category: 'FINANCE_TAX',
+    promptInstruction: 'Hitung total kewajiban PPN dan PB1 yang harus disetorkan holding dari transaksi Resto dan Hotel bulan ini.',
+    expectedThoughtReasoning: 'Menganalisis transaksi terpisah antara PPN 11% (Objek Pajak Pusat) dan PB1 10% (Pajak Daerah Restoran/Hotel). PB1 tidak dikenakan PPN ganda.',
+    expectedOutputResponse: 'Rekomendasi Fiskal: Total PB1 Resto & Hotel (Pajak Daerah 10%): Rp 42.500.000 (Setor ke Bapenda setempat). Total PPN Keluaran Retail (11%): Rp 18.700.000 (Setor via e-Faktur DJP). Jurnal Otomatis terposting di COA 2-10300 Utang Pajak.',
+    datasetVersion: 'v2.4-Enterprise'
+  },
+  {
+    id: 'dt-002',
+    category: 'INVENTORY_SUPPLY',
+    promptInstruction: 'Deteksi bahan baku persediaan catering yang berada di bawah buffer stock minimum dan buatkan draft PO otomatis.',
+    expectedThoughtReasoning: 'Memeriksa kolom current_stock vs min_threshold pada tabel SKU Master Gudang Utama Catering.',
+    expectedOutputResponse: 'Peringatan Stok Kritis: 2 SKU di bawah buffer point: (1) Tepung Terigu Cakra 25kg (Sisa: 4 Karung, Min: 10 Karung), (2) Minyak Goreng Bimoli 18L (Sisa: 2 Jerigen, Min: 5 Jerigen). Draft PO #PO/2026/07/0089 telah disiapkan untuk Supplier PT Indofood dengan estimasi nilai Rp 8.400.000.',
+    datasetVersion: 'v2.4-Enterprise'
+  },
+  {
+    id: 'dt-003',
+    category: 'MINING_FLEET',
+    promptInstruction: 'Analisis efisiensi konsumsi BBM unit Dump Truck Volvo FMX di Site Tambang Emas Borneo minggu ini.',
+    expectedThoughtReasoning: 'Menghitung rasio BBM per Ritase Hauling. Total Solar dikonsumsi / Total Jarak Km & Ritase Cargo Tonase.',
+    expectedOutputResponse: 'Analisis Fleet Mining: Unit DT-104 (Volvo FMX) mencatatkan konsumsi solar 28.5 Liter/Jam (Efisiensi 94% vs Target 30L/Jam). Total Cargo Terangkut: 701.5 Ton Ore Kadar Tinggi (Au 4.8 g/t). Rekomendasi: Unit aman untuk rotasi shift 2 malam ini.',
+    datasetVersion: 'v2.4-Enterprise'
+  },
+  {
+    id: 'dt-004',
+    category: 'HRD_PAYROLL',
+    promptInstruction: 'Simulasikan perhitungan THP Payroll Karyawan Tetap (PKWTT) Gaji Rp 12.000.000 dengan aturan BPJS dan PPh 21 TER 2026.',
+    expectedThoughtReasoning: 'Menggunakan Formula Engine HRD ERP: Pokok Rp 12jt, BPJS TK 2% + BPJS Kes 1%, PPh 21 TER Kategori B (Tarif 4.5%).',
+    expectedOutputResponse: 'Simulasi Payroll THP: Gaji Pokok: Rp 12.000.000. Potongan BPJS TK (2%): Rp 240.000. Potongan BPJS Kes (1%): Rp 120.000. Potongan PPh 21 TER (4.5%): Rp 540.000. Take Home Pay (THP Net): Rp 11.100.000.',
+    datasetVersion: 'v2.4-Enterprise'
+  },
+  {
+    id: 'dt-005',
+    category: 'GOVERNANCE_SECURITY',
+    promptInstruction: 'Bagaimana penanganan transaksi akuntansi jika staf mencoba mencatat tanggal jurnal pada bulan yang sudah ditutup (Backdate Transaction)?',
+    expectedThoughtReasoning: 'Memeriksa status Backdate Lock pada User Profile & System Parameters.',
+    expectedOutputResponse: 'Aturan Keamanan Backdate: Jika indikator Gembok Backdate [LOCKED 🔒] aktif, transaksi otomatis ditolak oleh validasi backend. Pengguna harus meminta unblock sementara dari Direksi / Super Admin (Bayu Yanuar), yang mana pembukaan kunci akan mencatat Log Audit Keamanan resmi dengan ID jejak permanen.',
+    datasetVersion: 'v2.4-Enterprise'
+  },
+  {
+    id: 'dt-006',
+    category: 'HOTEL_RESTO',
+    promptInstruction: 'Berapa persentase Occupancy Rate Hotel Grand Royal hari ini dan apakah ada kamar yang membutuhkan pembersihan cepat?',
+    expectedThoughtReasoning: 'Mengecek ketersediaan dari total 120 kamar hotel dan status Housekeeping FO.',
+    expectedOutputResponse: 'Ringkasan PMS Hotelier: Occupancy Rate Hari Ini: 84.2% (101 Dari 120 Kamar Terisi). ADR: Rp 850.000 / Malam. Perhatian Housekeeping: 3 Kamar Deluxe (Kamar 304, 308, 412) berstatus Checkout Dirty & membutuhkan Quick Turnover untuk tamu reservasi jam 14:00.',
+    datasetVersion: 'v2.4-Enterprise'
+  }
+];
