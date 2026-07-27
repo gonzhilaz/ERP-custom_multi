@@ -30,11 +30,12 @@ const MOCK_UNITS = [
 const NAV_ITEMS = [
   { name: 'Holding Overview', href: '/', icon: LayoutDashboard, module: 'CORE' },
   { name: 'Finance & COA', href: '/finance', icon: Wallet, module: 'FINANCE' },
-  { name: 'Inventory & Storage', href: '#', icon: Boxes, module: 'INVENTORY' },
-  { name: 'Vendor & PO', href: '#', icon: Truck, module: 'VENDOR' },
-  { name: 'HRD & Payroll', href: '#', icon: Users, module: 'HRD' },
-  { name: 'Employee Self Service', href: '#', icon: UserCheck, module: 'ESS' },
-  { name: 'Managerial & Budgeting', href: '#', icon: BarChart3, module: 'MANAGERIAL' },
+  { name: 'Inventory & Storage', href: '/inventory', icon: Boxes, module: 'INVENTORY' },
+  { name: 'Vendor & PO', href: '/vendor', icon: Truck, module: 'VENDOR' },
+  { name: 'HRD & Payroll', href: '/hrd', icon: Users, module: 'HRD' },
+  { name: 'Employee Portal', href: '/ess', icon: UserCheck, module: 'ESS' },
+  { name: 'CRM & Field Sales', href: '/crm', icon: Smartphone, module: 'CRM' },
+  { name: 'Managerial & Budget', href: '/managerial', icon: BarChart3, module: 'MANAGERIAL' },
   { name: 'Internal Chat & Voice', href: '/chat', icon: MessageSquare, module: 'CHAT', badge: 'Live' }
 ];
 

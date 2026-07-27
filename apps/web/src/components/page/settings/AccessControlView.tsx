@@ -5,6 +5,7 @@ import { ShieldCheck, UserCheck, HelpCircle, X, Lock, Key, Settings } from 'luci
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { useOrganization } from '@/hooks/settings/useOrganization';
 import { DynamicSearchFilter } from '@/components/ui/forms/DynamicSearchFilter';
+import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
 
 export const AccessControlView = () => {
   const { userRules, templates, currentUserRole, updateUserAccessTemplate } = useOrganization();
@@ -105,18 +106,12 @@ export const AccessControlView = () => {
                 </td>
                 <td className="p-3 text-center">
                   {u.role !== 'SUPER_ADMIN' ? (
-                    <select
+                    <SearchableSelect
+                      options={templates.map((tmpl) => ({ id: tmpl.id, label: tmpl.templateName }))}
                       value={u.assignedTemplateId || ''}
-                      onChange={(e) => updateUserAccessTemplate(u.id, e.target.value)}
-                      className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-[10px] font-bold cursor-pointer"
-                    >
-                      <option value="">-- Pilih Template --</option>
-                      {templates.map((tmpl) => (
-                        <option key={tmpl.id} value={tmpl.id}>
-                          {tmpl.templateName}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => updateUserAccessTemplate(u.id, val)}
+                      placeholder="Pilih Template..."
+                    />
                   ) : (
                     <span className="text-amber-600 font-bold text-[11px]">Unrestricted</span>
                   )}

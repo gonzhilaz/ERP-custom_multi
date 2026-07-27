@@ -1,5 +1,5 @@
-import { AssetDepreciationView } from '@/components/page/inventory/assets/AssetDepreciationView';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  return <AssetDepreciationView />;
+  redirect('/inventory/assets/depreciation');
 }
