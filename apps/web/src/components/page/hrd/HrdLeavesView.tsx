@@ -3,10 +3,20 @@
 import React, { useState } from 'react';
 import { CalendarDays, Plus, Trash2, HelpCircle, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+
+interface LeaveItem {
+  id: string;
+  code: string;
+  name: string;
+  defaultQuota: number;
+  isPaid: boolean;
+  requiresDoctorNote: boolean;
+}
 
 export const HrdLeavesView = () => {
   const { user } = useAuth();
-  const [leaves, setLeaves] = useState([
+  const [leaves, setLeaves] = useState<LeaveItem[]>([
     { id: 'lv-01', code: 'CUTI-TAHUNAN', name: 'Cuti Tahunan Karyawan (12 Hari)', defaultQuota: 12, isPaid: true, requiresDoctorNote: false },
     { id: 'lv-02', code: 'IZIN-SAKIT', name: 'Izin Sakit Dengan Surat Dokter', defaultQuota: 30, isPaid: true, requiresDoctorNote: true },
     { id: 'lv-03', code: 'CUTI-HAMIL', name: 'Cuti Melahirkan / Hamil (3 Bulan)', defaultQuota: 90, isPaid: true, requiresDoctorNote: true },
@@ -31,6 +41,36 @@ export const HrdLeavesView = () => {
     alert(`Kategori Cuti/Izin [${formData.name}] Berhasil Ditambahkan!`);
     setIsModalOpen(false);
   };
+
+  const columns: ColumnDef<LeaveItem>[] = [
+    { key: 'code', header: 'Kode', className: 'font-mono font-bold text-emerald-600', render: (lv) => lv.code },
+    { key: 'name', header: 'Nama Kategori Cuti / Izin', className: 'font-bold text-slate-900 dark:text-white', render: (lv) => lv.name },
+    { key: 'defaultQuota', header: 'Kuota Standar', align: 'center', className: 'font-mono font-bold text-purple-600', render: (lv) => `${lv.defaultQuota} Hari` },
+    {
+      key: 'isPaid',
+      header: 'Status Gaji',
+      align: 'center',
+      render: (lv) => (
+        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${lv.isPaid ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+          {lv.isPaid ? 'Paid Leave (Bergaji)' : 'Unpaid Leave'}
+        </span>
+      )
+    },
+    { key: 'requiresDoctorNote', header: 'Surat Dokter / Lampiran', align: 'center', className: 'font-medium', render: (lv) => (lv.requiresDoctorNote ? 'Wajib Lampiran' : 'Tidak Wajib') },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (lv) => (
+        canMutate ? (
+          <button onClick={() => setLeaves((prev) => prev.filter((item) => item.id !== lv.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer" title="Hapus Kategori">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        ) : null
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -67,49 +107,12 @@ export const HrdLeavesView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b font-bold">
-          Master Kategori Cuti & Izin Perusahaan ({leaves.length})
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 font-semibold border-b">
-              <tr>
-                <th className="py-3 px-4 font-mono">Kode</th>
-                <th className="py-3 px-4">Nama Kategori Cuti / Izin</th>
-                <th className="py-3 px-4 text-center">Kuota Standar</th>
-                <th className="py-3 px-4 text-center">Status Gaji</th>
-                <th className="py-3 px-4 text-center">Surat Dokter / Lampiran</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {leaves.map((lv) => (
-                <tr key={lv.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-3.5 px-4 font-mono font-bold text-emerald-600">{lv.code}</td>
-                  <td className="py-3.5 px-4 font-bold">{lv.name}</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-purple-600">{lv.defaultQuota} Hari</td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${lv.isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'}`}>
-                      {lv.isPaid ? 'Paid Leave (Bergaji)' : 'Unpaid Leave'}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-center font-medium">
-                    {lv.requiresDoctorNote ? 'Wajib Lampiran' : 'Tidak Wajib'}
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    {canMutate && (
-                      <button onClick={() => setLeaves((prev) => prev.filter((item) => item.id !== lv.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Master Kategori Cuti & Izin Perusahaan (${leaves.length})`}
+        columns={columns}
+        data={leaves}
+        keyExtractor={(lv) => lv.id}
+      />
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">

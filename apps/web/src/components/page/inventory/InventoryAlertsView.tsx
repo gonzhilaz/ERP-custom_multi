@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, ShoppingCart, HelpCircle, X } from 'lucide-react';
 import { useInventory } from '@/hooks/inventory/useInventory';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const InventoryAlertsView = () => {
   const { alertItems } = useInventory();
@@ -60,59 +61,44 @@ export const InventoryAlertsView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-amber-50/50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/50 flex items-center justify-between">
-          <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
-            Kritis / Low Stock ({alertItems.length} SKU)
-          </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Kode Item</th>
-                <th className="py-3.5 px-4">Nama Barang</th>
-                <th className="py-3.5 px-4">Kategori</th>
-                <th className="py-3.5 px-4">Lokasi Gudang</th>
-                <th className="py-3.5 px-4 text-center">Stok Saat Ini</th>
-                <th className="py-3.5 px-4 text-center">Batas Min. Stok</th>
-                <th className="py-3.5 px-4 text-center">Status</th>
-                <th className="py-3.5 px-4 text-center">Aksi Restock</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {alertItems.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-amber-600 dark:text-amber-400">{item.code}</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{item.name}</td>
-                  <td className="py-3.5 px-4 text-slate-500">{item.category}</td>
-                  <td className="py-3.5 px-4 text-slate-500">{item.warehouse}</td>
-                  <td className="py-3.5 px-4 text-center font-bold text-red-600 dark:text-red-400 font-mono">
-                    {item.stockQty} {item.uom}
-                  </td>
-                  <td className="py-3.5 px-4 text-center font-semibold text-slate-500 font-mono">
-                    {item.minStockLevel} {item.uom}
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span className="px-2 py-1 bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30 rounded-full text-[10px] font-bold">
-                      RE-ORDER NOW
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    <button
-                      onClick={() => alert(`Pengajuan Purchase Order (PO) untuk [${item.name}] telah dibuat!`)}
-                      className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-700 dark:text-amber-300 rounded-lg text-[11px] font-semibold transition-all cursor-pointer"
-                    >
-                      Buat PO Restock
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* Alerts Table */}
+      <DataTable
+        headerTitle={`Katalog Peringatan Restok Minimum (${alertItems.length})`}
+        columns={[
+          { key: 'code', header: 'Kode Barang', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (item) => item.code },
+          { key: 'name', header: 'Nama Barang SKU', className: 'font-bold text-slate-900 dark:text-white', render: (item) => item.name },
+          { key: 'category', header: 'Kategori', className: 'text-slate-500', render: (item) => item.category },
+          { key: 'warehouse', header: 'Lokasi Gudang', className: 'text-slate-500', render: (item) => item.warehouse },
+          { key: 'stockQty', header: 'Stok Sisa Saat Ini', align: 'center', className: 'font-bold text-red-600 dark:text-red-400 font-mono', render: (item) => `${item.stockQty} ${item.uom}` },
+          { key: 'minStockLevel', header: 'Batas Stok Minimum', align: 'center', className: 'font-semibold text-slate-500 font-mono', render: (item) => `${item.minStockLevel} ${item.uom}` },
+          {
+            key: 'status',
+            header: 'Status',
+            align: 'center',
+            render: () => (
+              <span className="px-2 py-1 bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30 rounded-full text-[10px] font-bold">
+                RE-ORDER NOW
+              </span>
+            )
+          },
+          {
+            key: 'actions',
+            header: 'Aksi Restock',
+            align: 'center',
+            sortable: false,
+            render: (item) => (
+              <button
+                onClick={() => alert(`Pengajuan Purchase Order (PO) untuk [${item.name}] telah dibuat!`)}
+                className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-700 dark:text-amber-300 rounded-lg text-[11px] font-semibold transition-all cursor-pointer"
+              >
+                Buat PO Restock
+              </button>
+            )
+          }
+        ]}
+        data={alertItems}
+        keyExtractor={(item) => item.id}
+      />
     </div>
   );
 };

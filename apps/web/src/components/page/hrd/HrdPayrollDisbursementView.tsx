@@ -1,12 +1,33 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DollarSign, Download, Send, CheckCircle2, MessageSquare, HelpCircle, X, Building, ShieldCheck } from 'lucide-react';
+import { DollarSign, Download, Send, HelpCircle, X } from 'lucide-react';
 import { usePayrollDisbursement } from '@/hooks/hrd/usePayrollDisbursement';
+import { PayrollDisbursementItem } from '@/lib/mock/payroll-disburse';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdPayrollDisbursementView = () => {
   const { batches, employees, isSendingWa, downloadBankExportFile, sendMassWaPayslips } = usePayrollDisbursement();
   const [showGlossary, setShowGlossary] = useState(false);
+
+  const columns: ColumnDef<PayrollDisbursementItem>[] = [
+    { key: 'employeeName', header: 'Nama Karyawan', className: 'font-bold text-slate-900 dark:text-white', render: (e) => e.employeeName },
+    { key: 'bankAccount', header: 'Bank & No Rekening', className: 'font-mono text-slate-600 dark:text-slate-300', render: (e) => `${e.bankName} - ${e.bankAccount}` },
+    { key: 'takeHomePay', header: 'Take Home Pay', align: 'right', className: 'font-mono font-bold text-emerald-600', render: (e) => `Rp ${e.takeHomePay.toLocaleString('id-ID')}` },
+    {
+      key: 'waStatus',
+      header: 'Status WhatsApp Slip',
+      align: 'center',
+      render: (e) => (
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+          e.waStatus === 'SENT' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+        }`}>
+          {e.waStatus === 'SENT' ? 'TERKIRIM WA' : 'MENUNGGU WA'}
+        </span>
+      )
+    },
+    { key: 'waSendTimestamp', header: 'Waktu Kirim WA', align: 'center', className: 'font-mono text-slate-400', render: (e) => e.waSendTimestamp || '-' }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -75,38 +96,12 @@ export const HrdPayrollDisbursementView = () => {
         ))}
       </div>
 
-      {/* Disbursement & WA Delivery Status Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm space-y-2 p-4">
-        <h3 className="font-bold text-sm text-slate-900 dark:text-white">Status Transfer Gaji & Distribusi Slip WA</h3>
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500">
-              <th className="p-3 font-semibold">Nama Karyawan</th>
-              <th className="p-3 font-semibold">Bank & No Rekening</th>
-              <th className="p-3 font-semibold text-right">Take Home Pay</th>
-              <th className="p-3 font-semibold text-center">Status WhatsApp Slip</th>
-              <th className="p-3 font-semibold text-center">Waktu Kirim WA</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {employees.map((e) => (
-              <tr key={e.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                <td className="p-3 font-bold text-slate-900 dark:text-white">{e.employeeName}</td>
-                <td className="p-3 font-mono text-slate-600 dark:text-slate-300">{e.bankName} - {e.bankAccount}</td>
-                <td className="p-3 text-right font-mono font-bold text-emerald-600">Rp {e.takeHomePay.toLocaleString('id-ID')}</td>
-                <td className="p-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    e.waStatus === 'SENT' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                  }`}>
-                    {e.waStatus === 'SENT' ? 'TERKIRIM WA' : 'MENUNGGU WA'}
-                  </span>
-                </td>
-                <td className="p-3 text-center font-mono text-slate-400">{e.waSendTimestamp || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        headerTitle={`Status Transfer Gaji & Distribusi Slip WA (${employees.length})`}
+        columns={columns}
+        data={employees}
+        keyExtractor={(e) => e.id}
+      />
     </div>
   );
 };

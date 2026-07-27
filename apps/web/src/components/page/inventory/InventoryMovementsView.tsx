@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ArrowDownLeft, History, CheckCircle2, ArrowRightLeft, X, HelpCircle } from 'lucide-react';
 import { useInventory } from '@/hooks/inventory/useInventory';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const InventoryMovementsView = () => {
   const { allItems } = useInventory();
@@ -173,61 +174,59 @@ export const InventoryMovementsView = () => {
       </div>
 
       {/* Movements Log Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            Log Mutasi ({mockMovements.length})
-          </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Waktu</th>
-                <th className="py-3.5 px-4 text-center">Tipe</th>
-                <th className="py-3.5 px-4">Kode & Nama Barang</th>
-                <th className="py-3.5 px-4 text-right">Jumlah Qty</th>
-                <th className="py-3.5 px-4">Gudang asal / tujuan</th>
-                <th className="py-3.5 px-4">Referensi</th>
-                <th className="py-3.5 px-4 text-center">Petugas</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {mockMovements.map((mov) => (
-                <tr key={mov.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-3.5 px-4 font-mono font-bold text-slate-500">{mov.timestamp}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    {mov.type === 'GOODS_IN' ? (
-                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
-                        <ArrowDownLeft className="w-3 h-3" /> Barang Masuk
-                      </span>
-                    ) : mov.type === 'TRANSFER_STOCK' ? (
-                      <span className="px-2.5 py-1 bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
-                        <ArrowRightLeft className="w-3 h-3" /> Transfer Mutasi
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" /> Stock Opname
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
-                    <span className="text-sky-600 dark:text-sky-400 font-mono block text-[11px]">{mov.code}</span>
-                    <span>{mov.name}</span>
-                  </td>
-                  <td className={`py-3.5 px-4 text-right font-mono font-bold ${mov.qty > 0 ? 'text-emerald-600' : 'text-amber-600'}`}>
-                    {mov.qty > 0 ? `+${mov.qty}` : mov.qty} {mov.uom}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500">{mov.warehouse}</td>
-                  <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{mov.reference}</td>
-                  <td className="py-3.5 px-4 text-center font-semibold">{mov.operator}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Log Mutasi Stock & Goods Receipt (${mockMovements.length})`}
+        columns={[
+          { key: 'timestamp', header: 'Waktu', className: 'font-mono font-bold text-slate-500', render: (mov) => mov.timestamp },
+          {
+            key: 'type',
+            header: 'Tipe',
+            align: 'center',
+            render: (mov) => (
+              mov.type === 'GOODS_IN' ? (
+                <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                  <ArrowDownLeft className="w-3 h-3" /> Barang Masuk
+                </span>
+              ) : mov.type === 'TRANSFER_STOCK' ? (
+                <span className="px-2.5 py-1 bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                  <ArrowRightLeft className="w-3 h-3" /> Transfer Mutasi
+                </span>
+              ) : (
+                <span className="px-2.5 py-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Stock Opname
+                </span>
+              )
+            )
+          },
+          {
+            key: 'code',
+            header: 'Kode & Nama Barang',
+            className: 'font-semibold text-slate-900 dark:text-white',
+            render: (mov) => (
+              <div>
+                <span className="text-sky-600 dark:text-sky-400 font-mono block text-[11px]">{mov.code}</span>
+                <span>{mov.name}</span>
+              </div>
+            )
+          },
+          {
+            key: 'qty',
+            header: 'Jumlah Qty',
+            align: 'right',
+            className: 'font-mono font-bold',
+            render: (mov) => (
+              <span className={mov.qty > 0 ? 'text-emerald-600' : 'text-amber-600'}>
+                {mov.qty > 0 ? `+${mov.qty}` : mov.qty} {mov.uom}
+              </span>
+            )
+          },
+          { key: 'warehouse', header: 'Gudang asal / tujuan', className: 'text-slate-500', render: (mov) => mov.warehouse },
+          { key: 'reference', header: 'Referensi', className: 'text-slate-600 dark:text-slate-300', render: (mov) => mov.reference },
+          { key: 'operator', header: 'Petugas', align: 'center', className: 'font-semibold', render: (mov) => mov.operator }
+        ]}
+        data={mockMovements}
+        keyExtractor={(mov) => mov.id}
+      />
 
       {/* Transfer Modal */}
       {isTransferModalOpen && (

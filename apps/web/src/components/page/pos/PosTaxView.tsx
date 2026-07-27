@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Percent, Plus, Edit2, Trash2, ShieldCheck, HelpCircle, X, CheckCircle2, History, BookOpen, Lock } from 'lucide-react';
 import { useTaxMaster } from '@/hooks/pos/useTaxMaster';
 import { MasterTaxItem } from '@/lib/mock/tax';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const PosTaxView = () => {
   const [showGlossary, setShowGlossary] = useState(false);
@@ -126,76 +127,68 @@ export const PosTaxView = () => {
       </div>
 
       {/* Main Tax Master Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Daftar Skema Pajak Terdaftar ({taxes.length})</span>
-          <span className="text-[11px] text-amber-600 font-semibold flex items-center gap-1">
-            <Lock className="w-3 h-3" /> Restricted Edit (IT / ADMIN)
-          </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3 px-4">Kode Pajak</th>
-                <th className="py-3 px-4">Nama Skema Pajak</th>
-                <th className="py-3 px-4 text-center">Tarif (%)</th>
-                <th className="py-3 px-4">Linkage COA Utang Pajak</th>
-                <th className="py-3 px-4">Modul Pengguna</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {taxes.map((t) => (
-                <tr key={t.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3 px-4 font-mono font-bold text-amber-600 dark:text-amber-400">{t.code}</td>
-                  <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{t.name}</td>
-                  <td className="py-3 px-4 text-center font-mono font-bold text-lg text-emerald-600 dark:text-emerald-400">
-                    {t.ratePercentage}%
-                  </td>
-                  <td className="py-3 px-4 font-mono text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold">
-                    {t.coaAccount}
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex flex-wrap gap-1">
-                      {t.applicableModules.map((m) => (
-                        <span key={m} className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                          {m}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                      {t.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <button
-                        onClick={() => handleOpenEdit(t)}
-                        className="p-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg cursor-pointer"
-                        title="Edit Master Pajak"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(t.id, t.name)}
-                        className="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg cursor-pointer"
-                        title="Soft Delete Master Pajak"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Daftar Skema Pajak Terdaftar (${taxes.length})`}
+        columns={[
+          { key: 'code', header: 'Kode Pajak', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (t) => t.code },
+          { key: 'name', header: 'Nama Skema Pajak', className: 'font-bold text-slate-900 dark:text-white', render: (t) => t.name },
+          { key: 'ratePercentage', header: 'Tarif (%)', align: 'center', className: 'font-mono font-bold text-lg text-emerald-600 dark:text-emerald-400', render: (t) => `${t.ratePercentage}%` },
+          { key: 'coaAccount', header: 'Linkage COA Utang Pajak', className: 'font-mono text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold', render: (t) => t.coaAccount },
+          {
+            key: 'applicableModules',
+            header: 'Modul Pengguna',
+            render: (t) => (
+              <div className="flex flex-wrap gap-1">
+                {t.applicableModules.map((m) => (
+                  <span key={m} className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                    {m}
+                  </span>
+                ))}
+              </div>
+            )
+          },
+          {
+            key: 'status',
+            header: 'Status',
+            align: 'center',
+            render: (t) => (
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                t.status === 'ACTIVE'
+                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                  : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+              }`}>
+                {t.status}
+              </span>
+            )
+          },
+          {
+            key: 'actions',
+            header: 'Aksi',
+            align: 'center',
+            sortable: false,
+            render: (t) => (
+              <div className="flex items-center justify-center gap-1">
+                <button
+                  onClick={() => handleOpenEdit(t)}
+                  className="p-1 text-slate-400 hover:text-amber-600 transition-colors cursor-pointer"
+                  title="Edit Pajak"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDelete(t.id, t.name)}
+                  className="p-1 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                  title="Soft-Delete Pajak"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )
+          }
+        ]}
+        data={taxes}
+        keyExtractor={(t) => t.id}
+      />
 
       {/* Audit Trail History Section */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 shadow-sm">

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Building2, Plus, Trash2, HelpCircle, X } from 'lucide-react';
 import { MOCK_DEPARTMENTS, DepartmentCategory } from '@/lib/mock/hrd';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdDepartmentsView = () => {
   const { user } = useAuth();
@@ -94,46 +95,43 @@ export const HrdDepartmentsView = () => {
       </div>
 
       {/* Department Master Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="font-bold text-slate-700 dark:text-slate-300">Daftar Departemen & Bagian Perusahaan ({departments.length})</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3 px-4 font-mono">Kode</th>
-                <th className="py-3 px-4">Nama Departemen</th>
-                <th className="py-3 px-4 text-center">Jumlah Karyawan</th>
-                <th className="py-3 px-4">Mapping COA Beban Gaji</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {departments.map((dept) => (
-                <tr key={dept.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-sky-600 dark:text-sky-400">{dept.code}</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{dept.name}</td>
-                  <td className="py-3.5 px-4 text-center font-semibold text-purple-600">{dept.employeeCount} Orang</td>
-                  <td className="py-3.5 px-4 font-mono text-[11px] text-indigo-600 dark:text-indigo-400">{dept.salaryCoaCode} - {dept.salaryCoaName}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    {canMutate && (
-                      <button
-                        onClick={() => handleSoftDeleteDepartment(dept.id, dept.name)}
-                        className="p-1 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
-                        title="Hapus Departemen"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Daftar Departemen & Bagian (${departments.length})`}
+        columns={[
+          { key: 'code', header: 'Kode', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (d) => d.code },
+          { key: 'name', header: 'Nama Departemen', className: 'font-bold text-slate-900 dark:text-white', render: (d) => d.name },
+          { key: 'employeeCount', header: 'Jumlah Karyawan', align: 'center', className: 'font-mono font-bold text-sky-600', render: (d) => `${d.employeeCount} Orang` },
+          {
+            key: 'salaryCoaCode',
+            header: 'Mapping COA Beban Gaji',
+            render: (d) => (
+              <div>
+                <span className="font-mono text-sky-600 font-bold block">{d.salaryCoaCode}</span>
+                <span className="text-[10px] text-slate-400">{d.salaryCoaName}</span>
+              </div>
+            )
+          },
+          {
+            key: 'actions',
+            header: 'Aksi',
+            align: 'center',
+            sortable: false,
+            render: (d) => (
+              canMutate ? (
+                <button
+                  onClick={() => handleSoftDeleteDepartment(d.id, d.name)}
+                  className="p-1 text-slate-400 hover:text-red-600 cursor-pointer"
+                  title="Hapus Departemen"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              ) : null
+            )
+          }
+        ]}
+        data={departments}
+        keyExtractor={(d) => d.id}
+      />
 
       {/* Modal Add Department */}
       {isModalOpen && (

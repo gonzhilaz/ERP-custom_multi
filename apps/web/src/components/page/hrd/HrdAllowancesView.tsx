@@ -3,10 +3,20 @@
 import React, { useState } from 'react';
 import { Award, Plus, Trash2, HelpCircle, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+
+interface AllowanceItem {
+  id: string;
+  code: string;
+  name: string;
+  type: string;
+  amount: number;
+  isTaxable: boolean;
+}
 
 export const HrdAllowancesView = () => {
   const { user } = useAuth();
-  const [allowances, setAllowances] = useState([
+  const [allowances, setAllowances] = useState<AllowanceItem[]>([
     { id: 'al-01', code: 'TUNJ-JABATAN', name: 'Tunjangan Jabatan & Structural', type: 'FIXED_MONTHLY', amount: 5000000, isTaxable: true },
     { id: 'al-02', code: 'TUNJ-MAKAN', name: 'Tunjangan Uang Makan & Transp', type: 'DAILY_ATTENDANCE', amount: 50000, isTaxable: false },
     { id: 'al-03', code: 'INSENTIF-KPI', name: 'Insentif Performa & KPI Achievement', type: 'PERFORMANCE_BASED', amount: 2000000, isTaxable: true }
@@ -30,6 +40,40 @@ export const HrdAllowancesView = () => {
     alert(`Tunjangan [${formData.name}] Berhasil Ditambahkan!`);
     setIsModalOpen(false);
   };
+
+  const columns: ColumnDef<AllowanceItem>[] = [
+    { key: 'code', header: 'Kode', className: 'font-mono font-bold text-emerald-600', render: (al) => al.code },
+    { key: 'name', header: 'Nama Tunjangan', className: 'font-bold text-slate-900 dark:text-white', render: (al) => al.name },
+    { key: 'type', header: 'Tipe Kalkulasi', align: 'center', className: 'font-mono text-[10px]', render: (al) => al.type },
+    { key: 'amount', header: 'Nominal / Tarif', align: 'right', className: 'font-mono font-bold text-emerald-600', render: (al) => `Rp ${al.amount.toLocaleString('id-ID')}` },
+    {
+      key: 'isTaxable',
+      header: 'Pajak PPh 21',
+      align: 'center',
+      render: (al) => (
+        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${al.isTaxable ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
+          {al.isTaxable ? 'Kena Pajak' : 'Bebas Pajak'}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (al) => (
+        canMutate ? (
+          <button
+            onClick={() => setAllowances((prev) => prev.filter((a) => a.id !== al.id))}
+            className="p-1 text-slate-400 hover:text-red-600 cursor-pointer"
+            title="Hapus Tunjangan"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        ) : null
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -66,47 +110,12 @@ export const HrdAllowancesView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 font-bold">
-          Master Komponen Tunjangan ({allowances.length})
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3 px-4 font-mono">Kode</th>
-                <th className="py-3 px-4">Nama Tunjangan</th>
-                <th className="py-3 px-4 text-center">Tipe Kalkulasi</th>
-                <th className="py-3 px-4 text-right">Nominal / Tarif</th>
-                <th className="py-3 px-4 text-center">Pajak PPh 21</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {allowances.map((al) => (
-                <tr key={al.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-3.5 px-4 font-mono font-bold text-emerald-600">{al.code}</td>
-                  <td className="py-3.5 px-4 font-bold">{al.name}</td>
-                  <td className="py-3.5 px-4 text-center font-mono text-[10px]">{al.type}</td>
-                  <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-600">Rp {al.amount.toLocaleString('id-ID')}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${al.isTaxable ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-600'}`}>
-                      {al.isTaxable ? 'Kena Pajak' : 'Bebas Pajak'}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    {canMutate && (
-                      <button onClick={() => setAllowances((prev) => prev.filter((a) => a.id !== al.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Master Komponen Tunjangan (${allowances.length})`}
+        columns={columns}
+        data={allowances}
+        keyExtractor={(al) => al.id}
+      />
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">

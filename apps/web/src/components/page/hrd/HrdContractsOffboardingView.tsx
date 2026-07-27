@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { ShieldCheck, AlertTriangle, Calculator, FileCheck, HelpCircle, X } from 'lucide-react';
 import { useHrExtended } from '@/hooks/hrd/useHrExtended';
+import { EmployeeContract } from '@/lib/mock/hr-extended';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdContractsOffboardingView = () => {
   const { contracts, calculatePesangonUUCiptaKerja } = useHrExtended();
@@ -19,6 +21,37 @@ export const HrdContractsOffboardingView = () => {
     const result = calculatePesangonUUCiptaKerja(calcBaseSalary, calcYears);
     setCalcResult(result);
   };
+
+  const columns: ColumnDef<EmployeeContract>[] = [
+    { key: 'employeeName', header: 'Nama Karyawan', className: 'font-bold text-slate-900 dark:text-white', render: (c) => c.employeeName },
+    { key: 'departmentName', header: 'Departemen', className: 'text-slate-600 dark:text-slate-300', render: (c) => c.departmentName },
+    { key: 'contractType', header: 'Tipe Kontrak', className: 'font-semibold text-amber-600', render: (c) => c.contractType },
+    { key: 'period', header: 'Periode Kontrak', className: 'text-slate-500', render: (c) => `${c.startDate} s/d ${c.endDate}` },
+    {
+      key: 'daysRemaining',
+      header: 'Sisa Hari',
+      align: 'center',
+      render: (c) => (
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 animate-pulse">
+          {c.daysRemaining} Hari Lagi
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi HRD',
+      align: 'center',
+      sortable: false,
+      render: (c) => (
+        <button
+          onClick={() => alert(`Memproses perpanjangan/offboarding untuk [${c.employeeName}]`)}
+          className="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg text-[10px] cursor-pointer"
+        >
+          Proses Tindakan
+        </button>
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -84,40 +117,12 @@ export const HrdContractsOffboardingView = () => {
 
       {/* Tab: Contracts */}
       {activeTab === 'CONTRACTS' && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500">
-                <th className="p-3 font-semibold">Nama Karyawan</th>
-                <th className="p-3 font-semibold">Departemen</th>
-                <th className="p-3 font-semibold">Tipe Kontrak</th>
-                <th className="p-3 font-semibold">Periode Kontrak</th>
-                <th className="p-3 font-semibold text-center">Sisa Hari</th>
-                <th className="p-3 font-semibold text-center">Aksi HRD</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {contracts.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                  <td className="p-3 font-bold text-slate-900 dark:text-white">{c.employeeName}</td>
-                  <td className="p-3 text-slate-600 dark:text-slate-300">{c.departmentName}</td>
-                  <td className="p-3 font-semibold text-amber-600">{c.contractType}</td>
-                  <td className="p-3 text-slate-500">{c.startDate} s/d {c.endDate}</td>
-                  <td className="p-3 text-center">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 animate-pulse">
-                      {c.daysRemaining} Hari Lagi
-                    </span>
-                  </td>
-                  <td className="p-3 text-center">
-                    <button onClick={() => alert(`Memproses perpanjangan/pengangkatan ${c.employeeName}`)} className="px-2.5 py-1 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-lg text-[10px] cursor-pointer">
-                      Perpanjang / Angkat Tetap
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          headerTitle={`Pemantauan Masa Berlaku Kontrak PKWT (${contracts.length})`}
+          columns={columns}
+          data={contracts}
+          keyExtractor={(c) => c.id}
+        />
       )}
 
       {/* Tab: Pesangon Calculator */}

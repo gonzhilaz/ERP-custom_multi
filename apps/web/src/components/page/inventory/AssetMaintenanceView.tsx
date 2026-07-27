@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Wrench, CheckCircle2, Clock, Plus, HelpCircle, X } from 'lucide-react';
 import { useInventory } from '@/hooks/inventory/useInventory';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const AssetMaintenanceView = () => {
   const { allAssets } = useInventory();
@@ -114,72 +115,65 @@ export const AssetMaintenanceView = () => {
         </button>
       </div>
 
-      {/* Maintenance Work Orders Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-amber-50/50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/50 flex items-center justify-between">
-          <span className="text-xs font-bold text-amber-900 dark:text-amber-200">
-            Work Order Service ({maintenanceItems.length})
-          </span>
-          <span className="text-[11px] text-amber-700 dark:text-amber-300 font-semibold">Real-Time Progress</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Kode & Nama Asset</th>
-                <th className="py-3.5 px-4">Lokasi Cabang</th>
-                <th className="py-3.5 px-4">Teknisi PJ</th>
-                <th className="py-3.5 px-4 text-center">Tgl Masuk</th>
-                <th className="py-3.5 px-4 text-center">Estimasi Selesai</th>
-                <th className="py-3.5 px-4">Catatan Perbaikan</th>
-                <th className="py-3.5 px-4 text-center">Status Service</th>
-                <th className="py-3.5 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {maintenanceItems.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
-                    <span className="text-amber-600 dark:text-amber-400 font-mono block text-[11px]">{item.assetCode}</span>
-                    <span>{item.assetName}</span>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500">{item.branch}</td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-800 dark:text-slate-200">{item.technician}</td>
-                  <td className="py-3.5 px-4 text-center font-mono text-slate-500">{item.startDate}</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-amber-600 dark:text-amber-400">
-                    {item.estimatedCompletion}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">{item.notes}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    {item.status === 'COMPLETED' ? (
-                      <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>Selesai & Aktif</span>
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        <span>Proses Repair</span>
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    {item.status !== 'COMPLETED' && (
-                      <button
-                        onClick={() => handleCompleteMaintenance(item.id)}
-                        className="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[11px] font-semibold shadow-sm transition-all cursor-pointer"
-                      >
-                        Selesai & Aktifkan
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Work Order Service (${maintenanceItems.length})`}
+        columns={[
+          {
+            key: 'assetCode',
+            header: 'Kode & Nama Asset',
+            className: 'font-semibold text-slate-900 dark:text-white',
+            render: (item) => (
+              <div>
+                <span className="text-amber-600 dark:text-amber-400 font-mono block text-[11px]">{item.assetCode}</span>
+                <span>{item.assetName}</span>
+              </div>
+            )
+          },
+          { key: 'branch', header: 'Lokasi Cabang', className: 'text-slate-500', render: (item) => item.branch },
+          { key: 'technician', header: 'Teknisi PJ', className: 'font-semibold text-slate-800 dark:text-slate-200', render: (item) => item.technician },
+          { key: 'startDate', header: 'Tgl Masuk', align: 'center', className: 'font-mono text-slate-500', render: (item) => item.startDate },
+          { key: 'estimatedCompletion', header: 'Estimasi Selesai', align: 'center', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (item) => item.estimatedCompletion },
+          { key: 'notes', header: 'Catatan Perbaikan', className: 'text-slate-600 dark:text-slate-300', render: (item) => item.notes },
+          {
+            key: 'status',
+            header: 'Status Service',
+            align: 'center',
+            render: (item) => (
+              item.status === 'COMPLETED' ? (
+                <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Selesai & Aktif</span>
+                </span>
+              ) : (
+                <span className="px-2.5 py-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded-full text-[10px] font-bold inline-flex items-center gap-1 animate-pulse">
+                  <Clock className="w-3 h-3" />
+                  <span>Dalam Perbaikan</span>
+                </span>
+              )
+            )
+          },
+          {
+            key: 'actions',
+            header: 'Aksi',
+            align: 'center',
+            sortable: false,
+            render: (item) => (
+              item.status !== 'COMPLETED' ? (
+                <button
+                  onClick={() => handleCompleteMaintenance(item.id)}
+                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold cursor-pointer transition-colors shadow-sm"
+                >
+                  Selesaikan Service
+                </button>
+              ) : (
+                <span className="text-[11px] text-slate-400 font-mono">Completed</span>
+              )
+            )
+          }
+        ]}
+        data={maintenanceItems}
+        keyExtractor={(item) => item.id}
+      />
 
       {/* Modal Form New Work Order */}
       {isModalOpen && (

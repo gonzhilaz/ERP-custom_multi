@@ -1,12 +1,34 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Award, AlertTriangle, HelpCircle, X, ShieldCheck } from 'lucide-react';
+import { Award, HelpCircle, X } from 'lucide-react';
 import { useHrExtended } from '@/hooks/hrd/useHrExtended';
+import { EmployeeCertification } from '@/lib/mock/hr-extended';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdCertificationsView = () => {
   const { certifications } = useHrExtended();
   const [showGlossary, setShowGlossary] = useState(false);
+
+  const columns: ColumnDef<EmployeeCertification>[] = [
+    { key: 'employeeName', header: 'Nama Karyawan', className: 'font-bold text-slate-900 dark:text-white', render: (c) => c.employeeName },
+    { key: 'departmentName', header: 'Departemen', className: 'text-slate-600 dark:text-slate-300', render: (c) => c.departmentName },
+    { key: 'certificateName', header: 'Nama Lisensi / Sertifikasi', className: 'font-bold text-indigo-600 dark:text-indigo-400', render: (c) => c.certificateName },
+    { key: 'issuer', header: 'Penerbit Lisensi', className: 'text-slate-500', render: (c) => c.issuer },
+    { key: 'expiryDate', header: 'Tanggal Kedaluwarsa', align: 'center', className: 'font-mono font-semibold', render: (c) => c.expiryDate },
+    {
+      key: 'status',
+      header: 'Status SIO',
+      align: 'center',
+      render: (c) => (
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+          c.status === 'VALID' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 animate-pulse'
+        }`}>
+          {c.status === 'VALID' ? 'BERLAKU' : 'SEGERA RE-SERTIFIKASI'}
+        </span>
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -39,39 +61,12 @@ export const HrdCertificationsView = () => {
         </div>
       </div>
 
-      {/* Certifications Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500">
-              <th className="p-3 font-semibold">Nama Karyawan</th>
-              <th className="p-3 font-semibold">Departemen</th>
-              <th className="p-3 font-semibold">Nama Lisensi / Sertifikasi</th>
-              <th className="p-3 font-semibold">Penerbit Lisensi</th>
-              <th className="p-3 font-semibold text-center">Tanggal Kedaluwarsa</th>
-              <th className="p-3 font-semibold text-center">Status SIO</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {certifications.map((c) => (
-              <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                <td className="p-3 font-bold text-slate-900 dark:text-white">{c.employeeName}</td>
-                <td className="p-3 text-slate-600 dark:text-slate-300">{c.departmentName}</td>
-                <td className="p-3 font-bold text-indigo-600 dark:text-indigo-400">{c.certificateName}</td>
-                <td className="p-3 text-slate-500">{c.issuer}</td>
-                <td className="p-3 text-center font-mono font-semibold">{c.expiryDate}</td>
-                <td className="p-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    c.status === 'VALID' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 animate-pulse'
-                  }`}>
-                    {c.status === 'VALID' ? 'BERLAKU' : 'SEGERA RE-SERTIFIKASI'}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        headerTitle={`Katalog Sertifikasi & SIO K3 (${certifications.length})`}
+        columns={columns}
+        data={certifications}
+        keyExtractor={(c) => c.id}
+      />
     </div>
   );
 };

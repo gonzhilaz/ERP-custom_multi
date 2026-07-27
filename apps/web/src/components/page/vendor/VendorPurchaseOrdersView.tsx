@@ -2,13 +2,17 @@
 
 import React, { useState } from 'react';
 import { FileCheck, Plus, CheckCircle, XCircle, X, ShieldAlert } from 'lucide-react';
+import { useAuth } from '@/hooks/auth/useAuth';
 import { useVendor } from '@/hooks/vendor/useVendor';
 import { ModuleHeader } from '@/components/ui/cards/ModuleHeader';
 import { StatusBadge } from '@/components/ui/badge/StatusBadge';
 import { PurchaseOrder } from '@/lib/mock/vendor';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const VendorPurchaseOrdersView = () => {
+  const { user } = useAuth();
+  const isHoldingExecutive = (user?.systemRole as string) === 'HOLDING_EXECUTIVE' || (user?.systemRole as string) === 'COMPANY_ADMIN' || (user?.systemRole as string) === 'ADMIN';
   const { purchaseOrders, approvePO, rejectPO, vendors } = useVendor();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [poList, setPoList] = useState<PurchaseOrder[]>(purchaseOrders);
@@ -77,87 +81,78 @@ export const VendorPurchaseOrdersView = () => {
       />
 
       {/* PO List Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            Daftar Purchase Order ({poList.length})
-          </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">No. PO</th>
-                <th className="py-3.5 px-4">Vendor Supplier</th>
-                <th className="py-3.5 px-4">Unit Usaha</th>
-                <th className="py-3.5 px-4">Tanggal</th>
-                <th className="py-3.5 px-4 text-right">Total Nominal</th>
-                <th className="py-3.5 px-4 text-center">Tingkat Approval</th>
-                <th className="py-3.5 px-4 text-center">Status</th>
-                <th className="py-3.5 px-4 text-center">Aksi (Direksi)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {poList.map((po) => (
-                <tr key={po.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-sky-600 dark:text-sky-400">{po.poNumber}</td>
-                  <td className="py-3.5 px-4 font-semibold">{po.vendorName}</td>
-                  <td className="py-3.5 px-4 text-slate-500">{po.unitUsaha}</td>
-                  <td className="py-3.5 px-4">{po.date}</td>
-                  <td className="py-3.5 px-4 text-right font-bold text-slate-900 dark:text-white">
-                    Rp {po.totalAmount.toLocaleString('id-ID')}
-                  </td>
-                  <td className="py-3.5 px-4 text-center font-medium">
-                    {po.requiresExecutiveApproval ? (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-500/30">
-                        ACC Direktur (&gt; 50 Jt)
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                        ACC Manager (&le; 50 Jt)
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    {po.status === 'APPROVED' ? (
-                      <StatusBadge type="APPROVED" label="DISETUJUI" />
-                    ) : po.status === 'REJECTED' ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300">
-                        DITOLAK
-                      </span>
-                    ) : (
-                      <StatusBadge type="WAITING_APPROVAL_DIREKTUR" label="WAITING ACC DIREKTUR" />
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    {po.status !== 'APPROVED' && po.status !== 'REJECTED' ? (
-                      <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => handleApprove(po.id)}
-                          className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
-                        >
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          <span>ACC</span>
-                        </button>
-                        <button
-                          onClick={() => handleReject(po.id)}
-                          className="px-2.5 py-1 bg-red-600 hover:bg-red-500 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
-                        >
-                          <XCircle className="w-3.5 h-3.5" />
-                          <span>Tolak</span>
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="text-[11px] text-slate-400 font-medium">Selesai</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Daftar Purchase Order (${poList.length})`}
+        columns={[
+          { key: 'poNumber', header: 'No. PO', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (po) => po.poNumber },
+          { key: 'vendorName', header: 'Vendor Supplier', className: 'font-semibold text-slate-900 dark:text-white', render: (po) => po.vendorName },
+          { key: 'unitUsaha', header: 'Unit Usaha', className: 'text-slate-500', render: (po) => po.unitUsaha },
+          { key: 'date', header: 'Tanggal', render: (po) => po.date },
+          { key: 'totalAmount', header: 'Total Nominal', align: 'right', className: 'font-bold text-slate-900 dark:text-white', render: (po) => `Rp ${po.totalAmount.toLocaleString('id-ID')}` },
+          {
+            key: 'approvalLevel',
+            header: 'Tingkat Approval',
+            align: 'center',
+            render: (po) => (
+              po.requiresExecutiveApproval ? (
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-500/30">
+                  ACC Direktur (&gt; 50 Jt)
+                </span>
+              ) : (
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  ACC Manager (&le; 50 Jt)
+                </span>
+              )
+            )
+          },
+          {
+            key: 'status',
+            header: 'Status',
+            align: 'center',
+            render: (po) => (
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                po.status === 'APPROVED'
+                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                  : po.status === 'REJECTED'
+                  ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
+                  : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 animate-pulse'
+              }`}>
+                {po.status === 'APPROVED' ? 'APPROVED' : po.status === 'REJECTED' ? 'REJECTED' : 'PENDING APPROVAL'}
+              </span>
+            )
+          },
+          {
+            key: 'actions',
+            header: 'Aksi (Direksi)',
+            align: 'center',
+            sortable: false,
+            render: (po) => (
+              po.status === 'WAITING_APPROVAL_DIREKTUR' && isHoldingExecutive ? (
+                <div className="flex items-center justify-center gap-1.5">
+                  <button
+                    onClick={() => handleApprove(po.id)}
+                    className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span>Setujui</span>
+                  </button>
+                  <button
+                    onClick={() => handleReject(po.id)}
+                    className="px-2.5 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded-lg font-bold text-[11px] flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    <XCircle className="w-3.5 h-3.5" />
+                    <span>Tolak</span>
+                  </button>
+                </div>
+              ) : (
+                <span className="text-[11px] text-slate-400 font-mono">-</span>
+              )
+            )
+          }
+        ]}
+        data={poList}
+        keyExtractor={(po) => po.id}
+      />
 
       {/* New Purchase Order Form Modal */}
       {isModalOpen && (

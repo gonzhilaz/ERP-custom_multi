@@ -5,6 +5,7 @@ import { Tag, Plus, Trash2, Edit3, Building, FileSpreadsheet, Key } from 'lucide
 import { StorageTypeItem, MOCK_ASSETS } from '@/lib/mock/inventory';
 import { COA_DATA } from '@/lib/mock/finance';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 interface Props {
   storageTypes: StorageTypeItem[];
@@ -129,85 +130,82 @@ export const StorageTypesTab: React.FC<Props> = ({
         </button>
       </div>
 
-      {/* Storage Type Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            Daftar Master Tipe Storage Terdaftar ({storageTypes.length} Tipe)
-          </span>
-          <span className="text-[11px] text-slate-400">Fixed Asset & HO COA Bound Table</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Kode Tipe</th>
-                <th className="py-3.5 px-4">Nama Tipe Storage</th>
-                <th className="py-3.5 px-4 text-center">Status Kepemilikan</th>
-                <th className="py-3.5 px-4">Terikat HO COA Accounts</th>
-                <th className="py-3.5 px-4">Link Master Asset</th>
-                <th className="py-3.5 px-4 text-center">Jumlah Gudang</th>
-                <th className="py-3.5 px-4 text-center">Aksi CRUD</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {storageTypes.map((st) => (
-                <tr key={st.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-amber-600 dark:text-amber-400">{st.code}</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{st.name}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                        st.ownershipStatus === 'OWNED'
-                          ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30'
-                          : 'bg-amber-500/10 text-amber-600 border-amber-500/30'
-                      }`}
-                    >
-                      {st.ownershipStatus === 'OWNED' ? '🏠 Milik Sendiri (Asset)' : '📜 Sewa (Lease)'}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-600 dark:text-slate-300">
-                    <div className="flex items-center gap-1.5">
-                      <FileSpreadsheet className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                      <span className="font-mono text-amber-600 dark:text-amber-400">{st.coaAccountCode}</span>
-                      <span className="text-[11px] text-slate-500">{st.coaAccountName}</span>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500">
-                    {st.linkedAssetId ? (
-                      <span className="inline-flex items-center gap-1 font-bold text-indigo-600 dark:text-indigo-400">
-                        <Building className="w-3.5 h-3.5" /> AST-OVEN-001 (Deck Rotari)
-                      </span>
-                    ) : (
-                      <span className="text-slate-400">-</span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-center font-bold font-mono">{st.storageCount} Gudang</td>
-                  <td className="py-3.5 px-4 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <button
-                        onClick={() => openEditModal(st)}
-                        className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/40 rounded-lg transition-all"
-                        title="Edit Tipe Storage"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => deleteStorageType(st.id)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-all"
-                        title="Hapus Tipe Storage"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Daftar Master Tipe Storage (${storageTypes.length})`}
+        columns={[
+          { key: 'code', header: 'Kode Tipe', className: 'font-mono font-bold text-amber-600 dark:text-amber-400', render: (st) => st.code },
+          { key: 'name', header: 'Nama Tipe Storage', className: 'font-bold text-slate-900 dark:text-white', render: (st) => st.name },
+          {
+            key: 'ownershipStatus',
+            header: 'Status Kepemilikan',
+            align: 'center',
+            render: (st) => (
+              <span
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+                  st.ownershipStatus === 'OWNED'
+                    ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30'
+                    : 'bg-amber-500/10 text-amber-600 border-amber-500/30'
+                }`}
+              >
+                {st.ownershipStatus === 'OWNED' ? '🏠 Milik Sendiri (Asset)' : '📜 Sewa (Lease)'}
+              </span>
+            )
+          },
+          {
+            key: 'coaAccountCode',
+            header: 'Terikat HO COA Accounts',
+            className: 'font-semibold text-slate-600 dark:text-slate-300',
+            render: (st) => (
+              <div className="flex items-center gap-1.5">
+                <FileSpreadsheet className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span className="font-mono text-amber-600 dark:text-amber-400">{st.coaAccountCode}</span>
+                <span className="text-[11px] text-slate-500">{st.coaAccountName}</span>
+              </div>
+            )
+          },
+          {
+            key: 'linkedAssetId',
+            header: 'Link Master Asset',
+            className: 'text-slate-500',
+            render: (st) => (
+              st.linkedAssetId ? (
+                <span className="inline-flex items-center gap-1 font-bold text-indigo-600 dark:text-indigo-400">
+                  <Building className="w-3.5 h-3.5" /> AST-OVEN-001 (Deck Rotari)
+                </span>
+              ) : (
+                <span className="text-slate-400 font-mono text-[11px]">Unlinked</span>
+              )
+            )
+          },
+          { key: 'storageCount', header: 'Jumlah Gudang', align: 'center', className: 'font-bold text-slate-700 dark:text-slate-300', render: (st) => `${st.storageCount} Unit` },
+          {
+            key: 'actions',
+            header: 'Aksi CRUD',
+            align: 'center',
+            sortable: false,
+            render: (st) => (
+              <div className="flex items-center justify-center gap-1">
+                <button
+                  onClick={() => openEditModal(st)}
+                  className="p-1.5 text-slate-400 hover:text-amber-600 transition-colors cursor-pointer"
+                  title="Edit Tipe Storage"
+                >
+                  <Edit3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => deleteStorageType(st.id)}
+                  className="p-1.5 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                  title="Hapus Tipe Storage"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )
+          }
+        ]}
+        data={storageTypes}
+        keyExtractor={(st) => st.id}
+      />
 
       {/* Modal Form Add / Edit Storage Type */}
       {(isCreateModalOpen || editingType) && (

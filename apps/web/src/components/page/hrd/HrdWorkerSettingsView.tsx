@@ -5,6 +5,7 @@ import { Users, ShieldCheck, Percent, Clock, Plus, Trash2, HelpCircle, X, BookOp
 import { MOCK_WORKER_TYPES, WorkerTypeItem } from '@/lib/mock/hrd';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { SubTabNav, SubTabItem } from '@/components/ui/button/SubTabNav';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdWorkerSettingsView = () => {
   const { user } = useAuth();
@@ -47,6 +48,12 @@ export const HrdWorkerSettingsView = () => {
     setWorkerTypes([...workerTypes, newType]);
     alert(`Tipe Pekerja [${formData.name}] Berhasil Didaftarkan!`);
     setIsModalOpen(false);
+  };
+
+  const handleSoftDeleteWorkerType = (id: string) => {
+    if (confirm('Hapus Tipe Pekerja ini?')) {
+      setWorkerTypes((prev) => prev.filter((w) => w.id !== id));
+    }
   };
 
   return (
@@ -107,62 +114,53 @@ export const HrdWorkerSettingsView = () => {
 
       {/* SubTab 1: Tipe Pekerja */}
       {activeTab === 'TYPES' && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-          <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <span className="font-bold text-slate-700 dark:text-slate-300">Master Tipe Pekerja & Formula Gaji ({workerTypes.length})</span>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-                <tr>
-                  <th className="py-3 px-4">Tipe Pekerja</th>
-                  <th className="py-3 px-4 text-center">Kategori</th>
-                  <th className="py-3 px-4">Formula Kalkulasi Gaji</th>
-                  <th className="py-3 px-4">Akun COA Beban Gaji</th>
-                  <th className="py-3 px-4 text-center">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-                {workerTypes.map((wt) => (
-                  <tr key={wt.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                        <Briefcase className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-                        <span>{wt.name}</span>
-                      </div>
-                      <div className="font-mono text-[10px] text-slate-400 mt-0.5">{wt.code}</div>
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300">
-                        {wt.category}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-purple-700 dark:text-purple-300 bg-slate-50/80 dark:bg-slate-800/40 rounded px-2.5 py-1">
-                      {wt.expression}
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-indigo-600 dark:text-indigo-400">
-                      <div className="flex items-center gap-1">
-                        <BookOpen className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-                        <span>{wt.salaryCoa}</span>
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      {canMutate && (
-                        <button
-                          onClick={() => setWorkerTypes((prev) => prev.filter((w) => w.id !== wt.id))}
-                          className="p-1 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <DataTable
+          headerTitle={`Master Tipe Pekerja & Formula Gaji (${workerTypes.length})`}
+          columns={[
+            {
+              key: 'name',
+              header: 'Tipe Pekerja',
+              render: (wt) => (
+                <div>
+                  <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Briefcase className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+                    <span>{wt.name}</span>
+                  </div>
+                  <div className="font-mono text-[10px] text-slate-400 mt-0.5">{wt.code}</div>
+                </div>
+              )
+            },
+            {
+              key: 'category',
+              header: 'Kategori',
+              align: 'center',
+              render: (wt) => (
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 dark:bg-sky-950 text-sky-700 dark:text-sky-300">
+                  {wt.category}
+                </span>
+              )
+            },
+            { key: 'expression', header: 'Formula Kalkulasi Gaji', className: 'font-mono text-[11px] text-slate-600 dark:text-slate-300', render: (wt) => wt.expression },
+            { key: 'salaryCoa', header: 'Akun COA Beban Gaji', className: 'font-mono text-[11px] text-sky-600 dark:text-sky-400 font-semibold', render: (wt) => wt.salaryCoa },
+            {
+              key: 'actions',
+              header: 'Aksi',
+              align: 'center',
+              sortable: false,
+              render: (wt) => (
+                <button
+                  onClick={() => handleSoftDeleteWorkerType(wt.id)}
+                  className="p-1 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                  title="Hapus Tipe"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )
+            }
+          ]}
+          data={workerTypes}
+          keyExtractor={(wt) => wt.id}
+        />
       )}
 
       {/* SubTab 2: Persentase BPJS */}

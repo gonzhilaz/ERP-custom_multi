@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plane, Plus, CheckCircle2, HelpCircle, X, DollarSign, Calculator } from 'lucide-react';
+import { Plane, Plus, HelpCircle, X } from 'lucide-react';
 import { useTravelExpenses } from '@/hooks/hrd/useTravelExpenses';
+import { TravelExpenseItem } from '@/lib/mock/hr-finance-integration';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdTravelExpensesView = () => {
   const { expenses, calculatePerDiem, settleTravelExpense, addTravelRequest } = useTravelExpenses();
@@ -42,6 +44,50 @@ export const HrdTravelExpensesView = () => {
     setShowModal(false);
   };
 
+  const columns: ColumnDef<TravelExpenseItem>[] = [
+    { key: 'spdCode', header: 'Kode SPD', className: 'font-bold font-mono text-indigo-600', render: (e) => e.spdCode },
+    { key: 'employeeName', header: 'Nama Karyawan', className: 'font-bold text-slate-900 dark:text-white', render: (e) => e.employeeName },
+    {
+      key: 'destinationCity',
+      header: 'Tujuan & Maksud',
+      render: (e) => (
+        <div>
+          <strong className="block text-slate-800 dark:text-slate-200">{e.destinationCity}</strong>
+          <span className="text-[11px] text-slate-400">{e.purpose}</span>
+        </div>
+      )
+    },
+    { key: 'daysCount', header: 'Durasi Dinas', align: 'center', className: 'text-slate-500', render: (e) => `${e.daysCount} Hari (${e.startDate} s/d ${e.endDate})` },
+    { key: 'perDiemTotal', header: 'Uang Saku Per Diem', align: 'right', className: 'font-mono font-bold text-emerald-600', render: (e) => `Rp ${e.perDiemTotal.toLocaleString('id-ID')}` },
+    {
+      key: 'status',
+      header: 'Status Settlement',
+      align: 'center',
+      render: (e) => (
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+          e.status === 'SETTLED' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+        }`}>
+          {e.status === 'SETTLED' ? 'SETTLED 100%' : 'UANG MUKA CAIR'}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi Finance',
+      align: 'center',
+      sortable: false,
+      render: (e) => (
+        e.status === 'ADVANCE_PAID' ? (
+          <button onClick={() => settleTravelExpense(e.id)} className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg text-[10px] cursor-pointer">
+            Settlement Realisasi
+          </button>
+        ) : (
+          <span className="text-slate-400">Selesai</span>
+        )
+      )
+    }
+  ];
+
   return (
     <div className="space-y-4 text-xs">
       {/* Header Bar */}
@@ -78,52 +124,12 @@ export const HrdTravelExpensesView = () => {
         </button>
       </div>
 
-      {/* Table Expenses */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500">
-              <th className="p-3 font-semibold">Kode SPD</th>
-              <th className="p-3 font-semibold">Nama Karyawan</th>
-              <th className="p-3 font-semibold">Tujuan & Maksud</th>
-              <th className="p-3 font-semibold text-center">Durasi Dinas</th>
-              <th className="p-3 font-semibold text-right">Uang Saku Per Diem</th>
-              <th className="p-3 font-semibold text-center">Status Settlement</th>
-              <th className="p-3 font-semibold text-center">Aksi Finance</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {expenses.map((e) => (
-              <tr key={e.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                <td className="p-3 font-bold font-mono text-indigo-600">{e.spdCode}</td>
-                <td className="p-3 font-bold text-slate-900 dark:text-white">{e.employeeName}</td>
-                <td className="p-3 text-slate-600 dark:text-slate-300">
-                  <strong className="block text-slate-800 dark:text-slate-200">{e.destinationCity}</strong>
-                  <span className="text-[11px] text-slate-400">{e.purpose}</span>
-                </td>
-                <td className="p-3 text-center text-slate-500">{e.daysCount} Hari ({e.startDate} s/d {e.endDate})</td>
-                <td className="p-3 text-right font-mono font-bold text-emerald-600">Rp {e.perDiemTotal.toLocaleString('id-ID')}</td>
-                <td className="p-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    e.status === 'SETTLED' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                  }`}>
-                    {e.status === 'SETTLED' ? 'SETTLED 100%' : 'UANG MUKA CAIR'}
-                  </span>
-                </td>
-                <td className="p-3 text-center">
-                  {e.status !== 'SETTLED' ? (
-                    <button onClick={() => settleTravelExpense(e.id)} className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg text-[10px] cursor-pointer">
-                      Final Settlement
-                    </button>
-                  ) : (
-                    <span className="text-emerald-600 font-bold text-[11px]">Selesai</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        headerTitle={`Katalog Perjalanan Dinas & Realisasi (${expenses.length})`}
+        columns={columns}
+        data={expenses}
+        keyExtractor={(e) => e.id}
+      />
 
       {/* Modal Modal */}
       {showModal && (

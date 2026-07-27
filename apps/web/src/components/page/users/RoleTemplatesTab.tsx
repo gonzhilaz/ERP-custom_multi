@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ShieldCheck, Plus, CheckCircle2, Lock, Trash2, Edit2, Copy, X, Sparkles } from 'lucide-react';
 import { useRoleTemplates } from '@/hooks/users/useRoleTemplates';
 import { RolePermissionTemplate, ModuleActionPermission, DEFAULT_MODULE_PERMISSIONS } from '@/lib/mock/roles';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const RoleTemplatesTab = () => {
   const {
@@ -147,42 +148,39 @@ export const RoleTemplatesTab = () => {
           </div>
 
           {/* Checklist Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-100 dark:bg-slate-800 text-slate-500 font-semibold border-b border-slate-200 dark:border-slate-800">
-                <tr>
-                  <th className="py-2.5 px-3">Nama Modul</th>
-                  <th className="py-2.5 px-2 text-center">Lihat (Read)</th>
-                  <th className="py-2.5 px-2 text-center">Tambah (Create)</th>
-                  <th className="py-2.5 px-2 text-center">Edit (Update)</th>
-                  <th className="py-2.5 px-2 text-center">Soft Delete</th>
-                  <th className="py-2.5 px-2 text-center">Approval</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {activeTemplate.permissions.map((perm) => (
-                  <tr key={perm.moduleCode} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                    <td className="py-2.5 px-3 font-semibold text-slate-900 dark:text-white">
-                      <div className="font-bold">{perm.moduleName}</div>
-                      <div className="text-[10px] font-mono text-sky-600">{perm.moduleCode}</div>
-                    </td>
-
-                    {(['canView', 'canCreate', 'canEdit', 'canDelete', 'canApprove'] as const).map((field) => (
-                      <td key={field} className="py-2.5 px-2 text-center">
-                        <input
-                          type="checkbox"
-                          checked={perm[field]}
-                          disabled={activeTemplate.isSystemPreset}
-                          onChange={() => handlePermissionToggle(perm.moduleCode, field)}
-                          className="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500 cursor-pointer disabled:cursor-not-allowed"
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            headerTitle={`Akses Otorisasi Hak Modul (${activeTemplate.permissions.length})`}
+            columns={[
+              {
+                key: 'moduleName',
+                header: 'Nama Modul',
+                className: 'font-semibold text-slate-900 dark:text-white',
+                render: (perm) => (
+                  <div>
+                    <div className="font-bold">{perm.moduleName}</div>
+                    <div className="text-[10px] font-mono text-sky-600">{perm.moduleCode}</div>
+                  </div>
+                )
+              },
+              ...(['canView', 'canCreate', 'canEdit', 'canDelete', 'canApprove'] as const).map((field) => ({
+                key: field,
+                header: field === 'canView' ? 'Lihat (Read)' : field === 'canCreate' ? 'Tambah (Create)' : field === 'canEdit' ? 'Edit (Update)' : field === 'canDelete' ? 'Soft Delete' : 'Approval',
+                align: 'center' as const,
+                sortable: false,
+                render: (perm: ModuleActionPermission) => (
+                  <input
+                    type="checkbox"
+                    checked={perm[field]}
+                    disabled={activeTemplate.isSystemPreset}
+                    onChange={() => handlePermissionToggle(perm.moduleCode, field)}
+                    className="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500 cursor-pointer disabled:cursor-not-allowed"
+                  />
+                )
+              }))
+            ]}
+            data={activeTemplate.permissions}
+            keyExtractor={(perm) => perm.moduleCode}
+          />
         </div>
       </div>
 

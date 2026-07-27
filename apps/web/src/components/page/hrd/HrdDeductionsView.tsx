@@ -3,10 +3,19 @@
 import React, { useState } from 'react';
 import { MinusCircle, Plus, Trash2, HelpCircle, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+
+interface DeductionItem {
+  id: string;
+  code: string;
+  name: string;
+  type: string;
+  amount: number;
+}
 
 export const HrdDeductionsView = () => {
   const { user } = useAuth();
-  const [deductions, setDeductions] = useState([
+  const [deductions, setDeductions] = useState<DeductionItem[]>([
     { id: 'ded-01', code: 'POT-TERLAMBAT', name: 'Potongan Keterlambatan Absensi', type: 'PER_MINUTE', amount: 5000 },
     { id: 'ded-02', code: 'POT-KASBON', name: 'Angsuran Kasbon / Pinjaman Karyawan', type: 'MONTHLY_INSTALLMENT', amount: 500000 },
     { id: 'ded-03', code: 'POT-ALPA', name: 'Potongan Mangkir / Tanpa Keterangan', type: 'DAILY_RATE', amount: 150000 }
@@ -29,6 +38,26 @@ export const HrdDeductionsView = () => {
     alert(`Daftar Potongan [${formData.name}] Berhasil Ditambahkan!`);
     setIsModalOpen(false);
   };
+
+  const columns: ColumnDef<DeductionItem>[] = [
+    { key: 'code', header: 'Kode', className: 'font-mono font-bold text-rose-600', render: (d) => d.code },
+    { key: 'name', header: 'Nama Potongan', className: 'font-bold text-slate-900 dark:text-white', render: (d) => d.name },
+    { key: 'type', header: 'Tipe Kalkulasi', align: 'center', className: 'font-mono text-[10px]', render: (d) => d.type },
+    { key: 'amount', header: 'Tarif / Nominal', align: 'right', className: 'font-mono font-bold text-rose-600', render: (d) => `Rp ${d.amount.toLocaleString('id-ID')}` },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (d) => (
+        canMutate ? (
+          <button onClick={() => setDeductions((prev) => prev.filter((item) => item.id !== d.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer" title="Hapus Potongan">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        ) : null
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -65,41 +94,12 @@ export const HrdDeductionsView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b font-bold">
-          Master Jenis Potongan Gaji ({deductions.length})
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 font-semibold border-b">
-              <tr>
-                <th className="py-3 px-4 font-mono">Kode</th>
-                <th className="py-3 px-4">Nama Potongan</th>
-                <th className="py-3 px-4 text-center">Tipe Kalkulasi</th>
-                <th className="py-3 px-4 text-right">Tarif / Nominal</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {deductions.map((d) => (
-                <tr key={d.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-3.5 px-4 font-mono font-bold text-rose-600">{d.code}</td>
-                  <td className="py-3.5 px-4 font-bold">{d.name}</td>
-                  <td className="py-3.5 px-4 text-center font-mono text-[10px]">{d.type}</td>
-                  <td className="py-3.5 px-4 text-right font-mono font-bold text-rose-600">Rp {d.amount.toLocaleString('id-ID')}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    {canMutate && (
-                      <button onClick={() => setDeductions((prev) => prev.filter((item) => item.id !== d.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Master Jenis Potongan Gaji (${deductions.length})`}
+        columns={columns}
+        data={deductions}
+        keyExtractor={(d) => d.id}
+      />
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Tag, Plus, Trash2, Edit3, FileSpreadsheet } from 'lucide-react';
 import { InventoryCategory } from '@/lib/mock/inventory';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 interface Props {
   categories: InventoryCategory[];
@@ -105,68 +106,53 @@ export const ItemCategoriesTab: React.FC<Props> = ({
       </div>
 
       {/* Enterprise Category Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            Daftar Master Kategori Terdaftar ({categories.length} Kategori)
-          </span>
-          <span className="text-[11px] text-slate-400">Strict HO COA Bound Table</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3.5 px-4">Kode Kategori</th>
-                <th className="py-3.5 px-4">Nama Kategori Resmi</th>
-                <th className="py-3.5 px-4">Terikat HO COA Persediaan</th>
-                <th className="py-3.5 px-4 text-center">Jumlah SKU</th>
-                <th className="py-3.5 px-4">Deskripsi</th>
-                <th className="py-3.5 px-4 text-center">Aksi CRUD</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {categories.map((cat) => (
-                <tr key={cat.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-sky-600 dark:text-sky-400">{cat.code}</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{cat.name}</td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-600 dark:text-slate-300">
-                    <div className="flex items-center gap-1.5">
-                      <FileSpreadsheet className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-                      <span className="font-mono text-sky-600 dark:text-sky-400">{cat.coaAccountCode}</span>
-                      <span className="text-[11px] text-slate-500">{cat.coaAccountName}</span>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4 text-center font-bold font-mono">
-                    <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-slate-800 dark:text-slate-200">
-                      {cat.itemCount} SKU
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500">{cat.description}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <button
-                        onClick={() => openEditModal(cat)}
-                        className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-950/40 rounded-lg transition-all"
-                        title="Edit Kategori"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => deleteCategory(cat.id)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-all"
-                        title="Hapus Kategori"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Daftar Master Kategori Barang (${categories.length})`}
+        columns={[
+          { key: 'code', header: 'Kode Kategori', className: 'font-mono font-bold text-sky-600 dark:text-sky-400', render: (cat) => cat.code },
+          { key: 'name', header: 'Nama Kategori Resmi', className: 'font-bold text-slate-900 dark:text-white', render: (cat) => cat.name },
+          {
+            key: 'coaAccountCode',
+            header: 'Terikat HO COA Persediaan',
+            className: 'font-semibold text-slate-600 dark:text-slate-300',
+            render: (cat) => (
+              <div className="flex items-center gap-1.5">
+                <FileSpreadsheet className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+                <span className="font-mono text-sky-600 dark:text-sky-400">{cat.coaAccountCode}</span>
+                <span className="text-[11px] text-slate-500">{cat.coaAccountName}</span>
+              </div>
+            )
+          },
+          { key: 'itemCount', header: 'Jumlah SKU', align: 'center', className: 'font-bold font-mono text-slate-800 dark:text-slate-200', render: (cat) => `${cat.itemCount} SKU` },
+          { key: 'description', header: 'Deskripsi', className: 'text-slate-500', render: (cat) => cat.description },
+          {
+            key: 'actions',
+            header: 'Aksi CRUD',
+            align: 'center',
+            sortable: false,
+            render: (cat) => (
+              <div className="flex items-center justify-center gap-1">
+                <button
+                  onClick={() => openEditModal(cat)}
+                  className="p-1.5 text-slate-400 hover:text-sky-600 transition-colors cursor-pointer"
+                  title="Edit Kategori"
+                >
+                  <Edit3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => deleteCategory(cat.id)}
+                  className="p-1.5 text-slate-400 hover:text-red-600 transition-colors cursor-pointer"
+                  title="Hapus Kategori"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )
+          }
+        ]}
+        data={categories}
+        keyExtractor={(cat) => cat.id}
+      />
 
       {/* Modal Form Add / Edit Category */}
       {(isCreateModalOpen || editingCategory) && (

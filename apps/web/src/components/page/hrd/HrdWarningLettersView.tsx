@@ -3,11 +3,23 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Plus, Trash2, HelpCircle, X, ShieldAlert } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 import { SearchableSelect } from '@/components/ui/dropdowns/SearchableSelect';
+
+interface WarningLetterItem {
+  id: string;
+  empName: string;
+  dept: string;
+  spType: string;
+  reason: string;
+  issueDate: string;
+  validUntil: string;
+  status: string;
+}
 
 export const HrdWarningLettersView = () => {
   const { user } = useAuth();
-  const [warningLetters, setWarningLetters] = useState([
+  const [warningLetters, setWarningLetters] = useState<WarningLetterItem[]>([
     { id: 'sp-01', empName: 'Rudi Hermawan', dept: 'Mining Operations', spType: 'SP_1', reason: 'Keterlambatan Absensi Beruntun > 5x dalam Sebulan', issueDate: '2026-06-10', validUntil: '2026-12-10', status: 'ACTIVE' },
     { id: 'sp-02', empName: 'Ahmad Subagyo', dept: 'Retail Store', spType: 'SP_2', reason: 'Pelanggaran SOP Kasir & Ketidakcocokan Cash Count', issueDate: '2026-05-15', validUntil: '2026-11-15', status: 'ACTIVE' }
   ]);
@@ -40,6 +52,46 @@ export const HrdWarningLettersView = () => {
     alert(`Surat Peringatan [${formData.spType}] untuk [${formData.empName}] Berhasil Diterbitkan!`);
     setIsModalOpen(false);
   };
+
+  const columns: ColumnDef<WarningLetterItem>[] = [
+    {
+      key: 'empName',
+      header: 'Nama Karyawan',
+      render: (sp) => (
+        <div>
+          <div className="font-bold text-slate-900 dark:text-white">{sp.empName}</div>
+          <div className="text-[10px] text-slate-400">{sp.dept}</div>
+        </div>
+      )
+    },
+    { key: 'spType', header: 'Tipe SP', align: 'center', className: 'font-bold text-amber-600 font-mono', render: (sp) => sp.spType },
+    { key: 'reason', header: 'Alasan Pelanggaran', className: 'text-slate-700 dark:text-slate-300', render: (sp) => sp.reason },
+    { key: 'issueDate', header: 'Tanggal Terbit', align: 'center', className: 'font-mono text-[11px]', render: (sp) => sp.issueDate },
+    { key: 'validUntil', header: 'Masa Berlaku', align: 'center', className: 'font-mono text-[11px] text-rose-600 font-bold', render: (sp) => sp.validUntil },
+    {
+      key: 'status',
+      header: 'Status',
+      align: 'center',
+      render: (sp) => (
+        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+          {sp.status}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (sp) => (
+        canMutate ? (
+          <button onClick={() => setWarningLetters((prev) => prev.filter((item) => item.id !== sp.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer" title="Hapus SP">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        ) : null
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -76,52 +128,12 @@ export const HrdWarningLettersView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b font-bold">
-          Daftar Surat Peringatan Aktif ({warningLetters.length})
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 font-semibold border-b">
-              <tr>
-                <th className="py-3 px-4">Nama Karyawan</th>
-                <th className="py-3 px-4 text-center">Tipe SP</th>
-                <th className="py-3 px-4">Alasan Pelanggaran</th>
-                <th className="py-3 px-4 text-center">Tanggal Terbit</th>
-                <th className="py-3 px-4 text-center">Masa Berlaku</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {warningLetters.map((sp) => (
-                <tr key={sp.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-3.5 px-4">
-                    <div className="font-bold text-slate-900 dark:text-white">{sp.empName}</div>
-                    <div className="text-[10px] text-slate-400">{sp.dept}</div>
-                  </td>
-                  <td className="py-3.5 px-4 text-center font-bold text-amber-600 font-mono">{sp.spType}</td>
-                  <td className="py-3.5 px-4">{sp.reason}</td>
-                  <td className="py-3.5 px-4 text-center font-mono text-[11px]">{sp.issueDate}</td>
-                  <td className="py-3.5 px-4 text-center font-mono text-[11px] text-rose-600 font-bold">{sp.validUntil}</td>
-                  <td className="py-3.5 px-4 text-center">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-                      {sp.status}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-center">
-                    {canMutate && (
-                      <button onClick={() => setWarningLetters((prev) => prev.filter((item) => item.id !== sp.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Daftar Surat Peringatan Aktif (${warningLetters.length})`}
+        columns={columns}
+        data={warningLetters}
+        keyExtractor={(sp) => sp.id}
+      />
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">

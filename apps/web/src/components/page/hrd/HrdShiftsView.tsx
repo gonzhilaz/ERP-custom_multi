@@ -3,10 +3,20 @@
 import React, { useState } from 'react';
 import { Clock, Plus, Trash2, HelpCircle, X } from 'lucide-react';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
+
+interface ShiftItem {
+  id: string;
+  code: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  breakHours: number;
+}
 
 export const HrdShiftsView = () => {
   const { user } = useAuth();
-  const [shifts, setShifts] = useState([
+  const [shifts, setShifts] = useState<ShiftItem[]>([
     { id: 'sh-01', code: 'SHIFT-MORNING', name: 'Shift Pagi (Office Normal)', startTime: '08:00', endTime: '17:00', breakHours: 1 },
     { id: 'sh-02', code: 'SHIFT-AFTERNOON', name: 'Shift Siang Operasional', startTime: '14:00', endTime: '22:00', breakHours: 1 },
     { id: 'sh-03', code: 'SHIFT-NIGHT', name: 'Shift Malam Tambang & Hotel', startTime: '22:00', endTime: '06:00', breakHours: 1 }
@@ -30,6 +40,27 @@ export const HrdShiftsView = () => {
     alert(`Kode Shift Kerja [${formData.name}] Berhasil Ditambahkan!`);
     setIsModalOpen(false);
   };
+
+  const columns: ColumnDef<ShiftItem>[] = [
+    { key: 'code', header: 'Kode Shift', className: 'font-mono font-bold text-purple-600', render: (sh) => sh.code },
+    { key: 'name', header: 'Nama Shift', className: 'font-bold text-slate-900 dark:text-white', render: (sh) => sh.name },
+    { key: 'startTime', header: 'Jam Masuk', align: 'center', className: 'font-mono font-bold text-emerald-600', render: (sh) => `${sh.startTime} WIB` },
+    { key: 'endTime', header: 'Jam Pulang', align: 'center', className: 'font-mono font-bold text-rose-600', render: (sh) => `${sh.endTime} WIB` },
+    { key: 'breakHours', header: 'Istirahat', align: 'center', className: 'font-mono', render: (sh) => `${sh.breakHours} Jam` },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (sh) => (
+        canMutate ? (
+          <button onClick={() => setShifts((prev) => prev.filter((item) => item.id !== sh.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer" title="Hapus Shift">
+            <Trash2 className="w-4 h-4" />
+          </button>
+        ) : null
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -66,43 +97,12 @@ export const HrdShiftsView = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b font-bold">
-          Master Kode Shift & Jam Kerja ({shifts.length})
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 font-semibold border-b">
-              <tr>
-                <th className="py-3 px-4 font-mono">Kode Shift</th>
-                <th className="py-3 px-4">Nama Shift</th>
-                <th className="py-3 px-4 text-center">Jam Masuk</th>
-                <th className="py-3 px-4 text-center">Jam Pulang</th>
-                <th className="py-3 px-4 text-center">Istirahat</th>
-                <th className="py-3 px-4 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {shifts.map((sh) => (
-                <tr key={sh.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                  <td className="py-3.5 px-4 font-mono font-bold text-purple-600">{sh.code}</td>
-                  <td className="py-3.5 px-4 font-bold">{sh.name}</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-emerald-600">{sh.startTime} WIB</td>
-                  <td className="py-3.5 px-4 text-center font-mono font-bold text-rose-600">{sh.endTime} WIB</td>
-                  <td className="py-3.5 px-4 text-center font-mono">{sh.breakHours} Jam</td>
-                  <td className="py-3.5 px-4 text-center">
-                    {canMutate && (
-                      <button onClick={() => setShifts((prev) => prev.filter((item) => item.id !== sh.id))} className="p-1 text-slate-400 hover:text-red-600 cursor-pointer">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable
+        headerTitle={`Master Kode Shift & Jam Kerja (${shifts.length})`}
+        columns={columns}
+        data={shifts}
+        keyExtractor={(sh) => sh.id}
+      />
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">

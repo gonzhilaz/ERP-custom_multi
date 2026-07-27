@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { DollarSign, Plus, CheckCircle, HelpCircle, X, CreditCard } from 'lucide-react';
+import { DollarSign, Plus, HelpCircle, X } from 'lucide-react';
 import { useHrExtended } from '@/hooks/hrd/useHrExtended';
+import { EmployeeLoan } from '@/lib/mock/hr-extended';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdLoansView = () => {
   const { loans, processPayrollLoanDeduction, addLoan } = useHrExtended();
@@ -31,6 +33,41 @@ export const HrdLoansView = () => {
     alert(`Pengajuan Kasbon Karyawan [${form.employeeName}] Rp ${form.totalAmount.toLocaleString('id-ID')} Disetujui!`);
     setShowModal(false);
   };
+
+  const columns: ColumnDef<EmployeeLoan>[] = [
+    { key: 'loanCode', header: 'Kode Kasbon', className: 'font-bold font-mono text-emerald-600', render: (l) => l.loanCode },
+    { key: 'employeeName', header: 'Nama Karyawan', className: 'font-bold text-slate-900 dark:text-white', render: (l) => l.employeeName },
+    { key: 'totalAmount', header: 'Total Pinjaman', className: 'font-bold text-slate-700 dark:text-slate-300', render: (l) => `Rp ${l.totalAmount.toLocaleString('id-ID')}` },
+    { key: 'monthlyDeduction', header: 'Cicilan / Bulan', align: 'center', className: 'text-slate-600 dark:text-slate-300', render: (l) => `Rp ${l.monthlyDeduction.toLocaleString('id-ID')} (${l.tenorMonths} Bln)` },
+    { key: 'remainingAmount', header: 'Sisa Pinjaman', align: 'center', className: 'font-bold text-rose-600', render: (l) => `Rp ${l.remainingAmount.toLocaleString('id-ID')}` },
+    {
+      key: 'status',
+      header: 'Status',
+      align: 'center',
+      render: (l) => (
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+          l.status === 'PAID_OFF' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+        }`}>
+          {l.status === 'PAID_OFF' ? 'LUNAS' : 'AKTIF'}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi Payroll',
+      align: 'center',
+      sortable: false,
+      render: (l) => (
+        l.status === 'ACTIVE' ? (
+          <button onClick={() => processPayrollLoanDeduction(l.id)} className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-[10px] cursor-pointer">
+            Potong Gaji Bulan Ini
+          </button>
+        ) : (
+          <span className="text-slate-400">-</span>
+        )
+      )
+    }
+  ];
 
   return (
     <div className="space-y-4 text-xs">
@@ -68,49 +105,12 @@ export const HrdLoansView = () => {
         </button>
       </div>
 
-      {/* Loans Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500">
-              <th className="p-3 font-semibold">Kode Kasbon</th>
-              <th className="p-3 font-semibold">Nama Karyawan</th>
-              <th className="p-3 font-semibold">Total Pinjaman</th>
-              <th className="p-3 font-semibold text-center">Cicilan / Bulan</th>
-              <th className="p-3 font-semibold text-center">Sisa Pinjaman</th>
-              <th className="p-3 font-semibold text-center">Status</th>
-              <th className="p-3 font-semibold text-center">Aksi Payroll</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {loans.map((l) => (
-              <tr key={l.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                <td className="p-3 font-bold font-mono text-emerald-600">{l.loanCode}</td>
-                <td className="p-3 font-bold text-slate-900 dark:text-white">{l.employeeName}</td>
-                <td className="p-3 font-bold text-slate-700 dark:text-slate-300">Rp {l.totalAmount.toLocaleString('id-ID')}</td>
-                <td className="p-3 text-center text-slate-600 dark:text-slate-300">Rp {l.monthlyDeduction.toLocaleString('id-ID')} ({l.tenorMonths} Bln)</td>
-                <td className="p-3 text-center font-bold text-rose-600">Rp {l.remainingAmount.toLocaleString('id-ID')}</td>
-                <td className="p-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    l.status === 'PAID_OFF' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                  }`}>
-                    {l.status === 'PAID_OFF' ? 'LUNAS' : 'AKTIF'}
-                  </span>
-                </td>
-                <td className="p-3 text-center">
-                  {l.status === 'ACTIVE' ? (
-                    <button onClick={() => processPayrollLoanDeduction(l.id)} className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-[10px] cursor-pointer">
-                      Potong Gaji Bulan Ini
-                    </button>
-                  ) : (
-                    <span className="text-slate-400">-</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        headerTitle={`Katalog Pinjaman & Kasbon Karyawan (${loans.length})`}
+        columns={columns}
+        data={loans}
+        keyExtractor={(l) => l.id}
+      />
 
       {/* Modal Modal */}
       {showModal && (

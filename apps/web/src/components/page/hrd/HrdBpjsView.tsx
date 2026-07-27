@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HeartPulse, ShieldCheck, Search, Edit, X } from 'lucide-react';
+import { ShieldCheck, Search, Edit, X, HeartPulse } from 'lucide-react';
 import { MOCK_EMPLOYEES, EmployeeItem } from '@/lib/mock/hrd';
 import { useAuth } from '@/hooks/auth/useAuth';
+import { DataTable, ColumnDef } from '@/components/ui/tables/DataTable';
 
 export const HrdBpjsView = () => {
   const { user } = useAuth();
@@ -33,22 +34,50 @@ export const HrdBpjsView = () => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedEmp) return;
-
-    alert(`Nomor kartu BPJS ${selectedEmp.fullName} berhasil diperbarui!`);
+    alert(`Nomor BPJS Karyawan [${selectedEmp.fullName}] berhasil diperbarui!`);
     setSelectedEmp(null);
   };
 
+  const columns: ColumnDef<EmployeeItem>[] = [
+    { key: 'fullName', header: 'Nama Karyawan', className: 'font-bold text-slate-900 dark:text-white', render: (emp) => emp.fullName },
+    { key: 'unitUsaha', header: 'Unit Usaha', className: 'text-slate-500', render: (emp) => emp.unitUsaha },
+    { key: 'baseSalary', header: 'Gaji Pokok Basis', align: 'right', className: 'font-semibold', render: (emp) => `Rp ${emp.baseSalary.toLocaleString('id-ID')}` },
+    { key: 'bpjsKesehatan', header: 'BPJS Kes (1%)', align: 'right', className: 'font-mono text-purple-600 font-bold', render: (emp) => `Rp ${emp.bpjsKesehatan.toLocaleString('id-ID')}` },
+    { key: 'bpjsKetenagakerjaan', header: 'BPJS TK (3%)', align: 'right', className: 'font-mono text-purple-600 font-bold', render: (emp) => `Rp ${emp.bpjsKetenagakerjaan.toLocaleString('id-ID')}` },
+    { key: 'totalBpjs', header: 'Total Potongan', align: 'right', className: 'font-bold text-slate-900 dark:text-white', render: (emp) => `Rp ${(emp.bpjsKesehatan + emp.bpjsKetenagakerjaan).toLocaleString('id-ID')}` },
+    {
+      key: 'status',
+      header: 'Status Card',
+      align: 'center',
+      render: () => (
+        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+          AKTIF
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      header: 'Aksi',
+      align: 'center',
+      sortable: false,
+      render: (emp) => (
+        canManage ? (
+          <button
+            onClick={() => handleOpenEdit(emp)}
+            className="p-1 text-slate-400 hover:text-purple-600 transition-colors cursor-pointer"
+            title="Edit Nomor BPJS"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+        ) : null
+      )
+    }
+  ];
+
   return (
-    <div className="space-y-4">
-      {/* Header Bar */}
+    <div className="space-y-4 text-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <HeartPulse className="w-5 h-5 text-purple-500" />
-            <span>BPJS</span>
-          </h1>
-          <p className="text-[11px] text-slate-500">Pengelolaan Iuran BPJS Kesehatan (1%) & Ketenagakerjaan (3%) Terintegrasi Payroll</p>
-        </div>
+        <h1 className="text-lg font-bold text-slate-900 dark:text-white">BPJS</h1>
 
         <div className="relative w-full sm:w-64">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -62,62 +91,17 @@ export const HrdBpjsView = () => {
         </div>
       </div>
 
-      {/* BPJS Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="p-4 bg-slate-50/50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Rincian Iuran BPJS Karyawan</span>
+      <DataTable
+        headerTitle={`Rincian Iuran BPJS (${filtered.length})`}
+        headerRightContent={
           <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5" /> Regulasi TER 2026 Ready
+            <ShieldCheck className="w-3.5 h-3.5" /> TER 2026 Ready
           </span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-800">
-              <tr>
-                <th className="py-3 px-4">Nama Karyawan</th>
-                <th className="py-3 px-4">Unit Usaha</th>
-                <th className="py-3 px-4 text-right">Gaji Pokok Basis</th>
-                <th className="py-3 px-4 text-right">BPJS Kes (1%)</th>
-                <th className="py-3 px-4 text-right">BPJS TK (3%)</th>
-                <th className="py-3 px-4 text-right">Total Potongan</th>
-                <th className="py-3 px-4 text-center">Status Card</th>
-                {canManage && <th className="py-3 px-4 text-center">Aksi</th>}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              {filtered.map((emp) => (
-                <tr key={emp.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{emp.fullName}</td>
-                  <td className="py-3 px-4 text-slate-500">{emp.unitUsaha}</td>
-                  <td className="py-3 px-4 text-right font-semibold">Rp {emp.baseSalary.toLocaleString('id-ID')}</td>
-                  <td className="py-3 px-4 text-right font-mono text-purple-600 font-bold">Rp {emp.bpjsKesehatan.toLocaleString('id-ID')}</td>
-                  <td className="py-3 px-4 text-right font-mono text-purple-600 font-bold">Rp {emp.bpjsKetenagakerjaan.toLocaleString('id-ID')}</td>
-                  <td className="py-3 px-4 text-right font-bold text-slate-900 dark:text-white">
-                    Rp {(emp.bpjsKesehatan + emp.bpjsKetenagakerjaan).toLocaleString('id-ID')}
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                      AKTIF
-                    </span>
-                  </td>
-                  {canManage && (
-                    <td className="py-3 px-4 text-center">
-                      <button
-                        onClick={() => handleOpenEdit(emp)}
-                        className="p-1 text-slate-400 hover:text-purple-600 transition-colors cursor-pointer"
-                        title="Edit Nomor BPJS"
-                      >
-                        <Edit className="w-3.5 h-3.5" />
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        }
+        columns={columns}
+        data={filtered}
+        keyExtractor={(emp) => emp.id}
+      />
 
       {/* Edit Modal */}
       {selectedEmp && (
