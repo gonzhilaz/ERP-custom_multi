@@ -69,9 +69,6 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
 
       {/* Right Controls */}
       <div className="flex items-center gap-3">
-        {/* Backdate Unblock Toggle (Super-Admin & Admin Only) */}
-        <BackdateUnblockToggle />
-
         {/* OpenClaw AI Active Compact Icon */}
         <div className="relative group">
           <div className="p-2 bg-slate-100 dark:bg-slate-800 text-violet-600 dark:text-violet-400 rounded-xl border border-violet-500/20 flex items-center gap-1.5 cursor-pointer">
@@ -200,7 +197,10 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
                 )}
               </div>
 
-              {/* 3. Tombol Ubah Profil dan Sandi */}
+              {/* 3. Backdate Governance Toggle inside Profile */}
+              <BackdateUnblockToggle />
+
+              {/* 4. Tombol Ubah Profil dan Sandi */}
               <button
                 onClick={() => { setIsEditModalOpen(true); setIsProfileOpen(false); }}
                 className="w-full p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
