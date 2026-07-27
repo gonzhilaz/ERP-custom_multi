@@ -1,9 +1,30 @@
 import { Router, Request, Response } from 'express';
+import QRCode from 'qrcode';
 
 const router = Router();
 
-// In-Memory Gateway State
-let isWhatsAppConnected = true; // Simulated connected status
+// Dynamic Gateway State
+let isConnected = false;
+let pairedPhone = '';
+let currentQrCodeDataUrl = '';
+
+// Generate Initial QR Code
+async function generatePairingQr() {
+  const qrString = `2@ERP-ENTERPRISE-GATEWAY,${Date.now()},${Math.random().toString(36).substring(7)}`;
+  try {
+    currentQrCodeDataUrl = await QRCode.toDataURL(qrString, {
+      margin: 2,
+      scale: 6,
+      color: { dark: '#0284c7', light: '#ffffff' }
+    });
+  } catch (err) {
+    console.error('Error generating QR code:', err);
+  }
+}
+
+// Generate on start
+generatePairingQr();
+
 const messageLogs: Array<{ id: string; phone: string; message: string; type: string; sentAt: string }> = [
   {
     id: 'wa-msg-101',
@@ -22,13 +43,42 @@ const messageLogs: Array<{ id: string; phone: string; message: string; type: str
 ];
 
 // GET /api/whatsapp/status
-router.get('/status', (req: Request, res: Response) => {
+router.get('/status', async (req: Request, res: Response) => {
+  if (!currentQrCodeDataUrl) {
+    await generatePairingQr();
+  }
   res.json({
-    status: isWhatsAppConnected ? 'CONNECTED' : 'DISCONNECTED',
-    phone: '+6285711223344 (ERP Enterprise Gateway)',
+    status: isConnected ? 'CONNECTED' : 'PAIRING_REQUIRED',
+    phone: pairedPhone || 'Belum Terhubung (Scan QR)',
     botName: 'Nusantara ERP OpenClaw Bot',
+    qrCodeDataUrl: currentQrCodeDataUrl,
     logsCount: messageLogs.length,
     timestamp: new Date().toISOString()
+  });
+});
+
+// POST /api/whatsapp/pair-simulated
+router.post('/pair-simulated', (req: Request, res: Response) => {
+  const { phone } = req.body;
+  isConnected = true;
+  pairedPhone = phone || '+6281234567890';
+  return res.json({
+    success: true,
+    message: `WhatsApp Bot successfully paired with phone: ${pairedPhone}`,
+    status: 'CONNECTED',
+    phone: pairedPhone
+  });
+});
+
+// POST /api/whatsapp/disconnect
+router.post('/disconnect', async (req: Request, res: Response) => {
+  isConnected = false;
+  pairedPhone = '';
+  await generatePairingQr();
+  return res.json({
+    success: true,
+    message: 'WhatsApp Bot disconnected. Scan new QR code to pair again.',
+    status: 'PAIRING_REQUIRED'
   });
 });
 
@@ -57,11 +107,11 @@ router.post('/send', (req: Request, res: Response) => {
 
   messageLogs.unshift(logEntry);
 
-  console.log(`📱 [WHATSAPP GATEWAY] Sent to ${phone}: "${message}"`);
+  console.log(`📱 [WHATSAPP GATEWAY] Outbound to ${phone}: "${message}"`);
 
   return res.json({
     success: true,
-    message: 'WhatsApp notification sent successfully',
+    message: 'WhatsApp notification dispatched successfully',
     log: logEntry
   });
 });
@@ -70,7 +120,7 @@ router.post('/send', (req: Request, res: Response) => {
 router.post('/send-ticket-alert', (req: Request, res: Response) => {
   const { ticketCode, title, priority, branchLocation, createdByName } = req.body;
 
-  const phone = '+62811223344'; // Target Executive Phone
+  const phone = pairedPhone || '+62811223344';
   const formattedMsg = `🚨 [ERP ESCALATION ALERT]\n\n` +
     `*Kode Tiket*: ${ticketCode}\n` +
     `*Judul*: ${title}\n` +
@@ -100,7 +150,7 @@ router.post('/send-ticket-alert', (req: Request, res: Response) => {
 router.post('/send-security-alert', (req: Request, res: Response) => {
   const { incidentCode, title, severity, location, patrolOfficerName } = req.body;
 
-  const phone = '+628198765432'; // Target Security Head Phone
+  const phone = pairedPhone || '+628198765432';
   const formattedMsg = `🛡️ [SECURITY INCIDENT ALERT]\n\n` +
     `*Kode Insiden*: ${incidentCode}\n` +
     `*Temuan*: ${title}\n` +

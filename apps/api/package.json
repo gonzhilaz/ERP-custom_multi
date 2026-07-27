@@ -15,6 +15,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "qrcode": "^1.5.3",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
@@ -23,6 +24,7 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.12.12",
+    "@types/qrcode": "^1.5.5",
     "tsx": "^4.11.0",
     "typescript": "^5.4.5"
   }
