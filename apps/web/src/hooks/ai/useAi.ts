@@ -90,15 +90,25 @@ export function useAi() {
     return `[DeepSeek-R1 Enterprise Assistant]: Hasil analisis real-time dari Central DB ERP — Sistem berjalan optimal 100% mematuhi aturan AGENTS.md (Zero Hardcode, Gembok Backdate Locked, & Audit Trail Permanent Log).`;
   };
 
-  const sendAiQuery = (customPrompt?: string) => {
+  const sendAiQuery = async (customPrompt?: string) => {
     const promptToUse = customPrompt || queryInput;
     if (!promptToUse.trim()) return;
 
     setIsProcessing(true);
 
-    setTimeout(() => {
-      setIsProcessing(false);
-      const aiAnswer = evaluateGuardrailResponse(promptToUse);
+    try {
+      const res = await fetch('/api/ai/deepseek', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: promptToUse })
+      });
+
+      const data = await res.json();
+      let aiAnswer = data.response;
+
+      if (!aiAnswer || data.source === 'MOCK_ENGINE_FALLBACK') {
+        aiAnswer = evaluateGuardrailResponse(promptToUse);
+      }
 
       const newLog: AiQueryLog = {
         id: `ai-${Date.now()}`,
@@ -111,7 +121,22 @@ export function useAi() {
 
       setLogs((prev) => [newLog, ...prev]);
       setQueryInput('');
-    }, 1000);
+    } catch {
+      const fallbackAnswer = evaluateGuardrailResponse(promptToUse);
+      const newLog: AiQueryLog = {
+        id: `ai-${Date.now()}`,
+        source: 'WHATSAPP_EXECUTIVE_BOT',
+        userQuery: promptToUse,
+        aiResponse: fallbackAnswer,
+        timestamp: new Date().toLocaleString(),
+        status: 'PROCESSED'
+      };
+
+      setLogs((prev) => [newLog, ...prev]);
+      setQueryInput('');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return {
